@@ -45,8 +45,7 @@ Biseccion <- function(a, b, N, Tol){
 
 f <- function(x){
   #Hay que modificar la función
-  return(x^3+x-4)
-  
+  return(x^4-3*x^2-3)
   #Ejercicio 1:
   #Visualizar las siguientes con 0.00001 dígitos de aproximación
   #x-2^(-x) [0;1]
@@ -57,9 +56,40 @@ f <- function(x){
   #Ejercicio 2
   #Visualizar la siguiente raiz con 0.001 dígitos de aproximación
   #x^3+x-4 [1;4]
-}
+} 
+ 
 
 print(Biseccion(1,4,100, 0.001))
 
 #Para visualizar mas decimales utilizar
 options(digits = 10)
+
+
+#Método de iteración de punto fijo
+PuntoFijo <- function(TOL, p0, N){
+  
+  #Instancio las listas vacias
+  lista_p0 <- c(NULL)
+  lista_gp0 <- c(NULL)
+  
+  for (i in 1:N) {
+    p <- f(p0)
+    print(p)
+    lista_p0[i] <- p0
+    lista_gp0[i] <- p 
+    
+    if(p == 0 | abs(p0-p) <= TOL){
+      #Creo el data frame para mostrarlo lindo
+      df <- data.frame("P" = lista_p0, "GP" = lista_gp0)
+      print(df)
+      
+      return(p)
+      
+    }
+    p0 <- p
+  }
+  
+  return(paste("Fallo el método lugo de ", N, " intentos"))
+}
+
+print(PuntoFijo(0.01, 1, 100))
