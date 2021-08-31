@@ -1,3 +1,5 @@
+
+# Ejercicio 1
 raices <- function(a, b, c){
   d <-  b^2-4*a*c
   
@@ -19,7 +21,8 @@ print(raices(1,2,1))
 #Borra todas las variables
 rm(list = ls(all=TRUE))
 
-#Funci?n factorial
+#Ejercicio 2
+#Funcion factorial
 factorial <- function(a){
   b <- 1
   for (i in 1:a){
