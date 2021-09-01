@@ -43,9 +43,11 @@ Biseccion <- function(a, b, N, Tol){
   return(paste('El método falla luego de: ', N, ' iteraciones'))
 }
 
+print(Biseccion(1,4,100, 0.001))
+
 f <- function(x){
   #Hay que modificar la función
-  return(x^4-3*x^2-3)
+  return(x^3-x-1)
   #Ejercicio 1:
   #Visualizar las siguientes con 0.00001 dígitos de aproximación
   #x-2^(-x) [0;1]
@@ -56,14 +58,13 @@ f <- function(x){
   #Ejercicio 2
   #Visualizar la siguiente raiz con 0.001 dígitos de aproximación
   #x^3+x-4 [1;4]
+  
+  #Ejercicio 3
+  #Hay que redefinir la ecuación de modo que: x = (3*x^2+3)^0.25
 } 
- 
-
-print(Biseccion(1,4,100, 0.001))
 
 #Para visualizar mas decimales utilizar
 options(digits = 10)
-
 
 #Método de iteración de punto fijo
 PuntoFijo <- function(TOL, p0, N){
@@ -74,9 +75,16 @@ PuntoFijo <- function(TOL, p0, N){
   
   for (i in 1:N) {
     p <- f(p0)
-    print(p)
+    
     lista_p0[i] <- p0
     lista_gp0[i] <- p 
+    
+    if(is.nan(p)){
+      #Creo el data frame para mostrarlo lindo
+      df <- data.frame("P" = lista_p0, "GP" = lista_gp0)
+      print(df)
+      return("Pruebe reexpresando la ecuación")
+    }
     
     if(p == 0 | abs(p0-p) <= TOL){
       #Creo el data frame para mostrarlo lindo
@@ -93,3 +101,4 @@ PuntoFijo <- function(TOL, p0, N){
 }
 
 print(PuntoFijo(0.01, 1, 100))
+
