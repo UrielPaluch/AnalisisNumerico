@@ -1,12 +1,12 @@
 #Método de Bisección
-Biseccion <- function(a, b, N, Tol){
+Biseccion <- function(a, b, N = 100, Tol) {
+#Tiene por default 100 iteraciones
   
   #Instancio las listas vacias
   lista_a <- c(NULL)
   lista_b <- c(NULL)
   lista_p <- c(NULL)
-  
-  
+
   for (i in 1:N) {
     #Calculo P
     p <- (a+b)/2
@@ -21,20 +21,18 @@ Biseccion <- function(a, b, N, Tol){
     
     #Si la f(p) es 0, entonces es raiz
     #O si esta dentro del límite tolerado
-    if(fp == 0 | abs((b-a)/2) <= Tol)
-    {
+    if (fp == 0 | abs((b-a)/2) <= Tol) {
       #Creo un data frame con las listas
       datos <- data.frame(lista_a, lista_b, lista_p)
       colnames(datos) <- c("A", "B", "P")
       print(datos)
       return(p)
     }
+    
     #Si comparten el mismo signo
-    if(fp * f(a) > 0){
+    if (fp * f(a) > 0) {
       a <- p
-    }
-    else
-    {
+    } else {
       b <- p
     }
   }
@@ -43,11 +41,43 @@ Biseccion <- function(a, b, N, Tol){
   return(paste('El método falla luego de: ', N, ' iteraciones'))
 }
 
-print(Biseccion(1,4,100, 0.001))
+Biseccion(a = 0, b = 1, Tol = 0.00001)
 
-f <- function(x){
+
+Biseccion2 <- function(a, b, tol){
+  #Calculo P
+  p <- (a+b)/2
+  
+  #Evaluo la función en p
+  fp <- f(p)
+  
+  #Si la f(p) es 0, entonces es raiz
+  #O si esta dentro del límite tolerado
+  if (fp == 0 | abs((b-a)/2) <= tol) {
+    
+    return(p)
+  }
+  
+  #Si comparten el mismo signo
+  if (fp * f(a) > 0) {
+    a <- p
+  } else {
+    b <- p
+  }
+}
+
+purrr::map(
+  .x = 1:100, 
+  .f = function(){
+  Biseccion2(a = 0, b = 1, tol = 0.00001)             
+  }
+)
+
+
+
+f <- function(x) {
   #Hay que modificar la función
-  return(x^3-x-1)
+  return(x-2^(-x))
   #Ejercicio 1:
   #Visualizar las siguientes con 0.00001 dígitos de aproximación
   #x-2^(-x) [0;1]
@@ -86,7 +116,7 @@ PuntoFijo <- function(TOL, p0, N){
       return("Pruebe reexpresando la ecuación")
     }
     
-    if(p == 0 | abs(p0-p) <= TOL){
+    if(abs(p0-p) <= TOL){
       #Creo el data frame para mostrarlo lindo
       df <- data.frame("P" = lista_p0, "GP" = lista_gp0)
       print(df)
@@ -101,4 +131,5 @@ PuntoFijo <- function(TOL, p0, N){
 }
 
 print(PuntoFijo(0.01, 1, 100))
+
 
