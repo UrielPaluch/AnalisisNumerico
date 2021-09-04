@@ -1,5 +1,5 @@
 ---
-title: "Biseccion"
+title: "Bisección"
 author: "Uriel Paluch"
 date: "4/9/2021"
 output: pdf_document
