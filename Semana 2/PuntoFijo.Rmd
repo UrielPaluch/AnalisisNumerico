@@ -57,7 +57,7 @@ PuntoFijo <- function(p0, n = 100, tol){
       datos <- data.frame(lista_p, lista_gp)
       colnames(datos) <- c("P", "G(P)")
       print(datos)
-      return(paste("La raiz es: ", p))
+      return(p)
     }
     
     p0 <- p
@@ -92,6 +92,9 @@ No todas las formas de la expresión pueden ser correctas, la ecuación puede re
 ### Solución:
 
 Aplicando directamente el algoritmo:  
+
+
+###### Ejercicio 1:
 
 Grafico la función:
 
@@ -131,7 +134,7 @@ gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
 #Grafico
 gg_fx
 ```
-Se observa graficamente que hay raices en los siguientes intervalos $[-4;-3]$, $[2.5;1.5]$ y $[1;2]$.
+Se observa graficamente que hay raices en los siguientes intervalos $[-4;-3]$, $[-2.5;-1.5]$ y $[1;2]$.
 
 
 Evaluo el método con $p_0 = 1$
@@ -172,28 +175,81 @@ Se observa que no cumple con:
   |g'(x)| \leq 1
 \end{align*}
 
-Reexpreso la ecuación: 
+Evaluo el método con $p_0 = -2$
+```{r método ejercicio 1.1 b}
+this_could_go_wrong <- tryCatch(
+  print(PuntoFijo(p0 = -2, tol = 0.0001)),
+  error = function(e){print("Error")})
+```
+Tira error porque probablemente no cumpla con las condiciones del teorema. Vamos a comprobarlo:
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[-2.5, -1.5]$
+```{r ejercicio 1.1b derivada}
+x <- seq(-2.5, -1.5, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
+```
+Se observa que no cumple con:
 \begin{align*}
-  x = \frac{1}{2}*(10-x^3)^\frac{1}{2}
+  |g'(x)| \leq 1
 \end{align*}
 
-Grafico ambas funciones:
+Evaluo el método con $p_0 = -3$
+```{r método ejercicio 1.1 c}
+this_could_go_wrong <- tryCatch(
+  print(PuntoFijo(p0 = -3, tol = 0.0001)),
+  error = function(e){print("Error")})
+```
 
-```{r grafico del ejercicio 1.1 con dos lineas}
+Tira error porque probablemente no cumpla con las condiciones del teorema. Vamos a comprobarlo:
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[-4, -3]$
+```{r ejercicio 1.1c derivada}
+x <- seq(-4, -3, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
+```
+
+Se observa que no cumple con:
+\begin{align*}
+  |g'(x)| \leq 1
+\end{align*}
+
+------------------------------------
+
+
+###### Ejercicio 2:
+
+Grafico la función:
+
+$x = g_2(x) = (\frac{10}{x} - 4x)^\frac{1}{2}$ \
+
+```{r grafico del ejercicio 2.1}
 f <- function(x){
-  return(x - x^3 - 4*x^2 + 10)
-}
-
-g <- function(x){
-  return((1/4*(x-x^3+10))^(1/2)-x)
+  return((10/x-4*x)^(1/2))
 }
 
 #Instancio un vector que me va a indicar los puntos en la función
-x <- seq(0, 2, by = 0.1)
+x <- seq(-4, 2, by = 0.001)
 
 #Genero los puntos
 fx <- f(x)
-gx <- g(x)
 
 #Creo un data frame con los x e y
 df <- data.frame(x, fx)
@@ -205,7 +261,7 @@ gg_fx <- ggplot(data = df)
 gg_fx <- gg_fx + aes(x = x, y = fx)
 
 #Est grafica una linea
-gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue") + geom_line(aes(y = gx), color = "darkred")
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
 
 #Agrego el eje X
 gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
@@ -213,22 +269,295 @@ gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
 #Agrego el eje Y
 gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
 
-#Le cambio la escala al eje X para tener una mejor visual
-gg_fx <- gg_fx + scale_x_continuous(name = "x", breaks = seq(0, 1.5, by = 0.1))
+#Grafico
+gg_fx
+```
+
+Se observa graficamente que la función no cumple con la primera condición del teorema:  \
+1. Ser continua.
+
+Por lo tanto, no es aplicable el método de punto fijo para encontrar sus raices
+
+------------------------------------
+
+
+###### Ejercicio 3:
+
+Grafico la función:
+
+$x = g_3(x) = \frac{1}{2}(10-x^3)^\frac{1}{2}$ \
+
+```{r grafico del ejercicio 3.1}
+#La función del ejercicio
+f <- function(x){
+  return((1/2)*(10-x^3)^(1/2))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(1/2)*(10-x^3)^(1/2))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-5, 2.5, by = 0.0001)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
 
 #Grafico
 gg_fx
 ```
-Podemos estimar un $p_0 = 1.4$ para la nueva ecuación  \
 
-```{r método ejercicio 1.1 raiz 1}
-#Tengo que volver a instanciar f con la nueva función porque el método de punto fijo eta definida para esta
+```{r método ejercicio 3.1}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 2, tol = 0.001),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+```{r ejercicio 3.1 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+#Grafico
+gg_fx
+```
+
+------------------------------------
+
+
+###### Ejercicio 4:
+
+Grafico la función:
+
+$x = g_4(x) = (\frac{10}{4+x})^\frac{1}{2}$ \
+
+```{r grafico del ejercicio 4.1}
+#La función del ejercicio
 f <- function(x){
-  #Es muy importante notar que cuando escribo la expresión reexpresada no lleva el -x al final
-  return((1/4*(x-x^3+10))^(1/2))
+  return((10/(4+x))^(1/2))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(10/(4+x))^(1/2))
 }
 
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-4, 2.5, by = 0.0001)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+Grafico nuevamente la función en el intervalo $[0;2]$ para tener una visión mas clara.
+
+```{r grafico del ejercicio 4.1b}
+#La función del ejercicio
+f <- function(x){
+  return((10/(4+x))^(1/2))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(10/(4+x))^(1/2))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 2, by = 0.0001)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+Se observa una raíz cerca de $p_0 = 1.25$
+
+```{r método ejercicio 4.1}
 this_could_go_wrong <- tryCatch(
-  print(PuntoFijo(p0 = 1.4, tol = 0.0001)),
+  PuntoFijo(p0 = 1.25, tol = 0.001),
   error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+```{r ejercicio 4.1 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+#Grafico
+gg_fx
+```
+
+------------------------------------
+
+
+###### Ejercicio 5:
+
+Grafico la función:
+
+$x = g_5(x) = x - \frac{x^3+4x^2-10}{3x^2+8x}$ \
+
+```{r grafico del ejercicio 5.1}
+#La función del ejercicio
+f <- function(x){
+  return(x-(x^3+4*x^2-10)/(3*x^2+8*x))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+x-(x^3+4*x^2-10)/(3*x^2+8*x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-10, 10, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+Se observan dos raices, una en el intervalo $[-4;-2.5]$ y otra en $[1;2.5]$  \
+
+Tomo $p_0 = 1$
+```{r método ejercicio 5.1}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 1, tol = 0.001),
+  error = function(e){print("Error")})
+
+print(this_could_go_wrong)
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 5.1 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
+```
+
+Tomo $p_0 = -2.5$
+```{r método ejercicio 5.1b}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = -2.5, tol = 0.001),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 5.1 linea rectab}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
 ```
