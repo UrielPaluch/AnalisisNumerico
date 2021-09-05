@@ -558,7 +558,7 @@ $cos^2(x) = x$  \
 
 Grafico la función:
 
-```{r grafico del ejercicio 2.1}
+```{r grafico del ejercicio 2.2}
 #La función del ejercicio
 f <- function(x){
   return(cos(x)*cos(x))
@@ -604,7 +604,7 @@ gg_fx
 Se observa una raiz en el intevalo $[0;2.5]$
 
 Tomo $p_0 = 1$
-```{r método ejercicio 5.1}
+```{r método ejercicio 2.2}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 1, tol = 0.001),
   error = function(e){print("Error")})
