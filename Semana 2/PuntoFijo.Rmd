@@ -84,9 +84,8 @@ No todas las formas de la expresión pueden ser correctas, la ecuación puede re
 
 * Reescribir como problemas de punto fijo y hallar la solución de:
   1. $cos(x) = \sqrt{x}$
-  2. $x^3 + 4x^2 - 10 = 0$
-  3. $2 + cos(e^x - 2) = e^x$
-  4. $x^3 - 7x^2 + 14x - 6 = 0$
+  2. $2 + cos(e^x - 2) = e^x$
+  3. $x^3 - 7x^2 + 14x - 6 = 0$
 
 
 ### Solución:
@@ -148,7 +147,7 @@ this_could_go_wrong <- tryCatch(
 Tira error porque probablemente no cumpla con las condiciones del teorema. Vamos a comprobarlo:
 
 1. Se observa graficamente que la función es continua en todo el intervalo.
-2. Evaluo la derivada en diferentes puntos del intervalo $[1, 2]$
+2. Evaluo la derivada en diferentes puntos del intervalo $[1;2]$
 ```{r ejercicio 1.1 derivada}
 
 fprima <- D(expression(x - x^3 - 4*x^2 + 10), "x")
@@ -240,7 +239,7 @@ Grafico la función:
 
 $x = g_2(x) = (\frac{10}{x} - 4x)^\frac{1}{2}$ \
 
-```{r grafico del ejercicio 2.1}
+```{r grafico del ejercicio 1.2}
 f <- function(x){
   return((10/x-4*x)^(1/2))
 }
@@ -287,7 +286,7 @@ Grafico la función:
 
 $x = g_3(x) = \frac{1}{2}(10-x^3)^\frac{1}{2}$ \
 
-```{r grafico del ejercicio 3.1}
+```{r grafico del ejercicio 1.3}
 #La función del ejercicio
 f <- function(x){
   return((1/2)*(10-x^3)^(1/2))
@@ -331,7 +330,7 @@ gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
 gg_fx
 ```
 
-```{r método ejercicio 3.1}
+```{r método ejercicio 1.3}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 2, tol = 0.001),
   error = function(e){print("Error")})
@@ -341,12 +340,38 @@ if (this_could_go_wrong != "Error"){
   print(paste("La raiz es: ", raiz)) 
 }
 ```
-```{r ejercicio 3.1 linea recta}
+```{r ejercicio 1.3 linea recta}
 #Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
 gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
 
 #Grafico
 gg_fx
+```
+
+Verifico que se cumplan las condiciones del teorema
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[1;1.5]$
+```{r ejercicio 1.3 derivada}
+
+fprima <- D(expression((1/2)*(10-x^3)^(1/2)), "x")
+
+fprima
+
+fprima <- function(x){
+  return((1/2) * ((10 - x^3)^((1/2) - 1) * ((1/2) * (3 * x^2))))
+}
+
+x <- seq(1, 1.5, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
 ```
 
 ------------------------------------
@@ -358,7 +383,7 @@ Grafico la función:
 
 $x = g_4(x) = (\frac{10}{4+x})^\frac{1}{2}$ \
 
-```{r grafico del ejercicio 4.1}
+```{r grafico del ejercicio 1.4}
 #La función del ejercicio
 f <- function(x){
   return((10/(4+x))^(1/2))
@@ -404,7 +429,7 @@ gg_fx
 
 Grafico nuevamente la función en el intervalo $[0;2]$ para tener una visión mas clara.
 
-```{r grafico del ejercicio 4.1b}
+```{r grafico del ejercicio 1.4b}
 #La función del ejercicio
 f <- function(x){
   return((10/(4+x))^(1/2))
@@ -449,7 +474,7 @@ gg_fx
 ```
 Se observa una raíz cerca de $p_0 = 1.25$
 
-```{r método ejercicio 4.1}
+```{r método ejercicio 1.4}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 1.25, tol = 0.001),
   error = function(e){print("Error")})
@@ -459,12 +484,38 @@ if (this_could_go_wrong != "Error"){
   print(paste("La raiz es: ", raiz)) 
 }
 ```
-```{r ejercicio 4.1 linea recta}
+```{r ejercicio 1.4 linea recta}
 #Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
 gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
 
 #Grafico
 gg_fx
+```
+
+Verifico que se cumplan las condiciones del teorema
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[0;2]$
+```{r ejercicio 1.4 derivada}
+
+fprima <- D(expression((10/(4+x))^(1/2)), "x")
+
+fprima
+
+fprima <- function(x){
+  return((10/(4 + x))^((1/2) - 1) * ((1/2) * (10/(4 + x)^2)))
+}
+
+x <- seq(1, 1.5, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
 ```
 
 ------------------------------------
@@ -476,7 +527,7 @@ Grafico la función:
 
 $x = g_5(x) = x - \frac{x^3+4x^2-10}{3x^2+8x}$ \
 
-```{r grafico del ejercicio 5.1}
+```{r grafico del ejercicio 1.5}
 #La función del ejercicio
 f <- function(x){
   return(x-(x^3+4*x^2-10)/(3*x^2+8*x))
@@ -523,7 +574,7 @@ gg_fx
 Se observa una raiz en el intervalo $[1;2.5]$  \
 
 Tomo $p_0 = 1$
-```{r método ejercicio 5.1}
+```{r método ejercicio 1.5}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 1, tol = 0.001),
   error = function(e){print("Error")})
@@ -536,12 +587,41 @@ if (this_could_go_wrong != "Error"){
 }
 ```
 
-```{r ejercicio 5.1 linea recta}
+```{r ejercicio 1.5 linea recta}
 #Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
 gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
 
 gg_fx
 ```
+
+
+Verifico que se cumplan las condiciones del teorema
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[1;1.5]$
+```{r ejercicio 1.5 derivada}
+
+fprima <- D(expression(x-(x^3+4*x^2-10)/(3*x^2+8*x)), "x")
+
+fprima
+
+fprima <- function(x){
+  return(1 - ((3 * x^2 + 4 * (2 * x))/(3 * x^2 + 8 * x) - (x^3 + 4 * x^2 - 
+    10) * (3 * (2 * x) + 8)/(3 * x^2 + 8 * x)^2))
+}
+
+x <- seq(1, 2.5, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
+```
+
 
 ### Solución:
 
@@ -554,22 +634,22 @@ $cos(x) = \sqrt{x}$  \
 
 Reescribo la función:
 
-$cos^2(x) = x$  \
+$x = \sqrt(x) * \frac{tan(x)}{sen(x)}* x$  \
 
 Grafico la función:
 
-```{r grafico del ejercicio 2.2}
+```{r grafico del ejercicio 2.1}
 #La función del ejercicio
 f <- function(x){
-  return(cos(x)*cos(x))
+  return(-sqrt(x)+cos(x)+x)
 }
 #La función para graficar la raiz
 g <- function(x){
-  return(-x+cos(x)*cos(x))
+  return(-sqrt(x)+cos(x))
 }
 
 #Instancio un vector que me va a indicar los puntos en la función
-x <- seq(-10, 10, by = 0.1)
+x <- seq(0, 2, by = 0.01)
 
 #Genero los puntos
 fx <- f(x)
@@ -601,12 +681,115 @@ gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
 #Grafico
 gg_fx
 ```
-Se observa una raiz en el intevalo $[0;2.5]$
+Se observa una raiz en el intevalo $[0.5;1]$
 
 Tomo $p_0 = 1$
+```{r método ejercicio 2.1}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 0.5, tol = 0.1),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 2.1 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
+```
+
+Verifico que se cumplan las condiciones del teorema
+
+1. Se observa graficamente que la función es continua en todo el intervalo.
+2. Evaluo la derivada en diferentes puntos del intervalo $[0.5;1]$
+```{r ejercicio 2.1 derivada}
+
+fprima <- D(expression(-sqrt(x)+cos(x)+x), "x")
+
+fprima
+
+fprima <- function(x){
+  return(1 - (sin(x) + 0.5 * x^-0.5))
+}
+
+x <- seq(0.5, 1, by =0.1)
+
+#Genero los puntos
+fprimax <- fprima(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fprimax)
+
+#Lo imprimo
+df
+```
+
+###### Ejercicio 2:
+ 
+$2 + cos(e^x - 2) = e^x$  \
+
+Reescribo la función:
+
+$x = ln(2 + cos(e^x - 2))$  \
+
+Grafico la función:
+
+```{r grafico del ejercicio 2.2}
+#La función del ejercicio
+f <- function(x){
+  return(log((2+ cos(exp(x)-2)), base = exp(1)))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+log((2+ cos(exp(x)-2)), base = exp(1)))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 2, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+
+Se observa una raiz en 1
+
+Tomo $p_0 = 1$
+
 ```{r método ejercicio 2.2}
 this_could_go_wrong <- tryCatch(
-  PuntoFijo(p0 = 1, tol = 0.001),
+  PuntoFijo(p0 = 1, tol = 0.1),
   error = function(e){print("Error")})
 
 if (this_could_go_wrong != "Error"){

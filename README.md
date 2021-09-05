@@ -5,4 +5,4 @@
 
 ## Semana 2
 * Método de Bisección
-* Punto fijo (falta ejercicios 2)
+* Punto fijo
