@@ -7,3 +7,4 @@
 * Método de Bisección
 * Punto fijo
 * Newton-Rapshon
+* Secante
