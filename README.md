@@ -6,3 +6,4 @@
 ## Semana 2
 * Método de Bisección
 * Punto fijo
+* Newton-Rapshon

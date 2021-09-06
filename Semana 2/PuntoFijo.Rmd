@@ -634,7 +634,7 @@ $cos(x) = \sqrt{x}$  \
 
 Reescribo la función:
 
-$x = \sqrt(x) * \frac{tan(x)}{sen(x)}* x$  \
+$x = -\sqrt(x) + cos(x) + x$  \
 
 Grafico la función:
 
