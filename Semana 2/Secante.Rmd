@@ -456,4 +456,5 @@ gg_fx
 
 ```{r método ejercicio 10}
 Secante(p0 = -1, p1 = -0.75, tol = 0.001)
+
 ```
