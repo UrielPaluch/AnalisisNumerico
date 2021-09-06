@@ -1,0 +1,79 @@
+---
+title: "Newton-Raphson"
+author: "Uriel Paluch"
+date: "5/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Método de Newton-Raphson
+El método de la forma presentada en el libro esta basada en los polinomios de Taylor.  \
+
+Supongamos que $p_0$ existe en un intervalo $[a;b]$ y es una aproximación para $p$, de tal forma que $f'(p_0)$ $\neq$ 0 y $|p-p_0|$ es "pequeño". Consideremos e primer polinomio de Taylor expandido de $p_0$ y evaluado en $x = p$:
+\begin{align*}
+  f(p) = f(p_0) + (p - p_0) * f'(p_0) + \frac{(p - p_0)^2}{2} * f''(\xi(p))
+\end{align*}
+Puesto que, $f(p) = 0$ y $(p - p_0)^2$ es pequeño, reexpresamos de modo que:
+\begin{align*}
+  p = p_0 - \frac{f(p_0)}{f'(p_0)}
+\end{align*}
+
+![Método de Newton-Raphson](img/Newton-Raphson.png)
+
+```{r método de Newton-Raphson}
+
+
+
+Newton <- function(p0, tol, n = 100){
+  #Donde p0 es la aproximación inicial
+  #El número máximo de iteraciones n viene por default en 100
+  #Y tol es la toleranacia al error
+  
+  #Instancio las listas vacias
+  lista_p <- c(NULL)
+  lista_p0 <- c(NULL)
+  
+  for (i in 1:n) {
+    
+    #Calculo p
+    p <- p0 - (f(p0)/fprima(p0))
+    
+    lista_p0[i] <- p0
+    lista_p[i] <- p
+    
+    if(abs(p-p0) <= tol){
+      #Creo un data frame con las listas
+      datos <- data.frame(lista_p, lista_p0)
+      colnames(datos) <- c("P", "P0")
+      print(datos)
+      return(p)
+    }
+    
+    p0 <- p
+    
+  }
+  
+  #En el caso de que falle el método
+  return(paste('El método falla luego de: ', n, ' iteraciones'))
+}
+
+```
+
+En el libro se presenta como el método mas eficaz ¿eso es realmente así? sí, pero hay que tener algo en cuenta. Al comienzo supusimos que el término $(p-p_0)^2$ es tan pequeño, que es despreciable. Esto implica que la primera aproximación de p, necesariamente, es buena. 
+
+### Ejercicios:
+* Hallar las soluciones de (si es posible):
+  1. $e^x + 2^\frac{-x}{} + 2cos(x)-6 = 0$   $\hspace{12px}$  $1 \leq x \leq 2$
+  2. $ln(x-1) + cos(x-1) = 0$ $\hspace{12px}$  $1.3 \leq x \leq 2$
+  3. $2x * cos(2x) - (x-2)^2 = 0$ $\hspace{12px}$  $2 \leq x \leq 3$ and $3 \leq x \leq 4$
+  4. $(x-2)^2 - ln(x) = 0$ $\hspace{12px}$  $1 \leq x \leq 2$ and $e \leq x \leq 4$
+  5. $e^x - 3x^2 = 0$ $\hspace{12px}$  $0 \leq x \leq 1$ and $3 \leq x \leq 5$
+  6. $sin(x) - e^\frac{-x}{} = 0$ $\hspace{12px}$  $0 \leq x \leq 1$ and $3 \leq x \leq 4$ and $6 \leq x \leq 7$
+  7. $cos(x) = \sqrt(x)$
+  8. $2 + cos(e^x - 2) = e^x$
+  9. $x^3 - 7x^2 + 14x - 6 = 0$
+  10. $-x^3 - cos(x) = 0$
