@@ -686,7 +686,7 @@ Se observa una raiz en el intevalo $[0.5;1]$
 Tomo $p_0 = 1$
 ```{r método ejercicio 2.1}
 this_could_go_wrong <- tryCatch(
-  PuntoFijo(p0 = 0.5, tol = 0.1),
+  PuntoFijo(p0 = 0.5, tol = 0.001),
   error = function(e){print("Error")})
 
 if (this_could_go_wrong != "Error"){
@@ -790,6 +790,102 @@ Tomo $p_0 = 1$
 ```{r método ejercicio 2.2}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 1, tol = 0.1),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+###### Ejercicio 3:
+ 
+$x^3 - 7x^2 + 14x - 6 = 0$  \
+
+Reescribo la función:
+
+$x = (x^3 - 7x^2 - 6)/14$  \
+
+Grafico la función:
+
+```{r grafico del ejercicio 2.3}
+#La función del ejercicio
+f <- function(x){
+  return((x^3 - 7*x^2 - 6)/(-14))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(x^3 - 7*x^2 - 6)/(-14))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 5, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+
+Se observan 3 raices
+
+Tomo $p_0 = 0.5$
+
+```{r método ejercicio 2.3}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 0.5, tol = 0.1),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+Tomo $p_0 = 3$
+
+```{r método ejercicio 2.3b}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 3, tol = 0.1),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+Tomo $p_0 = 3.5$
+
+```{r método ejercicio 2.3c}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 3.5, tol = 0.1),
   error = function(e){print("Error")})
 
 if (this_could_go_wrong != "Error"){
