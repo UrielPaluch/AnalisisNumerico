@@ -8,3 +8,4 @@
 * Punto fijo
 * Newton-Rapshon
 * Secante
+* Guía ejercicios

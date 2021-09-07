@@ -1,0 +1,606 @@
+---
+title: "Guía de ejercicios"
+author: "Uriel Paluch"
+date: "7/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+```{r metodo de biseccion}
+#Método de Bisección
+Biseccion <- function(a, b, N = 100, tol) {
+#Tiene por default 100 iteraciones
+  
+  #Instancio las listas vacias
+  lista_a <- c(NULL)
+  lista_b <- c(NULL)
+  lista_p <- c(NULL)
+
+  for (i in 1:N) {
+    #Calculo P
+    p <- (a+b)/2
+    
+    #Agrego el valor a cada lista
+    lista_p[i] <- p
+    lista_a[i] <- a
+    lista_b[i] <- b
+    
+    #Evaluo la función en p
+    fp <- f(p)
+    
+    #Si la f(p) es 0, entonces es raiz
+    #O si esta dentro del límite tolerado
+    if (fp == 0 | abs((b-a)/2) <= tol) {
+      #Creo un data frame con las listas
+      datos <- data.frame(lista_a, lista_b, lista_p)
+      colnames(datos) <- c("A", "B", "P")
+      print(datos)
+      return(paste("La raiz es: ", p))
+    }
+    
+    #Si comparten el mismo signo
+    if (fp * f(a) > 0) {
+      a <- p
+    } else {
+      b <- p
+    }
+  }
+  
+  #En el caso de que falle el método
+  return(paste('El método falla luego de: ', N, ' iteraciones'))
+}
+```
+
+```{r metodo de punto fijo}
+#Método de punto fijo
+PuntoFijo <- function(p0, n = 100, tol){
+  #Donde p0 es la aproximación inicial
+  #El número máximo de iteraciones n viene por default en 100
+  #Y tol es la toleranacia al error
+  
+  #Instancio las listas vacias
+  lista_p <- c(NULL)
+  lista_gp <- c(NULL)
+  
+  for (i in 1:n) {
+    #Calculo p
+    p <- f(p0)
+    
+    lista_p[i] <- p0
+    lista_gp[i] <- p
+    
+    if(abs(p-p0) <= tol){
+      #Creo un data frame con las listas
+      datos <- data.frame(lista_p, lista_gp)
+      colnames(datos) <- c("P", "G(P)")
+      print(datos)
+      return(p)
+    }
+    
+    p0 <- p
+  }
+  
+  #En el caso de que falle el método
+  return(paste('El método falla luego de: ', n, ' iteraciones'))
+}
+```
+
+```{r método de Newton-Raphson}
+Newton <- function(p0, tol, n = 100){
+  #Donde p0 es la aproximación inicial
+  #El número máximo de iteraciones n viene por default en 100
+  #Y tol es la toleranacia al error
+  
+  for (i in 1:n) {
+    
+    #Calculo p
+    p <- p0 - (f(p0)/fprima(p0))
+    
+    if(abs(p-p0) <= tol){
+      return(p)
+    }
+    
+    p0 <- p
+    
+  }
+  
+  #En el caso de que falle el método
+  return(paste('El método falla luego de: ', n, ' iteraciones'))
+}
+
+```
+
+## Ejercicio 1:
+Aplique el método de Bisección para encontrar soluciones exactas dentro de $0.00001$ para los siguientes problemas:
+
+### a) $x-2^(-x) = 0$ $\hspace{12px}$ $0 \leq x \leq 1$
+
+```{r grafico ejercicio 1.a}
+f <- function(x){
+  return(x-2^(-x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 1, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+
+```
+
+```{r aplico el método ejercicia 1.a}
+Biseccion(a = 0.5,b = 1, tol = 0.00001)
+```
+
+### b) $e^x - x^2 + 3*x - 2=0$ $\hspace{12px}$ $0 \leq x \leq 1$
+
+```{r grafico ejercicio 1.b}
+f <- function(x){
+  return(exp(x) - x^2+3*x - 2)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 1, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+
+```
+
+```{r aplico el método ejercicia 1.b}
+Biseccion(a = 0,b = 0.5, tol = 0.00001)
+```
+
+### c) $2x*cos(2x)-(x+1)^2=0$ $\hspace{12px}$ $-3 \leq x \leq -2$ $-1 \leq x \leq 0$
+
+```{r grafico ejercicio 1.c}
+f <- function(x){
+  return(2*x*cos(2*x)-(x+1)^2)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-3, 0, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+
+```
+
+```{r aplico el método ejercicia 1.c}
+Biseccion(a = -3,b = -2, tol = 0.00001)
+Biseccion(a = -1,b = 0, tol = 0.00001)
+```
+
+### d) $xcos(x)-2x^2+3x-1=0$ $\hspace{12px}$ $0.2 \leq x \leq 0.3$ $1.2 \leq x \leq 1.3$
+
+```{r grafico ejercicio 1.d}
+f <- function(x){
+  return(x*cos(x)-2*x^2+3*x-1)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0.2, 1.3, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+
+```
+
+```{r aplico el método ejercicia 1.d}
+Biseccion(a = 0.25,b = 0.5, tol = 0.00001)
+Biseccion(a = 1,b = 1.5, tol = 0.00001)
+```
+
+## Ejercicio 2:
+Use el Teorema 2.1 para obtener una cota del número de iteraciones que se requieren para alcanzar una aproximación con una exactitud de $0.001$ a la solución de $x^3+x-4$ que se encuentra  en  el  intervalo  $[1;4]$. Obtenga  una  aproximación  de  la  raíz  con  este  grado  de exactitud.
+
+```{r grafico ejercicio 2}
+f <- function(x){
+  return(x^3+x-4)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(1, 4, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+
+```
+
+```{r aplico el método ejercicio 2}
+Biseccion(a = 1,b = 4, tol = 0.001)
+```
+
+## Ejercicio 3:
+Aplique  el  método  de  iteración  de  punto  fijo  para  determinar  una  solución  con  una exactitud de $0.01$ para $x^4-3x^2-3=0$ en $[1;2]$. Utiice $p_0 = 1$.
+
+
+Reexpreso la ecuación de la forma 
+\begin{align*}
+  x = g(x)
+\end{align*}
+$x = (3*x^2+3)^\frac{1}{4}$
+
+```{r grafico del ejercicio 3}
+#La función del ejercicio
+f <- function(x){
+  return((3*x^2+3)^(1/4))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(3*x^2+3)^(1/4))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(1, 2, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+Tomo $p_0 = 1$
+```{r método ejercicio 3}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 1, tol = 0.01),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 3 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
+```
+
+## Ejercicio 4:
+Aplique el  método  de  iteración  de  punto  fijo  para  determinar  una  solución  con  una exactitud de $0.01$ para  $x^3-x-1 = 0$ en $[1;2]$. Utiice $p_0 = 1$
+
+Reexpreso la ecuación de la forma 
+\begin{align*}
+  x = g(x)
+\end{align*}
+$x = (x+1)^\frac{1}{3}$
+
+```{r grafico del ejercicio 4}
+#La función del ejercicio
+f <- function(x){
+  return((x+1)^(1/3))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+(x+1)^(1/3))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(1, 2, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+Tomo $p_0 = 1$
+```{r método ejercicio 4}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 1, tol = 0.01),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 4 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
+```
+
+
+## Ejercicio 5:
+Aplique  el  Teorema de  Punto  Fijo para  demostrar  que $g(x) = \pi + 0.5 sen(\frac{x}{2})$ tiene  un único punto fijo en $[0;2*\pi]$. Use la iteración de punto fijo para obtener una aproximación al punto  fijo  con  una  exactitud  de $0.01$.  Use  el Corolario  para  estimar  la  cantidad  de iteraciones  necesarias  para  alcanzar  una  exactitud  de $0.001$ y  después  compare  esta estimación teórica con la cantidad que realmente se requiere.
+
+Reexpreso la ecuación de la forma 
+\begin{align*}
+  x = g(x)
+\end{align*}
+$x = \pi + 0.5 * sen(\frac{x}{2})$
+
+```{r grafico del ejercicio 5}
+#La función del ejercicio
+f <- function(x){
+  return( pi + 0.5 * sin(x/2))
+}
+#La función para graficar la raiz
+g <- function(x){
+  return(-x+ pi + 0.5 * sin(x/2))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 2*pi, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+Tomo $p_0 = 3.5$
+```{r método ejercicio 5}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 3.5, tol = 0.01),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+```{r método ejercicio 5b}
+this_could_go_wrong <- tryCatch(
+  PuntoFijo(p0 = 3.5, tol = 0.0001),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
+
+```{r ejercicio 5 linea recta}
+#Agrego la linea recta que une los puntos entre la función del ejercicio, el punto fijo y la raiz
+gg_fx <- gg_fx + geom_vline(xintercept = raiz, linetype = 1, colour="darkgreen")
+
+gg_fx
+```
+
+## Ejercicio 6:
+Sean $f(x) = -x^3 - cos(x)$  y $p_0 = 1$.  Aplique la fórmula  de  iteración  deNewton  para encontrar $p_2$. ¿Podríamos utilizar $p_0 = 0$?
+
+```{r grafico del ejercicio 6}
+f <- function(x){
+  return(-x^3 -cos(x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-3, 3, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 6}
+fprima <- D(expression(-x^3 -cos(x)), "x")
+
+fprima
+
+fprima <- function(x){
+  return(-(3 * x^2 - sin(x)))
+}
+
+Newton(p0 = -1, tol = 0.001)
+
+this_could_go_wrong <- tryCatch(
+  Newton(p0 = 0, tol = 0.001),
+  error = function(e){print("Error")})
+
+if (this_could_go_wrong != "Error"){
+  raiz <- this_could_go_wrong
+  print(paste("La raiz es: ", raiz)) 
+}
+```
