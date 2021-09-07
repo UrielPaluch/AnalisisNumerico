@@ -683,7 +683,7 @@ gg_fx
 ```
 Se observa una raiz en el intevalo $[0.5;1]$
 
-Tomo $p_0 = 1$
+Tomo $p_0 = 0.5$
 ```{r método ejercicio 2.1}
 this_could_go_wrong <- tryCatch(
   PuntoFijo(p0 = 0.5, tol = 0.001),
