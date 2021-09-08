@@ -8,4 +8,4 @@
 * Punto fijo
 * Newton-Rapshon
 * Secante
-* Guía ejercicios
+* Guía ejercicios (falta TIR)

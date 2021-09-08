@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 ```
 
+## Métodos:
+
 ```{r metodo de biseccion}
 #Método de Bisección
 Biseccion <- function(a, b, N = 100, tol) {
@@ -110,6 +112,63 @@ Newton <- function(p0, tol, n = 100){
   
   #En el caso de que falle el método
   return(paste('El método falla luego de: ', n, ' iteraciones'))
+}
+
+```
+
+```{r método de la secante}
+
+Secante <- function(p0, p1, tol, n = 100){
+  
+  q0 = f(p0)
+  q1 = f(p1)
+  
+  for (i in 2:n) {
+    
+    p = p1 - q1 * (p1 - p0) / (q1 - q0)
+    
+    if (abs(p-p1) < tol){
+      return(p)
+    }
+    
+    p0 = p1
+    q0 = q1
+    p1 = p
+    q1 = f(p)
+    
+  }
+  
+  return(paste("El método falló luego de ", n, " iteraciones"))
+}
+
+```
+
+```{r método de la falsa posición}
+
+FalsaPosicion <- function(p0, p1, tol, n = 100){
+  
+  q0 <- f(p0)
+  q1 <- f(p1)
+  
+  for (i in 2:n){
+    p = p1 -q1*(p1-p0)/(q1-q0)
+    
+    if (abs(p-p1) < tol){
+      return(p)
+    }
+    
+    q = f(p)
+    
+    if (q*q1 < 0){
+      p0 <- p1
+      q0 <- q1
+    }
+    
+    p1 <- p
+    q1 <- q
+  }
+  
+  return(paste("El método falló luego de ", n, " iteraciones"))
 }
 
 ```
@@ -604,3 +663,286 @@ if (this_could_go_wrong != "Error"){
   print(paste("La raiz es: ", raiz)) 
 }
 ```
+
+## Ejercicio 7:
+Sea $f(x) = x^2 - 6$. Con $p_0 = 3$ y $p_1 = 2$ encuentre $p_3$.
+
+### a) Aplique la fórmula de iteración de la secante.
+
+```{r grafico del ejercicio 7.a}
+f <- function(x){
+  return(x^2 - 6)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 4, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 7.a}
+Secante(p0 = 3, p1 = 2, tol = 0.1)
+```
+
+```{r método ejercicio 7.b}
+FalsaPosicion(p0 = 3, p1 = 2, tol = 0.1)
+```
+
+## Ejercicio 8:
+Aplique el método de Newton para obtener soluciones con una exactitud de $0.0001$ para los siguientes problemas:
+
+### a) $x^3 - 2*x^2 - 5 = 0$ $\hspace{12px}$ $[1;4]$
+### b) $x^3 - 3*x^2 - 1 = 0$ $\hspace{12px}$ $[-3;-2]$
+### c) $x - cos(x) = 0$ $\hspace{12px}$ $[0;\frac{\pi}{2}]$
+### d) $x - 0.8 - 0.2 sen(x) = 0$ $\hspace{12px}$ $[0;\frac{\pi}{2}]$
+
+```{r grafico del ejercicio 8.a}
+f <- function(x){
+  return(x^3 - 2*x^2 - 5)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(1, 4, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 8.a}
+fprima <- D(expression(x^3 - 2*x^2 - 5), "x")
+
+fprima
+
+fprima <- function(x){
+  return(3 * x^2 - 2 * (2 * x))
+}
+
+Newton(p0 = 2.5, tol = 0.001)
+```
+
+```{r grafico del ejercicio 8.b}
+f <- function(x){
+  return(x^3 - 3*x^2 - 1)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(-3, 5, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 8.b}
+fprima <- D(expression(x^3 - 3*x^2 - 1), "x")
+
+fprima
+
+fprima <- function(x){
+  return(3 * x^2 - 3 * (2 * x))
+}
+
+Newton(p0 = 2.5, tol = 0.001)
+```
+
+```{r grafico del ejercicio 8.c}
+f <- function(x){
+  return(x - cos(x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 2, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 8.c}
+fprima <- D(expression(x - cos(x)), "x")
+
+fprima
+
+fprima <- function(x){
+  return(1 + sin(x))
+}
+
+Newton(p0 = 0.75, tol = 0.001)
+```
+
+```{r grafico del ejercicio 8.d}
+f <- function(x){
+  return(x - 0.8 - 0.2 * sin(x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 2, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+```{r método ejercicio 8.d}
+fprima <- D(expression(x - 0.8 - 0.2 * sin(x)), "x")
+
+fprima
+
+fprima <- function(x){
+  return(1 - 0.2 * cos(x))
+}
+
+Newton(p0 = 0.75, tol = 0.001)
+```
+
+## Ejercicio 9:
+Repita el ejercicio 8 usando (i) el método de la secante y (ii) el método de la posición falsa.Modifique las aproximaciones iniciales de ser necesario.
+
+### a)
+
+```{r método ejercicio 9.a.i}
+Secante(p0 = 2.5, p1 = 3, tol = 0.001)
+```
+
+```{r método ejercicio 9.a.ii}
+FalsaPosicion(p0 = 2.5, p1 = 3, tol = 0.00001)
+```
+
+### b)
+
+```{r método ejercicio 9.b.i}
+Secante(p0 = 3, p1 = 4, tol = 0.0001)
+```
+
+```{r método ejercicio 9.b.ii}
+FalsaPosicion(p0 = 3, p1 = 4, tol = 0.0001)
+```
+
+### c)
+
+```{r método ejercicio 9.c.i}
+Secante(p0 = 0.5, p1 = 0.75, tol = 0.0001)
+```
+
+```{r método ejercicio 9.c.ii}
+FalsaPosicion(p0 = 0.5, p1 = 0.75, tol = 0.0001)
+```
+
+### d)
+
+```{r método ejercicio 9.d.i}
+Secante(p0 = 0.75, p1 = 1, tol = 0.0001)
+```
+
+```{r método ejercicio 9.d.ii}
+FalsaPosicion(p0 = 0.75, p1 = 1, tol = 0.0001)
+```
+
+
+
+
+
+
