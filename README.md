@@ -9,3 +9,6 @@
 * Newton-Rapshon
 * Secante
 * Guía ejercicios (falta TIR)
+
+## Semana 3
+* Eliminación Gaussiana
