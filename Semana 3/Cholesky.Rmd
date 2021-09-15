@@ -1,0 +1,146 @@
+---
+title: "Cholesky"
+author: "Uriel Paluch"
+date: "14/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Se usa una idea similar al algoritmo LU pero con una única matriz L.
+
+La matriz L que se obtiene mediante la descomposición de CHolesky tiene aplicaciones en Simulación de Monte Carlo de variables aleatorias multivariadas.\
+- La matriz A que se factoriza n estas aplicaciones es la matriz de covarianzas, o bien la matid de correlaciones\
+- La matriz de covarianzas (y de correlaciones), deben ser semi-definidas positivas, pero en la mayoría de las aplicaciones son definidas positivas
+
+Una matriz $A$ es definida positiva si es simétrica y si $x^tAx > 0$ para cada vector n-dimensional de $x \neq 0$. Cuando se hace este calculo se obtiene una matriz de 1X1, puesto que estamos trabajando con variables y no con incognitas va a quedar una ecuación. En el libro hay un ejemplo en el cual el resultado es las $x$ elevadas al cuadrado, por lo tanto, es definida postiva ($>0$) a menos que todos los valores de $x$ sean 0.
+
+## Teorema 6.24:
+Si $A$ es una matriz de $n$ X $n$ una matriz es definida positiva, entonces:  \
+i. $A$ tiene inversa  \
+ii. $a_{ii} > 0$ para cada $i = 1, 2, ..., n;$
+iii. $max_{1 \leq k, j \leq n} |a_{kj}| \leq max_{q\leq i \leq n} |a_{ii}|$  \
+iv. $(a_{ij})^2 \le a_{ii} a_{jj}$ para cada $i \neq j$  \
+
+## Corolario 6.28: 
+Una matriz  $A$ es definida positiva si y sólo si $A$ se puede factorizar en la forma $LL^t$, donde $L$ es triangular inferior con entradas diagonales diferentes a cero.
+
+CREO que los elementos diagonales deben ser $\neq$ de cero.  \
+
+```{r factorizacion de matrices con el metodo de Cholesky}
+
+Cholesky <- function(A){
+  n <- nrow(A)
+  
+  L <- matrix(rep(0, times = n^2), nrow = n, ncol = n, byrow = TRUE)
+  
+  # Paso 1 ------------------------------------------------------------------
+  L[1,1] <- sqrt(A[1,1])
+  
+
+  # Paso 2 ------------------------------------------------------------------
+  for (j in 2:n){
+    L[j,1] <- A[j,1]/L[1,1]
+  }
+  
+
+  # Paso 3 ------------------------------------------------------------------
+  for (i in 2:(n-1)) {
+
+    # Paso 4 ------------------------------------------------------------------
+    suma <- 0
+    for (k in 1:(i-1)) {
+      suma <- suma + L[i,k]^2
+    }
+    
+    L[i,i] <- sqrt(A[i,i] - suma)
+    
+
+    # Paso 5 ------------------------------------------------------------------
+    for (j in (i+1):n) {
+      
+      suma <- 0
+      for (k in 1:(i-1)) {
+        suma <- suma + L[j,k]*L[i,k]
+      }
+      
+      L[j,i] <- (A[j,i] - suma)/L[i,i] 
+      
+    }
+  }
+  
+  # Paso 6 ------------------------------------------------------------------
+  suma <- 0
+  for (k in 1:(n-1)) {
+    suma <- suma + L[n,k]^2
+  }
+  
+  L[n,n] <- sqrt(A[n,n]-suma)
+  
+  return(L)
+  
+}
+
+A <- matrix(c(2, -1, 0,
+              -1, 2, -1,
+              0, -1, 2), nrow = 3, ncol = 3, byrow = TRUE)
+
+test <- Cholesky(A)
+
+print(test)
+
+print(test%*%t(test))
+
+```
+
+## Ejercicios de la guía:
+
+### A:
+```{r ejercicio 2.a}
+
+A <- matrix(c(2, -1, 0,
+              -1, 2, -1,
+              0, -1, 2), nrow = 3, ncol = 3, byrow = TRUE)
+
+test <- Cholesky(A)
+
+print(test)
+```
+
+### B:
+```{r ejercicio 2.b}
+B <- matrix(c(6, 2, 1, -1,
+              2, 4, 1, 0,
+              1, 1, 4, -1,
+              -1, 0, -1, 3), nrow = 4, ncol = 4, byrow = TRUE)
+
+test <- Cholesky(B)
+
+print(test)
+```
+
+### C:
+```{r ejercicio 2.c}
+C <- matrix(c(4, 1, 1, 1,
+              1, 3, -1, 1,
+              1, -1, 2, 0,
+              1, 1, 0, 2), nrow = 4, ncol = 4, byrow = TRUE)
+
+test <- Cholesky(C)
+
+print(test)
+```
+
+### D:
+```{r ejercicio 2.d}
+D <- matrix(c(1, 2, 4, 7,
+              2, 13, 23, 38,
+              4, 23, 77, 122,
+              7, 38, 122, 294), nrow = 4, ncol = 4, byrow = TRUE)
+
+test <- Cholesky(D)
+
+print(test)
+```
