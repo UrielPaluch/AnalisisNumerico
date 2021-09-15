@@ -12,10 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Sistemas de ecuaciones lineales: Eliminación Gaussiana
 Los sistemas se pueden modificar, siempre haciendo operaciones legales (Ejemplo: multiplicando una ecuación por una constante y sumandosela a otra.), para obtener en un nuevo mas fácil de resolver pero, con las mismas soluciones. Por simplicidad se expresan los sistemas como arreglos matriciales.
 
-a_ij = a,fc
 
 Para resolver el sistma lineal de n x n
-
 ```{r metodo de eliminacion gaussiana}
 Eliminacion_Gaussiana <- function(matriz_coeficientes, vector_resultados){
   n_incoginitas <- nrow(vector_resultados)
@@ -66,7 +64,8 @@ Eliminacion_Gaussiana <- function(matriz_coeficientes, vector_resultados){
   x <- rep(NA, times = n_incoginitas)
   
   
-  x[n_incoginitas] <- matriz_aumentada[n_incoginitas,(n_incoginitas+1)]/matriz_aumentada[n_incoginitas,n_incoginitas]
+  x[n_incoginitas] <- matriz_aumentada[n_incoginitas,(n_incoginitas+1)]/
+    matriz_aumentada[n_incoginitas,n_incoginitas]
   
   for (i in (n_incoginitas-1):1) {
     
