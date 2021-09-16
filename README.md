@@ -12,3 +12,7 @@
 
 ## Semana 3
 * Eliminación Gaussiana
+* Factorizacion LU
+* Factorización de Cholesky
+
+## Semana 4
