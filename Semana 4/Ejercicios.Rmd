@@ -1,0 +1,101 @@
+---
+title: "Ejercicios"
+author: "Uriel Paluch"
+date: "19/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejercicios de SQL
+https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all
+
+## Ejercicio 1:
+Todas las ventas realizadas por MargaretPeacock al cliente Frankenversand.La salida debe  contener  los  siguientes  campos: Nombre  y  Apellido  del  Vendedor,  Nombre  del Cliente,  ID  de  la  Orden  de  Compra  (tabla  Orders),  Nombre  del  Producto  (tabla Products), Presentación (Unit, de tabla Products), Cantidad (tabla OrderDetails), Precio (tabla Products) y Total (calculado como Precio*Cantidad).
+
+
+SELECT  
+e.FirstName as "Nombre del vendedor",  
+e.LastName as "Apellido del vendedor",  
+c.CustomerName as "Nombre del cliente",  
+o.OrderID as "ID de la orden",  
+p.ProductName as "Nombre del producto",  
+p.Unit as "Presentacion",  
+od.Quantity as "Cantidad",  
+p.Price as "Precio",  
+Price * Quantity as "Total"  
+FROM Orders o  
+INNER JOIN Customers c ON o.CustomerID = c.CustomerID  
+INNER JOIN Employees e ON o.EmployeeID = e.EmployeeID  
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID  
+INNER JOIN Products p ON p.ProductID = od.ProductID  
+WHERE "Nombre del vendedor" = "Margaret" AND "Apellido del vendedor" = "Peacock" AND "Nombre del cliente" = "Frankenversand";
+
+
+## Ejercicio 2:
+Un  descuento  de  12%  para  aquellos productos  con  precio  mayor  a  75,  un  descuento del8%  para  productos  con  precio  entre  50  y  75  (inclusive),  y 4%  para  productos  con precio mayor o igual a 30 y hasta 49.99.La salida debe contener los siguientes campos: Nombre   del   Producto,   Presentación   (Unidades),   Precio   Original,   Descuento   (%), Descuento ($) y Precio con Descuento.
+
+
+Algo que menciono Melisa en clase es que la instrucción CASE, una vez que encuentra una coincidencia elimina ese dato del data set, por eso es posible hacerlo así. Sin poner, por ejemplo entre 50 y 75  75 > price > 50, y solo poner solo price > 50.
+
+SELECT ProductName as "Nombre del producto",  
+Unit as "Presentacion",  
+Price as "Precio Original",  
+CASE WHEN Price > 75 THEN "12%" WHEN Price > 50 THEN "8%" WHEN Price >= 30 THEN "4%" ELSE "0%" END as "Descuento %",  
+round(Price * (CASE WHEN Price > 75 THEN 0.12 WHEN Price > 50 THEN 0.8 WHEN Price >= 30 THEN 0.4 ELSE 0 END), 2) as "Descuento $",  
+round(Price - Price * (CASE WHEN Price > 75 THEN 0.12 WHEN Price > 50 THEN 0.8 WHEN Price >= 30 THEN 0.4 ELSE 0 END), 2) as "Precio con descuento"  
+FROM Products  
+
+## Ejercicio 3:
+El  precio  máximo  y  mínimo  por  cada  categoría  de  los  productos.  La  salida  debe contener  los  siguientes  campos:  Nombre  de  la  categoría,  Precio Máximo,  Precio Mínimoy debe ser ordenado por el precio máximo de forma descendente.
+
+SELECT  
+c.CategoryName as "Nombre de la categoria",  
+MIN(p.Price) as "Precio minimo",  
+MAX(p.Price) as "Precio maximo"  
+FROM Products p  
+INNER JOIN Categories c ON p.CategoryID = c.CategoryID  
+GROUP BY p.CategoryID  
+ORDER BY MAX(p.Price) DESC  
+
+## Ejercicio 4:
+Todas  las  ventas  realizadas  a  los  clientes  de España.La  salida  debe  contener  los siguientes  campos:  Nombre  del  Cliente, ciudad  y  país  del  cliente, ID  de  la  Orden  de Compra  (tabla  Orders),  Nombre  del  Producto  (tabla  Products),  Presentación  (Unit,  de tabla   Products),   Cantidad   (tabla   OrderDetails),   Precio   (tabla   Products)   y   Total (calculado como Precio*Cantidad).
+
+SELECT  
+c.CustomerName as "Nombre del cliente",  
+c.City as "Ciudad",  
+c.Country as "Pais",  
+o.OrderID as "ID de la orden de compra",  
+p.ProductName as "Nombre del producto",  
+p.Unit as "Presentacion",  
+od.Quantity as "Cantidad",  
+p.Price as "Precio",  
+p.Price * od.Quantity as "Total"  
+FROM Customers c   
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID  
+INNER JOIN OrderDetails od ON od.OrderID = o.OrderID   
+INNER JOIN Products p ON p.ProductID = od.ProductID  
+WHERE c.Country = "Spain"  
+
+## Ejercicio 5:
+Un recargode 7% para losproductos que se venden en cajasy un  5% para productos que se venden en botellas o paquetes, para el resto de los productos el recargo es del 2%.La   salida   debe   contener   los   siguientes   campos:   Nombre   del   Producto, Presentación (Unidades), Precio Original, Recargo(%), Recargo($) y Precio con Recargo.
+
+SELECT  
+ProductName as "Nombre del producto",  
+Unit as "Presentacion",  
+Price as "Precio",  
+CASE WHEN Unit LIKE "%box%" THEN "7%"  
+WHEN Unit LIKE "%bag%" OR  Unit LIKE"%bottles%" THEN "5%"  
+ELSE "2%"  
+END as "Recargo %",  
+round(Price * (CASE WHEN Unit LIKE "%box%" THEN 0.07  
+WHEN Unit LIKE "%bag%" OR  Unit LIKE"%bottles%" THEN 0.05  
+ELSE 0.02  
+END),2) as "Recargo $",  
+round(Price + Price * (CASE WHEN Unit LIKE "%box%" THEN 0.07  
+WHEN Unit LIKE "%bag%" OR  Unit LIKE"%bottles%" THEN 0.05  
+ELSE 0.02  
+END),2) as "Precio con recargo"  
+FROM Products  
