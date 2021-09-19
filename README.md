@@ -16,3 +16,4 @@
 * Factorización de Cholesky
 
 ## Semana 4
+* Ejercicios SQL
