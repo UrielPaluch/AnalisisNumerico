@@ -99,3 +99,87 @@ WHEN Unit LIKE "%bag%" OR  Unit LIKE"%bottles%" THEN 0.05
 ELSE 0.02  
 END),2) as "Precio con recargo"  
 FROM Products  
+
+## Ejercicio 6:
+La  cantidad  de  órdenes  de  compra y el  total  gastadopor  cliente,  para  los  clientes  de Estados  Unidos. La  salida  debe  contener  los  siguientes  campos:  Nombre  del  Cliente, Cantidad de órdenes, Total (calculado comola suma total delPrecio*Cantidad).
+
+SELECT  
+c.CustomerName as "Nombre del cliente",  
+COUNT(DISTINCT(o.OrderID)) as "Cantidad de pedidos",  
+ROUND(SUM(p.Price * od.Quantity), 2) as "Total"  
+FROM Customers c  
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID  
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID  
+INNER JOIN Products p on od.ProductID =  p.ProductID  
+WHERE Country = "USA"  
+GROUP BY o.CustomerID  
+
+## Ejercicio 7:
+Un  comisión  del  20%  para los emplearos  que  realizaron ventas  por más  de 100.000, del  10%  para  los  que  tuvieron  ventas  entre  40.000  y  99.999  y  del  5%  para  los  que vendieron  entre  30.000  y  39000. La  salida  debe  contener  los  siguientes  campos: Nombre  y  Apellido  del  Vendedor,  Cantidad  de  ventas(cantidad  de  órdenes,  no  de productos), Totalvendido($),Comisión(%).
+
+En algunas bases de datos se concatena con "||" como aca, en otras se puede usar la función CONCAT()
+
+SELECT  
+e.FirstName || " " || e.LastName AS "Nombre del vendedor",  
+COUNT(e.EmployeeID) AS "Cantidad de ventas",  
+ROUND(SUM(p.Price * od.Quantity),2) AS "Total vendido",  
+CASE WHEN ROUND(SUM(p.Price * od.Quantity),2) > 100000 THEN "20%"  
+WHEN ROUND(SUM(p.Price * od.Quantity),2) > 40000 THEN "10%"   
+WHEN ROUND(SUM(p.Price * od.Quantity),2) > 30000 THEN "5%"END AS "Comisión %"  
+FROM Orders o  
+INNER JOIN Employees e ON e.EmployeeID = o.EmployeeID  
+INNER JOIN OrderDetails od ON od.OrderID = o.OrderID  
+INNER JOIN Products p ON p.ProductID = od.ProductID  
+GROUP BY e.EmployeeID  
+ORDER BY "Total vendido" DESC  
+
+## Ejercicio 8:
+Total de productos vendidoscuyos proveedores son de Japón.La salida debe contener los  siguientes  campos:  Nombre  del Proveedor, ciudad  y  país  del  proveedor,  Contacto del  proveedor, Nombre  del  Producto  (tabla  Products), Nombre  de  la  categoría  del producto  (tabla  Categories), Cantidad  (tabla  OrderDetails),  Precio  (tabla  Products)  y Total (calculado como Precio*Cantidad).
+
+SELECT  
+s.SupplierName AS "Nombre del proveedor",  
+s.City AS "Ciudad",  
+s.Country AS "Pais",  
+s.Phone AS "Contacto",  
+p.ProductName AS "Nombre del producto",  
+c.CategoryName AS "Categoria del producto",  
+SUM(od.Quantity) AS "Cantidad",  
+p.Price AS "Precio",  
+ROUND(SUM(p.Price * od.Quantity),2) AS "Total"  
+FROM Suppliers s  
+INNER JOIN Products p ON p.SupplierID = s.SupplierID  
+INNER JOIN Categories c ON c.CategoryID = p.CategoryID  
+INNER JOIN OrderDetails od ON od.ProductID = p.ProductID  
+WHERE Country = "Japan"  
+GROUP BY p.ProductID  
+
+## Ejercicio 9:
+La  cantidad de  proveedores  y  de  productos,  agrupando  por  cada  pais  y  ciudad de  los proveedores. La  salida  debe  contener  los  siguientes  campos:Paísy  ciudad  de  los proveedores (Tabla Suppliers), Cantidad de proveedores, Cantidad de productos.
+
+SELECT  
+s.Country AS "Pais",  
+s.City AS "Ciudad",  
+COUNT(s.City) AS "Cantidad de proveedores",  
+COUNT(DISTINCT(p.ProductID)) AS "Cantidad de productos"  
+FROM Suppliers s  
+INNER JOIN Products p ON p.SupplierID = s.SupplierID  
+GROUP BY s.City  
+ORDER BY s.Country  
+
+## Ejercicio 10:
+Los  clientes  que  gastaron más de  14.000  en  el  total  de  todas  sus  compras.La  salida debe  contener  los  siguientes  campos:Nombre  del  Cliente,ciudad  y  país  del  cliente, Cantidad de compras, Total (calculado como la suma total del Precio*Cantidad).
+
+Cuando se quiere filtrar en base a una clausula de la consulta se utiliza HAVING
+
+SELECT  
+c.CustomerName AS "Nombre del cliente",  
+c.City AS "Ciudad",  
+c.Country AS "Pais",  
+COUNT(o.CustomerID) AS "Cantidad de compras",  
+ROUND(SUM(p.Price * od.Quantity), 2) AS "Total"  
+FROM Customers c  
+INNER JOIN Orders o ON o.CustomerID = c.CustomerID  
+INNER JOIN OrderDetails od ON od.OrderID = o.OrderID  
+INNER JOIN Products p ON p.ProductID = od.ProductID  
+GROUP BY o.CustomerID  
+HAVING "Total" > 14000  
