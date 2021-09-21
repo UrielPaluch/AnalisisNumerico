@@ -1,0 +1,78 @@
+---
+title: "Twitter API"
+author: "Uriel Paluch"
+date: "20/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Inicio
+Este va a ser mi cuaderno sobre la API de Twitter.  
+
+Lo primero que hay que hacer es entrar a https://developer.twitter.com/en/apps y seguir todos los pasos para poder tener una cuenta de *Devloper*.
+
+Lo segundo que hacemos es obtener nuestras clave. Por seguridad y porque para las pruebas estoy usando mi cuenta de Twitter personal, no voy a subir el archivo con las claves a GitHub.
+
+https://github.com/twitterdev
+
+## API keys y tokens
+Con la API le haces pedidos a twitter sin estar logeado en tu cuenta. Con el Access entras a tu cuenta de twitter.  
+- API Key: Es un usuario y te permite hacer pedidos a la app.  
+- API Key Secret: Es la contraseña de ese usuario.  
+- Access Token: Esto debe ser el usuario de tu cuenta de twitter con la que conseguiste la de *developer*.  
+- Access Token Secret: Esto debe ser la contraseña. La verdad que la documentación no lo aclara.  
+- Bearer Token: Es lo que te permite realizar la autenticación con la API.
+
+Para todo usa OAuth (Open Authorization), es un protocolo estandarizado de seguridad  para las API.  
+
+
+## Manos a la obra
+Lo primero que hacemos es crear una variable en el ambiente de trabajo donde vamos a setear nuestro Bearer Token
+
+```{r}
+Sys.setenv(BEARER_TOKEN = "your-bearer-token")
+```
+
+Vamos a utilizar las siguientes librerias:
+- httr: Hacer HTTP requests a la API de Twitter  
+- jsonlite: La API de Twitter devuelve archivos JSON, asi que la vamos a necesitar para trabajar.
+- dplyr: Data manipulation  
+```{r message = FALSE, warning = FALSE}
+require(httr)
+require(jsonlite)
+require(dplyr)
+```
+
+Agarramos el Token seteado en el ambiente y lo referenciamos a una variable
+```{r}
+bearer_token <- Sys.getenv("$BEARER_TOKEN")
+headers <- c(`Authorization` = sprintf('Bearer %s', bearer_token))
+```
+
+Por default vuelve siempre el ID, nombre y username de cada usuario. Se le pueden agregar mas campos.
+https://developer.twitter.com/en/docs/twitter-api/fields  
+https://developer.twitter.com/en/docs/twitter-api/expansions  
+
+```{r}
+params <- list(`user.fields` = 'description',
+               `expansion` = 'pinned_tweet_id')
+```
+
+```{r}
+handle <- readline('$USERNAME')
+url_handle <-
+  sprintf('https://api.twitter.com/2/users/by?usernames=%s', handle)
+```
+
+```{r}
+response <-
+  httr::GET(url = url_handle,
+            httr::add_headers(.headers = headers),
+            query = params)
+obj <- httr::content(response, as = "text")
+print(obj)
+```
+
