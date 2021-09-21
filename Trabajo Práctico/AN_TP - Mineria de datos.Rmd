@@ -1,0 +1,42 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 2, 2021. Trabajo Práctico 1 -  Minería de datos"
+author: "Remplace este texto por su Apellido y Nombre y su Numero de Registro"
+output: 
+  pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Realice un análisis, agrupando o filtrando los datos como considere sobre algún set de datos público de Argentina con el objetivo de obtener información relevante.
+
+Donde:
+
+- Los datos se descargan en la siguiente url: [https://datos.gob.ar/dataset] 
+- El análisis debe incluir el filtrado y agrupamiento de los datos que considere relevante y un gráfico en R.
+
+
+**Fecha y Forma de Entrega:**
+
+- La entrega debe consistir en un archivo Rmd que contenga el código y las conclusiones del análisis realizado.
+- El nombre del archivo entregado debe ser: ***AN_TP1_APELLIDO_Nro Registro.Rmd***
+- La entrega la deben realizar mediante carga al Campus Virtual, en la Sección de Actividades/Entregas.
+- Fecha límite de entrega: **domingo 3 de octubre a las 23:59hs.**
+-  **Para poder rendir el primer parcial, deberán haber entregado el Trabajo Práctico.**
+- La evaluación del TP estará contenida en la nota del primer examen parcial.
+
+
+
+# Código:
+```{r}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 
+
+
+```
+
+# Conclusiones:
+
+
