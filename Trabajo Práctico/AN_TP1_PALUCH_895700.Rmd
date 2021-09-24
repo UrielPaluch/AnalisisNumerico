@@ -1,0 +1,94 @@
+---
+title: "AN_TP1_PALUCH_895700"
+author: "Uriel Paluch"
+date: "21/9/2021"
+output: pdf_document
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Análisis de la "Tarjeta Alimentar"
+El objetivo de este trabajo es poder analizar la Tarjeta Alimentar y responder algunas preguntas como: ¿En que provincia hay mas personas?, ¿Son mas los hombres o las mujeres?, ¿Cual es la edad promedio?, entre otras.
+
+*Hacer un glosario*
+
+Link (igual me parece que va al final): https://datos.gob.ar/dataset/desarrollo-social-titulares-tarjeta-alimentar/archivo/desarrollo-social_7d8b67b8-5f75-41ca-b6fb-83afbfdc46a1
+
+Agrego las librerias
+```{r warning = FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(treemapify)
+library(hrbrthemes)
+hrbrthemes::import_roboto_condensed()
+```
+
+
+
+Seteamos el data frame y obtenemos sus columnas
+```{r}
+#Leo el csv
+df <- read.csv("C:/Users/COHEN/Desktop/Facultad/AnalisisNumerico/Trabajo Práctico/Titulares_Tarjeta_Alimentar-20210801.csv", encoding = "UTF-8")
+
+#Leo el nombre de las columnas
+colnames(df)
+```
+## Quienes tienen mas la tarjeta alimentar: ¿hombres o mujeres?
+Selecciono el sexo y ploteo un gráfico de barras.
+```{r}
+#Saco la notación científica
+options(scipen=999)
+
+#Selecciono el sexo
+df_sex <- df %>% select(sexo)
+
+#Ploteo el gráfico de barras
+ggplot(df_sex, aes(x = sexo, fill = sexo)) + geom_bar(width = 0.5)
+```
+Se observan que las personas pertenecientes al género femenino superan ampliamente a las personas del género masculino.
+
+## ¿Cual es la edad promedio?
+```{r}
+mean(df$edad)
+```
+
+## ¿Como se distribuye la edad?
+```{r fig.align='center', echo=FALSE}
+ggplot(df, aes(x = edad)) + 
+  geom_bar(width = 1, fill = "#38b4e0") + #Grafico de barras
+  scale_x_continuous(name = "edad", breaks = seq(12,75, by = 5)) + #Cambio el eje X
+  scale_y_continuous(name = "cantidad") #Cambio el eje Y
+```
+La edad se asemeja a una distribución normal, levemente asimétrica.
+
+## Cual es la distribución de los montos entregados
+```{r}
+#Hago un data frame con los montos y sus cantidades
+df_monto_ultima_liquidacion <- df %>% select(monto_ultima_liquidacion) %>% count(monto_ultima_liquidacion)
+
+#Genero el gráfico
+ggplot(df_monto_ultima_liquidacion, aes(area = n, fill = monto_ultima_liquidacion,
+               label = paste("Monto: $", monto_ultima_liquidacion, ". ", "Cantidad: ", n))) +
+  geom_treemap() +
+  geom_treemap_text(colour = "white",
+                    place = "centre",
+                    size = 15) +
+  theme(legend.position = "none")
+```
+
+```{r}
+#Creo un factor con las provincias
+df  %>% 
+  mutate(provincia = factor(provincia)) %>% 
+  group_by(provincia) %>% 
+  ggplot(aes(x = provincia, y = monto_ultima_liquidacion)) +
+  geom_bar(stat="identity", fill="#f68060", width=0.4) +
+    coord_flip() +
+    xlab("") +
+    theme_bw()
+```
+

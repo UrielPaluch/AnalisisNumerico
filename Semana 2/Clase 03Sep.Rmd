@@ -1,0 +1,79 @@
+---
+title: "Clase 03/Sep"
+author: "Dario"
+date: "3/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+```
+
+# Gráfcio de f(x)
+
+Voy a graficar la función $f(x) = cos(x)-\sqrt(x)$:
+
+```{r funcion f(x), echo = TRUE}
+f = function(x){
+  cos(x)-sqrt(x)
+}
+x <- seq(0,10,by = 0.1) #Generamos un vector "x" para crear los puntos en F(x)
+fx <- f(x) #Creamos los valores de f(x)
+df <- data.frame(x, fx) # Creo data frame
+```
+
+```{r grafico}
+ggplot(data = df) + #Cargo los datos
+  aes(x=x,y=fx) + #Agrego capa estética (culumnas de "df")
+  geom_line(linetype=1,colour="darkblue") + #Agrego la geometria
+  geom_hline(yintercept = 0,linetype=1) + #Agrego linea que cruza en y=0
+  geom_vline(xintercept = 0,linetype=1) + #Agrego linea que cruza en x=0
+  scale_x_continuous(name = "x", breaks = seq(0,10, by = 1)) + # Cambio ticks en eje X
+  scale_y_continuous(name = "y = f(x)", breaks = seq(-4.5,1, by = 0.5)) + # Cambio ticks en eje Y
+  geom_vline(xintercept = c(0.5,1),linetype=2, col = "red") + # Intervalo de las raíces
+  ggtitle("Función con raíz entre 0.5 y 1")
+```
+
+# Gráfcio de g(x)
+
+Voy a graficar la función $g(x)$ que tiene un punto fijo en la raíz o cero de $f(x)$.
+
+$f(x) = cos(x) - raíz(x) = 0$, entonces $cos(x)^2 = x = g(x)$.
+
+```{r funcion g(x)}
+g = function(x){
+  cos(x)^2
+}
+x2 = seq(0,1,by = 0.001) #Creamos un Vector para obtener puntos de la g(x)
+gx = g(x2)
+df2 = data.frame(x = x2, gx)
+source('Clase Introducción a Ggplot - sourced.R')
+
+```
+
+
+```{r grafico g(x)}
+
+ggplot(data = df2) +
+  aes(x=x,y=gx) + 
+  geom_line(linetype=1,colour="darkblue") +
+  ggtitle("Función con Punto Fijo") +
+  geom_abline(intercept = 0,slope=1,linetype=2) +
+  scale_x_continuous(name = "x", limits = c(0,1), breaks = seq(0,1, by = 0.1))+
+  scale_y_continuous(name = "g(x)", limits = c(0,1), breaks = seq(0,1, by = 0.1))+
+  geom_vline(xintercept=PuntoFijo(g,0.6,10^-6,300),linetype=1,size=1,colour="darkgreen")+
+  geom_point(aes(x =   PuntoFijo(g, p0 = 0.6, tol = 10^-6, N = 300),
+                 y = g(PuntoFijo(g, p0 = 0.6, tol = 10^-6, N = 300))),
+             pch = 16, col = "red")
+```
+
+
+
+
+
+
+
+
+
+
