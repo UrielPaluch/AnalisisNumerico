@@ -80,15 +80,21 @@ ggplot(df_monto_ultima_liquidacion, aes(area = n, fill = monto_ultima_liquidacio
   theme(legend.position = "none")
 ```
 
+## Cual es la distribución de la cantidad de dinero entregada a cada provincia
+
 ```{r}
 #Creo un factor con las provincias
-df  %>% 
-  mutate(provincia = factor(provincia)) %>% 
-  group_by(provincia) %>% 
-  ggplot(aes(x = provincia, y = monto_ultima_liquidacion)) +
-  geom_bar(stat="identity", fill="#f68060", width=0.4) +
-    coord_flip() +
-    xlab("") +
-    theme_bw()
-```
+#No lo ploteo directamente porque me hace el archivo muy pesado (3mb)
+p <- df  %>% 
+      mutate(provincia = factor(provincia)) %>% 
+    group_by(provincia) %>% 
+      ggplot(aes(x = provincia, y = monto_ultima_liquidacion)) +
+      geom_bar(stat="identity", fill="#f68060", width=0.4) +
+      coord_flip() +
+      xlab("") +
+      theme_bw()
 
+#Lo guardo
+ggsave("Monto por provincia.jpeg", dpi = 100, limitsize = TRUE)
+```
+![](Monto por provincia.jpeg)

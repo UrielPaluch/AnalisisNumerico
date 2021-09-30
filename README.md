@@ -17,3 +17,6 @@
 
 ## Semana 4
 * Ejercicios SQL
+
+## Trabajo Práctico
+* Data mining sobre la tarjeta alimentar.
