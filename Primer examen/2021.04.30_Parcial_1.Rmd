@@ -73,7 +73,7 @@ Respuesta:
       #Paso 3
         p = p0 - f(p0)/df(p0) #df(p0)/f(p0)
       #Paso 4
-        if (abs(p-p0) < Tol){return(p0)} #abs[p0-p]. Agregue los corchetes 
+        if (abs(p-p0) < Tol){return(p)} #abs[p0-p]. Agregue los corchetes. Return(p)
       #Paso 5
         i = i + 1
       #Paso 6
@@ -185,6 +185,8 @@ Explique las diferencias del método *Regula Falsi* respecto del método de *Sec
 
 Respuesta (escriba a continuación):
 El método de la *posición falsa* genera aproximaciones de igual forma que el método de la *secante*, pero incluye una prueba para probar que las raices se agrupan en iteraciones sucesivas. 
+En *regular falsi* el p de la iteración siguiente depende del signo de la teración actual. Si *f(p0)* y *f(p1)* comaprten el mismo signo, ¨*p0 = p1*. A diferencia del método de la *secante* donde siempre *p0 = p1*
+
 ## Hallar raíces con RF {#raicesRF} 
 Halle todas las raíces de $h(x)$ en el intervalo $[0,3\pi]$ utilizando el método de Falsa Posición.
 
