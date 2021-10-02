@@ -60,6 +60,77 @@ newton <- function(x, TOL, N = 100, ecuaciones){
 }
 ```
 
+```{r}
+# Metodo de Broyden --------------------------------------------------------
+Broyden <- function(x, TOL, N = 100, ecuaciones){
+  # x: aproximación inicial
+  # TOL: tolerancia
+  # N: cantidad maxima de iteraciones
+  
+  # Instancio las variables -------------------------------------------------
+  # n: número de ecuaciones e incognitas
+  n <- length(ecuaciones)
+  # funciones valuadas en cero
+  f0 <- rep(NA, n)
+  jacobiano <- matrix(rep(NA, n*n), nrow = n, ncol = n)
+  
+  # Recorro las filas
+  for (i in 1:n) {
+    #Evaluo las ecuaciones 
+    f0[i] <- eval(ecuaciones[i], x)
+    # Recorro las columnas
+    for (j in 1:n){
+      # Derivo en cada variable y evaluo
+      jacobiano[i,j] <- eval((D(ecuaciones[i], glue::glue("x",j))), x)
+    }
+  }
+      
+  # Calcula la inversa de una matriz
+  A <- solve(jacobiano)
+  v <- f0
+  s <- -A %*% v
+  
+  x <- unlist(x, use.names = FALSE) + s
+  
+  for (max in 1:N) {
+    w <- v
+    
+    # listo las x
+    x0 <- list()
+    for (i in 1:n) {
+      x0[glue::glue("x",i)] <- x[i]
+    }
+    x <- x0
+    for (i in 1:n) {
+      #Evaluo las ecuaciones 
+      f0[i] <- eval(ecuaciones[i], x)
+    }
+    v <- f0 
+    
+    y <- v - w
+    
+    z <- -A%*%y
+    
+    p <- -t(s) %*% z
+    
+    u <- t(s) %*% A
+    u <- t(u)
+    
+    A <- A + (1/p)[1,1] * (s+z) %*% t(u)
+    
+    s <- -A%*%v
+    x <- unlist(x, use.names = FALSE) + s
+    
+    norma <- norm(s,type = 'M')
+    if (norma < TOL) {
+      return(x)
+    }
+  }
+  return("Numero de iteraciones maximo excedido")
+}
+```
+
+
 ### a.
 ```{r}
 # IMPORTANTE: declarar las funciones con x1, x2, ..., xn
@@ -114,5 +185,71 @@ print(newton(x = list(x1 = 0.1, x2 = 0.1), TOL = 0.000000001,
                       expression(log(x1^2+x2^2)-sin(x1*x2)-log(2)),
                       expression(exp(x1-x2)+cos(x1*x2))
                       )
+))
+```
+
+## Ejercicio 2
+Utilice el método de  Broydenpara resolver el siguiente sistema de ecuaciones no lineales. Realice  supuestos razonables  respecto de  la tolerancia, verificando que  la solución hallada (x1, x2, x3) satisface el par de ecuaciones.
+
+### a.
+```{r}
+# Llamo a la funcion ------------------------------------------------------
+# IMPORTANTE: declarar las funciones con x1, x2, ..., xn
+print(Broyden(x = list(x1 = 0.1, x2 = 0.1, x3 = -0.1), TOL = 0.000001, 
+             ecuaciones = c(
+               expression(3*x1-cos(x2*x3)-0.5),
+               expression(x1^2-81*(x2+0.1)^2+sin(x3)+1.06),
+               expression(exp(-x1*x2)+20*x3+(10*pi-3)/3)
+             )
+))
+```
+
+### b.
+```{r}
+# Llamo a la funcion ------------------------------------------------------
+# IMPORTANTE: declarar las funciones con x1, x2, ..., xn
+print(Broyden(x = list(x1 = -1, x2 = -2, x3 = 1), TOL = 0.000001, 
+             ecuaciones = c(
+               expression(x1^3+x1^2*x2-x1*x3+6),
+               expression(exp(x1)+exp(x2)-x3),
+               expression(x2^2-2*x1*x3-4)
+             )
+))
+```
+
+### c.
+```{r}
+# Llamo a la funcion ------------------------------------------------------
+# IMPORTANTE: declarar las funciones con x1, x2, ..., xn
+print(Broyden(x = list(x1 = 0, x2 = 0, x3 = 0), TOL = 0.00001, 
+             ecuaciones = c(
+               expression(6*x1-2*cos(x2*x3)-1),
+               expression(9*x2+sqrt(x1^2+sin(x3)+1.06)+0.9),
+               expression(60*x3+3*exp(-x1*x2)+10*pi-3)
+             )
+))
+```
+
+### d.
+```{r}
+# Llamo a la funcion ------------------------------------------------------
+# IMPORTANTE: declarar las funciones con x1, x2, ..., xn
+print(Broyden(x = list(x1 = 2, x2 = 2), TOL = 0.000001, 
+             ecuaciones = c(
+               expression(log(x1^2+x2^2) - sin(x1*x2)-log(2)-log(pi)),
+               expression(exp(x1-x2)+cos(x1*x2))
+             )
+))
+```
+
+### e.
+```{r}
+# Llamo a la funcion ------------------------------------------------------
+# IMPORTANTE: declarar las funciones con x1, x2, ..., xn
+print(Broyden(x = list(x1 = 0, x2 = 0), TOL = 0.0001, 
+             ecuaciones = c(
+               expression(4*x1^2-20*x1+0.25*x2^2+8),
+               expression(0.5*x1*(x2^2)+2*x1-5*x2+8)
+             )
 ))
 ```

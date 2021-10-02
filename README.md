@@ -18,5 +18,12 @@
 ## Semana 4
 * Ejercicios SQL
 
+## Semana 5
+* Data mining con Twitter (No hice mucho la verdad)
+
+## Semana 6
+* SENOL: Newton
+* SENOL: Broyden (No estoy seguro que este bien el mío, esta el de Pedro)
+
 ## Trabajo Práctico
 * Data mining sobre la tarjeta alimentar.

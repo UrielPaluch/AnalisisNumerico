@@ -30,6 +30,7 @@ newton <- function(x, TOL, N = 100, ecuaciones){
       }
     }
     
+    #Calcula la inversa de una matriz
     y0 <- solve(jacobiano) %*% (-f0)
     x <- y0 + unlist(x, use.names=FALSE)
     
