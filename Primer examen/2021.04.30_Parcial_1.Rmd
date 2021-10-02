@@ -227,6 +227,9 @@ FalsaPosicion <- function(p0, p1, tol, n = 100){
   # En este bloque, aplique el algoritmo de RF para hallar las raíces. No olvide imprimir los resultados.
   # Incluya aquí mismo cualquier cálculo adicional que requiera.
 
+#Se observa un raiz en aproximadamente 0
+raiz0 <- FalsaPosicion(p0 = 0, p1 = 0.1, tol = 0.0000001)
+raiz0
 #Se observa una raiz entre 1.5 y 1.8
 raiz1 <- FalsaPosicion(p0 = 1.5, p1 = 1.8, tol = 0.0000001)
 raiz1
