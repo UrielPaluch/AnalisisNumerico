@@ -1,0 +1,576 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. Primer Examen Parcial."
+author: "Remplace este texto por su Apellido y Nombre, y su Numero de Registro"
+date: "30/Abril/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace 000000 a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 895700
+```
+
+```{r Digitos-Reg}
+  d1 = floor( NroReg/10^5 )
+  d2 = floor( (NroReg - d1*10^5)/10^4 )
+  d3 = floor( (NroReg - d1*10^5 - d2*10^4)/10^3 )
+  d4 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3)/10^2 )
+  d5 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2)/10^1)
+  d6 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2 - d5*10^1)/10^0)
+```
+
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(flextable)
+  library(tidyverse)
+
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Newton-Raphson. (24 puntos)
+Considere la siguiente ecuación: $2sin(x)=e^{10/x}$.
+
+## Corregir algoritmo NR {#CorregirNR}
+
+CORREGIR el algoritmo “Newton-Rapshon” en el siguiente bloque de código. 
+
+COMENTAR los cambios que realizó (use "#" al final de cada línea modificada). 
+
+[***Notar que, para el resto del ejercicio, no debe utilizar su propio algoritmo, sino que debe usar el algoritmo dado y corregido, sin agregar ninguna línea de código adicional.***]
+
+Respuesta:
+```{r Algortimo-NR, echo=TRUE}
+ # Edite las líneas que considere erróneas
+  NewtonRapshon <- function(f,df,p0,Tol,N){
+    #Paso 1
+    i = 1
+    #Paso 2
+    while (i <= N){
+      #Paso 3
+        p = p0 - f(p0)/df(p0) #df(p0)/f(p0)
+      #Paso 4
+        if (abs(p-p0) < Tol){return(p0)} #abs[p0-p]. Agregue los corchetes 
+      #Paso 5
+        i = i + 1
+      #Paso 6
+        p0 = p
+    }
+    #Paso 7
+      return(paste('El método falla luego de ', N, ' iteraciones')) #cambie n por N
+  }
+```
+
+## Graficar función e identificar raíces para NR {#GraficoNR}
+
+Plantee la ecuación de la forma $f(x)=0$ y grafique la función en el intervalo $[10;30]$ de manera tal que pueda identificar todas las soluciones de la ecuación en el intervalo.
+
+Respuesta:
+```{r Grafico-f-NR, fig.cap="Grafico de Función para hallar raíces"}
+f <- function(x){
+  return(2*sin(x)-exp(10/x))
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(10, 30, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+## Hallar raíces con NR
+Utilizando el algoritmo del punto 1.1, halle todas las raíces identificadas en el punto 1.2.
+
+Respuesta:
+```{r Calculo-raices-NR}
+  # En este bloque, aplique el algoritmo de NR para hallar las raíces. No olvide imprimir los resultados.
+  # Incluya aquí mismo cualquier cálculo adicional que requiera.
+
+
+df <- function(x){return(eval(D(expression(2*sin(x)-exp(10/x)), "x"), list(x = x)))}
+
+NewtonRapshon(f = f(x=20), df = df(x=20), p0 = 20, 0.0001, 100)
+NewtonRapshon(f = f(x=21), df = df(x=21), p0 = 21, 0.0001, 100)
+NewtonRapshon(f = f(x=26), df = df(x=26), p0 = 26, 0.0001, 100)
+NewtonRapshon(f = f(x=27), df = df(x=27), p0 = 27, 0.0001, 100)
+```
+
+## Iteraciones del algortimo de NR {#NR5p}
+Tome el algoritmo del punto 1.1 (copie y pegue) y agregue las líneas de código que considere necesarias para poder visualizar (imprimir) cada iteración del algoritmo. Una vez editado el algoritmo, imprima `r ifelse(d4>=2,d4,ifelse(d5>=2,d5,d6))` iteraciones del algoritmo iniciando en $x_0=`r 24-ifelse(d4!=0,d4,ifelse(d5!=0,d5,d6))`$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+```{r Algortimo-NR-Iteraciones, echo=TRUE}
+f <- function(x){
+  return(2*sin(x)-exp(10/x))
+}
+NewtonRapshon <- function(f,df,p0,Tol,N){
+    #Paso 1
+    i = 1
+    #Paso 2
+    while (i <= N){
+      #Paso 3
+        p = p0 - f(p0)/df(p0) #df(p0)/f(p0)
+      #Paso 4
+        if (abs(p-p0) < Tol){return(p0)} #abs[p0-p]. Agregue los corchetes 
+      #Paso 5
+        i = i + 1
+      #Paso 6
+        p0 = p
+      
+      #Para que imprima 7 veces
+        if (i <= 7) {
+          print(p0)
+        }
+    }
+    #Paso 7
+      return(paste('El método falla luego de ', N, ' iteraciones')) #cambie n por N
+}
+
+p0 <- 17
+NewtonRapshon(f = f(x=p0), df = df(x=p0), p0 = p0, 0.0001, 100)
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Falsa Posición. (24 puntos)
+
+Para este ejercicio, considere la función $h(x)=x^2 \times cos(x)$.
+
+## Teoría {#RF_T}
+Explique las diferencias del método *Regula Falsi* respecto del método de *Secante*.
+
+Respuesta (escriba a continuación):
+El método de la *posición falsa* genera aproximaciones de igual forma que el método de la *secante*, pero incluye una prueba para probar que las raices se agrupan en iteraciones sucesivas. 
+## Hallar raíces con RF {#raicesRF} 
+Halle todas las raíces de $h(x)$ en el intervalo $[0,3\pi]$ utilizando el método de Falsa Posición.
+
+Respuesta:
+```{r Algoritmo-RF}
+# Ingrese aquí la función con el algoritmo que programó del método de Regula Falsi
+
+f <- function(x){
+  return(x^2*cos(x))
+}
+
+FalsaPosicion <- function(p0, p1, tol, n = 100){
+  
+  q0 <- f(p0)
+  q1 <- f(p1)
+  
+  for (i in 2:n){
+    p = p1 -q1*(p1-p0)/(q1-q0)
+    
+    if (abs(p-p1) < tol){
+      return(p)
+    }
+    
+    q = f(p)
+    
+    if (q*q1 < 0){
+      p0 <- p1
+      q0 <- q1
+    }
+    
+    p1 <- p
+    q1 <- q
+  }
+  
+  return(paste("El método falló luego de ", n, " iteraciones"))
+}
+```
+
+```{r Calculo-raices-RF}
+  # En este bloque, aplique el algoritmo de RF para hallar las raíces. No olvide imprimir los resultados.
+  # Incluya aquí mismo cualquier cálculo adicional que requiera.
+
+#Se observa una raiz entre 1.5 y 1.8
+raiz1 <- FalsaPosicion(p0 = 1.5, p1 = 1.8, tol = 0.0000001)
+raiz1
+#Se observa una raiz entre 5.5 y 5.8
+raiz2 <- FalsaPosicion(p0 = 5.5, p1 = 5.8, tol = 0.0000001)
+raiz2
+#Se observa una raiz entre 7.5 y 8
+raiz3 <-FalsaPosicion(p0 = 7.5, p1 = 8, tol = 0.0000001)
+raiz3
+```
+
+## Iteraciones del algortimo de *Regula Falsi* {#RF7p}
+Considere el punto anterior. Realice `r ifelse(d6!=0,d6,ifelse(d5!=0,d5,d5))` iteraciones del algoritmo de Falsa Posición, utilizando en $x_0= `r max(5 - min(d4,d5,d6),1)`$ y $x_1=6$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+```{r Algortimo-RF-Iteraciones}
+  # Aquí puede modificar el algoritmo RF del punto anterior para que imprima, o bien puede realizar las cuentas "a mano" (paso a paso, cada una de las iteraciones)
+FalsaPosicion <- function(p0, p1, tol, n = 100){
+  
+  q0 <- f(p0)
+  q1 <- f(p1)
+  
+  p = p1 -q1*(p1-p0)/(q1-q0)
+    
+  q = f(p)
+    
+  if (q*q1 < 0){
+    p0 <- p1
+    q0 <- q1
+  }
+    
+  p1 <- p
+  q1 <- q
+  
+  return(p)
+}
+FalsaPosicion(p0 = 5, p1 = 6, tol = 0.0000001, n = 0)
+```
+
+## Graficar función para RF y marcar raíces {#GraficoRF}
+
+Grafique la función $h(x)$ en el intervalo $[0;3\pi]$, identifique todas las raíces halladas en el punto 2.2 y marque cada una con un color distinto en el gráfico (con un punto en el eje $x$ o con una línea vertical).
+
+Respuesta:
+```{r Grafico-f-RF, fig.cap="Grafico de Función para hallar raíces"}
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 3*pi, by = 0.01)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Agrego la línea vertical en las raices
+gg_fx <- gg_fx + geom_vline(xintercept = raiz1, linetype = 1, colour="darkgreen")
+gg_fx <- gg_fx + geom_vline(xintercept = raiz2, linetype = 1, colour="darkgreen")
+gg_fx <- gg_fx + geom_vline(xintercept = raiz3, linetype = 1, colour="darkgreen")
+
+#Grafico
+gg_fx
+```
+
+\newpage
+
+# Factorización de Matrices. (12 puntos)
+
+```{r Ej2-Genera-Matrices}
+  set.seed(NroReg)
+  datos = matrix(rnorm(3000,10,2),nrow = 1000, ncol = 3)
+  A = round(cor(datos),4)
+  rm(datos)
+  B = matrix(round(rnorm(16,20,5),0),nrow = 4, ncol = 4)
+```
+
+## Factorización de Cholesky
+Realice la factorización de Cholesky de la siguiente matriz:
+
+$$
+A = `r write_matex2(A)`
+$$
+
+Respuesta:
+```{r Algortimo-Cholesky}
+  # En este bloque de código debe ingresar su algoritmo de Cholesky
+Cholesky <- function(A){
+  n <- nrow(A)
+  
+  L <- matrix(rep(0, times = n^2), nrow = n, ncol = n, byrow = TRUE)
+  
+  # Paso 1 ------------------------------------------------------------------
+  L[1,1] <- sqrt(A[1,1])
+  
+
+  # Paso 2 ------------------------------------------------------------------
+  for (j in 2:n){
+    L[j,1] <- A[j,1]/L[1,1]
+  }
+  
+
+  # Paso 3 ------------------------------------------------------------------
+  for (i in 2:(n-1)) {
+
+    # Paso 4 ------------------------------------------------------------------
+    suma <- 0
+    for (k in 1:(i-1)) {
+      suma <- suma + L[i,k]^2
+    }
+    
+    L[i,i] <- sqrt(A[i,i] - suma)
+    
+
+    # Paso 5 ------------------------------------------------------------------
+    for (j in (i+1):n) {
+      
+      suma <- 0
+      for (k in 1:(i-1)) {
+        suma <- suma + L[j,k]*L[i,k]
+      }
+      
+      L[j,i] <- (A[j,i] - suma)/L[i,i] 
+      
+    }
+  }
+  
+  # Paso 6 ------------------------------------------------------------------
+  suma <- 0
+  for (k in 1:(n-1)) {
+    suma <- suma + L[n,k]^2
+  }
+  
+  L[n,n] <- sqrt(A[n,n]-suma)
+  
+  return(L)
+  
+}
+```
+
+```{r Respuesta-2a}
+  # En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+  A <- matrix(c(1, 0.0481, 0.0105,
+              0.0481, 1, 0.0116,
+              0.0105, 0.0116, 1), nrow = 3, ncol = 3, byrow = TRUE)
+
+test <- Cholesky(A)
+
+print(test)
+```
+
+
+## Factorización LU
+Realice la factorización de LU de la siguiente matriz:
+
+$$
+B = `r write_matex2(B)`
+$$
+
+Respuesta:
+```{r Algortimo-LU}
+  # En este bloque de código debe ingresar su algoritmo LU
+LU <- function(matriz_coeficientes){
+  n_incognitas = nrow(matriz_coeficientes)
+  
+  L <- matrix(rep(0, times = n_incognitas^2), nrow = n_incognitas, ncol = n_incognitas, byrow = TRUE)
+  U <- matrix(rep(0, times = n_incognitas^2), nrow = n_incognitas, ncol = n_incognitas, byrow = TRUE)
+  
+  # -------- PASO 1
+  for (i in 1:(n_incognitas-1)) {
+    #Completo con 1 la diagonal principal de L.
+    L[i,i] <- 1
+    
+    for (j in (i+1):n_incognitas) {
+      L[i,j] <- 0
+    }
+  }
+  
+  #El último lo completo a mano
+  L[n_incognitas, n_incognitas] <- 1
+  
+  U[1,1] <- matriz_coeficientes[1,1]
+  
+  
+  if(U[1,1] == 0){
+    return("factorizacion imposible")
+  }
+  
+  # -------- PASO 2
+  
+  for (j in 2:n_incognitas) {
+    U[1,j] <- matriz_coeficientes[1,j]
+    L[j,1] <- matriz_coeficientes[j,1]/U[1,1]
+  }
+  
+  
+  # -------- PASO 3
+  
+  for(i in 2:(n_incognitas-1)){
+    
+    # -------- PASO 4
+    suma <- 0
+    for (k in 1:(i-1)) {
+      suma <- suma + L[i,k]*U[k,i]
+    }
+    
+    U[i,i] <- matriz_coeficientes[i,i] - suma
+    
+    
+    if(U[i,i] == 0){
+      return("factorizacion imposible")
+    }
+    
+    # -------- PASO 5
+    
+    for (j in (i+1):n_incognitas) {
+      sumaU <- 0
+      sumaL <- 0
+      for (k in 1:(i-1)) {
+        sumaU <- sumaU + L[i,k]*U[k,j]
+        sumaL <- sumaL + L[j,k]*U[k,i]
+      }
+      
+      U[i,j] <- (1/L[i,i])* (matriz_coeficientes[i,j] - sumaU)
+      L[j,i] <- (1/U[i,i])* (matriz_coeficientes[j,i] - sumaL)
+      
+    }
+    
+    
+  }
+  
+  
+  # -------- PASO 6
+  
+  
+  suma <- 0
+  for (k in 1:(n_incognitas-1)) {
+    suma <- suma + L[n_incognitas,k]*U[k,n_incognitas]
+  }
+  U[n_incognitas, n_incognitas] <- matriz_coeficientes[n_incognitas,n_incognitas] - suma
+  
+  
+  # -------- PASO 7
+  return(list("L" = L, "U" = U))
+}
+```
+
+```{r Respuesta-2b}
+  # En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+    
+A <- matrix(c(20, 18, 16, 18,
+              16, 15, 29, 18,
+              19, 21, 15, 26,
+              19, 3, 16, 19), nrow = 4, ncol = 4, byrow = TRUE)
+
+LU(matriz_coeficientes = A)
+
+L <- LU(A)$L
+U <- LU(A)$U
+
+L%*%U
+```
+
+\newpage
+
+# Interpolación de Lagrange (40 Puntos)
+
+Considere la siguente tabla de datos:
+```{r Datos-Interpolacion, warning=FALSE}
+# No edite nada en ese bloque
+x = c(-2.0, -1.5, -1.0, -0.5,  0.0,  0.5,  1.0,  1.5,  2.0)
+y = c(0.0769, 0.1290, 0.2500, 0.5714, 1.0000, 0.5714, 0.2500, 0.1290, 0.0769)
+df = data.frame(x,y)
+df %>% 
+  flextable() %>%
+  colformat_num(digits = 4)
+set.seed(NroReg)
+x0 = x[runif(1,min=1, max=length(x))]+0.25
+```
+
+## Polinomio de Newton: $P_{N}(x)$
+Escriba el Polinomio interpolante de Newton, $P_n(x)$, que pasa por todos los puntos dados
+
+Respuesta:
+```{r Escribe-PN}
+
+```
+
+
+## Interpolar con $P_{N}(x)$
+Calcule $P_N(`r x0`)$.
+
+Respuesta:
+```{r Interpola-PN}
+
+```
+
+
+## Cubic Splines: $S_{i}(x)$
+Escriba los trazadores cúbicos, $S_i(x); i=1,...,n$ que pasan por todos los puntos dados.Indique claramente qué polinomio $S_i$ se debe usar en cada intervalo de $x$.
+
+Respuesta:
+```{r Escribe-CS}
+
+```
+## Interpolar con $S_{i}(x)$
+Usando los trazadores cúbicos, interpole los datos para el valor $x=`r x0`$ 
+
+Respuesta:
+```{r Interpola-CS}
+
+```
+
+## Graficar {#GraficoInterpolacion}
+Grafique lo siguiente:
+
+a. Datos dados en la tabla mediante puntos (círculos rellenos o no).
+b. Línea continua de color azul con la función $P_N(x)$ para $x$ en $[-2;2]$.
+c. Línea continua de color rojo con los trazadores cúbicos para $x$ en $[-2;2]$.
+
+Respuesta:
+```{r Grafica_Interpolaciones}
+
+```
+
+## Comentar Resultados
+A partir de lo hallado en el punto anterior, comente sobre la calidad de los métodos para realizar aproximaciones de la función entre los puntos dados.
+
+Respuesta (escriba sus comentarios a continuación):
+
+
+
+
+
