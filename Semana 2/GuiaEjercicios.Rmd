@@ -8,6 +8,7 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
+options(scipen = 999)
 ```
 
 ## Métodos:
@@ -941,8 +942,52 @@ Secante(p0 = 0.75, p1 = 1, tol = 0.0001)
 FalsaPosicion(p0 = 0.75, p1 = 1, tol = 0.0001)
 ```
 
+## Ejercicio 10:
+No se puede. Es un quilombo. Hay que tomar las fechas de pago del bono.
 
+##Ejercicio 11:
+```{r}
 
+```
+
+##Ejercicio 12:
+```{r}
+f <- function(x){
+  return(1500000-(25000*(1-(1+x/12)^(-120)))/(x/12))
+}
+
+#La función para graficar la raiz
+g <- function(x){
+return(-x+1500000-(25000*(1-(1+x/12)^(-120)))/(x/12))
+}
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(0, 1, by = 0.001)
+#Genero los puntos
+fx <- f(x)
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+#Grafica la función del ejercicio
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+#Gráfico x = y
+gg_fx <- gg_fx + geom_line(aes(y = x), colour = "darkred")
+#Gráfico la función del ejercicio donde esta la raiz
+gg_fx <- gg_fx + geom_line(aes(x = x, y = g(x)), colour = "steelblue")
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+#Grafico
+gg_fx
+
+```
+
+```{r}
+PuntoFijo(p0 = 0.1, tol = 0.000001)
+```
 
 
 

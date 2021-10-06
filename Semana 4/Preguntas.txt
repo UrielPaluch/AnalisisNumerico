@@ -1,0 +1,37 @@
+¿Que es Big Data?
+Se llama Big Data a la masiva cantidad de datos generados por los dispositivos electrónicos.
+
+¿Qué son las 3v?
+Volumen: refiere la cantidad
+Velocidad: al día de hpy, la internet permite tener los datos en tiempo real.
+Variedad: Bases de datos MySQL (estructuradas) y NoMySQL (no estructuradas).
+
+¿Que son las 5v?
+Veracidad: son los datos reales?
+Valor: los datos por si solos no tienen ningún valor. Sirven por su capacidad predictiva. Surge 
+       la necesidad de analizar este gran volumen de datos, con algoritmos acordes (Machine Learning).
+
+Impacto del BigData:
+- Tecnología: nuevas infraestructuras para adaptrse a los grandes volumenes (cloud storage).
+- Impacto social: como se utilizan estos datos? que saben realmente de nosotros? Solo basta con recordar el caso de 
+		  Cambridge Analytics.
+
+Recolección de datos:
+- API: permite que dos aplicaciones se conecten. Se utilizan, para el intercambio de información.
+- Web Scrapping: leer el código html de una página para extraer información.
+		 
+Data Mining:
+Conocer los datos mediante análisis estadísticos. Puede incluir gráficos y comparaciones. El objetivo es conocer a 
+los datos.
+
+Text mining: 
+Estructura de textos. Ejemplo: el ejercicio de Twitter.
+
+Machine Learning:
+Se basa en la detección de patrones sin la intervención humana.
+
+Aprendizaje automático:
+- Supervisado: cada uno de los datos tiene una "etiqueta" o respuesta asociada.
+- No supervisado: los datos no tienen "etiqueta".
+- Aprendizaje reforzado: se da una recompensa al algoritmo cuando hace algo bien. Un ejemplo son las AI que
+			 juegan ajedrez.

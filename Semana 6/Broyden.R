@@ -75,11 +75,10 @@ Broyden <- function(x, TOL, N = 100, ecuaciones){
 
 # Llamo a la funcion ------------------------------------------------------
 # IMPORTANTE: declarar las funciones con x1, x2, ..., xn
-print(Broyden(x = list(x1 = 0.1, x2 = 0.1, x3 = -0.1), TOL = 0.0000001, 
+print(Broyden(x = list(x1 = 0.1, x2 = 0.1), TOL = 0.0000001, 
              ecuaciones = c(
-               expression(3*x1-cos(x2*x3)-0.5),
-               expression(x1^2-81*(x2+0.1)^2+sin(x3)+1.06),
-               expression(exp(-x1*x2)+20*x3+(10*pi-3)/3)
+               expression(3*x1^2-x2^2),
+               expression(3*x1*x2^2-x1^3-1)
              )
 ))
 

@@ -23,7 +23,7 @@
 
 ## Semana 6
 * SENOL: Newton
-* SENOL: Broyden (No estoy seguro que este bien el mío, esta el de Pedro)
+* SENOL: Broyden
 
 ## Trabajo Práctico
 * Data mining sobre la tarjeta alimentar.
