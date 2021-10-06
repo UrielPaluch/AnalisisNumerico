@@ -28,7 +28,7 @@ write_matex2 <- function(x) {
 
 ```{r Numero de Resgistro}
   # Remplace NULL a continuación por su número de resgistro y no edite nada más en este bloque
-  NroReg = 895096
+  NroReg = 895700
 ```
 
 ```{r Digitos-Reg}
@@ -42,7 +42,6 @@ write_matex2 <- function(x) {
 
 ```{r Librerias, message=FALSE}
   # Ingrese en este bloque de código las librerías que utilizará
-  library(ggplot2)
   library(scales)
   library(flextable)
   library(tidyverse)

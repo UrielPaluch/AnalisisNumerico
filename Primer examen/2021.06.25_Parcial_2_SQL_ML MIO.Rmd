@@ -1,0 +1,113 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. Segundo Examen Parcial."
+author: "Pedro Romagnano"
+date: "25/junio/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace NULL a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 895700
+```
+
+```{r Digitos-Reg}
+  d1 = floor( NroReg/10^5 )
+  d2 = floor( (NroReg - d1*10^5)/10^4 )
+  d3 = floor( (NroReg - d1*10^5 - d2*10^4)/10^3 )
+  d4 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3)/10^2 )
+  d5 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2)/10^1)
+  d6 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2 - d5*10^1)/10^0)
+```
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(scales)
+  library(flextable)
+  library(tidyverse)
+
+```
+
+\newpage
+
+# SQL (20 Puntos)
+
+Utilice la base de datos de la siguiente web para preparar sus códigos de SQL: <https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all>
+
+## Consulta Clientes
+
+Escriba una consulta SQL que contenga los clientes de Estados Unidos y Alemania que gastaron más de \$10.000 en el total de todas sus compras. La salida debe contener los siguientes campos: Nombre del Cliente, ciudad y país del cliente, Cantidad de compras, Total (calculado como la suma total del Precio\*Cantidad).
+
+Respuesta:
+SELECT  
+C.CustomerName AS "Nombre del cliente",  
+C.City AS "Ciudad",  
+C.Country AS "Pais",  
+COUNT(DISTINCT(C.CustomerID)) AS "Cantidad de compras",  
+ROUND(SUM(P.Price * OD.Quantity)) AS "Total"  
+FROM Customers C  
+INNER JOIN Orders O ON O.CustomerID = C.CustomerID  
+INNER JOIN OrderDetails OD ON OD.OrderID = O.OrderID  
+INNER JOIN Products P ON P.ProductID = OD.ProductID  
+WHERE C.Country = "Germany" OR C.Country = "USA"  
+GROUP BY C.CustomerID  
+HAVING "Total" > 10000  
+
+
+## Consulta Ventas
+
+Escriba una consulta SQL que contenga todas las ventas realizadas por Robert King a los clientes de España, México y Canadá. La salida debe contener los siguientes campos: Nombre y Apellido del Vendedor, Nombre del Cliente, Ciudad y País del Cliente, ID de la Orden de Compra (tabla Orders), Nombre del Producto (tabla Products), Presentación (Unit, de tabla Products), Cantidad (tabla OrderDetails), Precio (tabla Products) y Total (calculado como Precio\*Cantidad).
+
+Respuesta:
+SELECT  
+E.FirstName AS "Nombre del vendedor",  
+E.LastName AS "Apellido del vendedor",  
+C.CustomerName AS "Nombre del cliente",  
+C.City AS "Ciudad",  
+C.Country AS "Pais",  
+O.OrderID AS "ID de la orden de compra",  
+P.ProductName AS "Nombre del producto",  
+P.Unit AS "Presentacion",  
+OD.Quantity AS "Cantidad",  
+P.Price AS "Precio",  
+ROUND(SUM(P.Price * OD.Quantity),2) AS "Total"  
+FROM Employees E  
+INNER JOIN Orders O ON O.EmployeeID = E.EmployeeID  
+INNER JOIN Customers C ON C.CustomerID = O.CustomerID  
+INNER JOIN OrderDetails OD ON OD.OrderID = O.OrderID  
+INNER JOIN Products P ON P.ProductID = OD.ProductID  
+WHERE (E.FirstName = "Robert" AND E.LastName = "King")  
+AND (C.Country = "Mexico" OR C.Country = "Spain" OR C.Country = "Canada")  
+GROUP BY OD.OrderDetailID  
+
+\newpage
+
+# Aprendizaje Automático (10 puntos)
+
+Defina el aprendizaje automático y mencione qué ventajas se pueden obtener de su utilización. Explique brevemente los dos tipos de métodos más utilizados en la actualidad.
+
+Respuesta:
+El aprendizaje automático son algorítmos computacionales que permiten la detección de patrones. Las aplicaciones mas conocidas son, autos que se manejan solos (Tesla), sistemas de recomendación (Netflix) o inclusive el correo spam. Hay tres métodos de aprendizaje:
+- Supervisado: Cada dato tiene asignado una etiqueta.
+- No supervisado: Cada dato no tiene una etiqueta asignada.
+- Aprendizaje reforzado: Es el menos utilizado por lo difícil que es generar un entorno simulado y aplicarlo a situaciones comerciales prácticas. El algoritmo explora las opciones y en base a castigos o recompensas (refuerzos) toma las decisiones. Un ejemplo práctico son las AI que juegan ajedrez.
