@@ -1,0 +1,132 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. Segundo Examen Parcial."
+author: "Pedro Romagnano"
+date: "25/junio/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace NULL a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 895096
+```
+
+```{r Digitos-Reg}
+  d1 = floor( NroReg/10^5 )
+  d2 = floor( (NroReg - d1*10^5)/10^4 )
+  d3 = floor( (NroReg - d1*10^5 - d2*10^4)/10^3 )
+  d4 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3)/10^2 )
+  d5 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2)/10^1)
+  d6 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2 - d5*10^1)/10^0)
+```
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(scales)
+  library(flextable)
+  library(tidyverse)
+
+```
+
+\newpage
+
+# SQL (20 Puntos)
+
+Utilice la base de datos de la siguiente web para preparar sus códigos de SQL: <https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all>
+
+## Consulta Clientes
+
+Escriba una consulta SQL que contenga los clientes de Estados Unidos y Alemania que gastaron más de \$10.000 en el total de todas sus compras. La salida debe contener los siguientes campos: Nombre del Cliente, ciudad y país del cliente, Cantidad de compras, Total (calculado como la suma total del Precio\*Cantidad).
+
+Respuesta (SELECT c.CustomerName as 'Nombre del cliente', c.City as 'Ciudad', c.Country as 'Pais',
+count(DISTINCT(o.OrderID)) as 'Cantidad de compras',
+round(sum(p.Price*od.Quantity),2) as 'Total'
+FROM Customers c 
+INNER JOIN Orders o ON o.CustomerID = c.CustomerID 
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN Products p ON p.ProductID = od.ProductID
+WHERE c.Country = 'USA' OR c.Country = 'Germany'
+GROUP BY c.CustomerName
+HAVING sum(round(p.Price*od.Quantity,2)) > 10000
+):
+
+## Consulta Ventas
+
+Escriba una consulta SQL que contenga todas las ventas realizadas por Robert King a los clientes de España, México y Canadá. La salida debe contener los siguientes campos: Nombre y Apellido del Vendedor, Nombre del Cliente, Ciudad y País del Cliente, ID de la Orden de Compra (tabla Orders), Nombre del Producto (tabla Products), Presentación (Unit, de tabla Products), Cantidad (tabla OrderDetails), Precio (tabla Products) y Total (calculado como Precio\*Cantidad).
+
+Respuesta (SELECT 
+e.FirstName as 'Nombre' , e.LastName as 'Apellido',
+c.CustomerName as 'Nombre del cliente', c.City as 'Ciudad', c.Country as 'Pais', 
+o.OrderID as 'ID del pedido',
+p.ProductName as 'Nombre del producto', p.Unit as 'Presentacion',
+od.Quantity as 'Cantidad',
+p.Price as 'Precio',
+round(p.price*od.Quantity,2) as 'Total'
+FROM Employees e
+INNER JOIN Customers c ON o.CustomerID = c.CustomerID
+INNER JOIN Orders o ON e.EmployeeID  = o. EmployeeID
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN Products p ON p.ProductID = od.ProductID
+WHERE e.LastName = 'King' AND c.Country = 'Spain' 
+UNION
+SELECT 
+e.FirstName as 'Nombre' , e.LastName as 'Apellido',
+c.CustomerName as 'Nombre del cliente', c.City as 'Ciudad', c.Country as 'Pais', 
+o.OrderID as 'ID del pedido',
+p.ProductName as 'Nombre del producto', p.Unit as 'Presentacion',
+od.Quantity as 'Cantidad',
+p.Price as 'Precio',
+round(p.price*od.Quantity,2) as 'Total'
+FROM Employees e
+INNER JOIN Customers c ON o.CustomerID = c.CustomerID
+INNER JOIN Orders o ON e.EmployeeID  = o. EmployeeID
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN Products p ON p.ProductID = od.ProductID
+WHERE e.LastName = 'King' AND c.Country = 'Mexico'
+UNION
+SELECT 
+e.FirstName as 'Nombre' , e.LastName as 'Apellido',
+c.CustomerName as 'Nombre del cliente', c.City as 'Ciudad', c.Country as 'Pais', 
+o.OrderID as 'ID del pedido',
+p.ProductName as 'Nombre del producto', p.Unit as 'Presentacion',
+od.Quantity as 'Cantidad',
+p.Price as 'Precio',
+round(p.price*od.Quantity,2) as 'Total'
+FROM Employees e
+INNER JOIN Customers c ON o.CustomerID = c.CustomerID
+INNER JOIN Orders o ON e.EmployeeID  = o. EmployeeID
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN Products p ON p.ProductID = od.ProductID
+WHERE e.LastName = 'King' AND c.Country = 'Canada'
+):
+
+\newpage
+
+# Aprendizaje Automático (10 puntos)
+
+Defina el aprendizaje automático y mencione qué ventajas se pueden obtener de su utilización. Explique brevemente los dos tipos de métodos más utilizados en la actualidad.
+
+Respuesta (
+El aprendizaje automatico hace mension a un conjunto de metodos que permiten detectar automaticamente patrones en funcion de experiencia pasada, por eso su termino en nglres "Machine Learning" , a partir del uso de big data en conjunto con machine learning se pueden utilizar metodos que aprovechen al maximo todos los datos disponibles de fuentes externas, como podria ser por ejemplo recoleccion de datos apra campanias politicas, para analisis de mercados financieros o mercados economicos. El Machine learning actualmente se encuentra dividido en tres ramas, dos de las cuales, en la actualidad captan la mayor utilidad, estas son Apredizaje supervisado, aprendizaje no supervisado y aprendizaje reforzado. Este ultimo es el menos utilizado ya que requiere simulacion de entornos y es mas dificil de aplicar a situaciones comerciales practicas. Los primeros dos, el supervisado y no supervisado se diferencian principalmente por el etiquetado de los datos. Es decir, el supervisado agarra un dato y le asigna una salida o etiqueta, por ejemplo; la casilla de mail que diferencia entre spam y no spam y el no supervisado no le asigna nada a los datos, osea se tienen las dos categorias de mails pero no se sabe cual es spam y cual no lo es. 
+):

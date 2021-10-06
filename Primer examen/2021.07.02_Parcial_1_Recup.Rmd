@@ -27,7 +27,7 @@ write_matex2 <- function(x) {
 
 ```{r Numero de Resgistro}
   # Remplace 000000 a continuación por su número de resgistro y no edite nada más en este bloque
-  NroReg = 000000
+  NroReg = 895700
 ```
 
 ```{r Digitos-Reg}
@@ -210,8 +210,8 @@ Respuesta:
 ```{r Respuesta-Ej2-2, echo=TRUE}
  # Ingrese en este bloque todo el código necesario para resolver el ejercicio 2.2
 
-f <- function(x){
-return(x^2*cos(x))
+g <- function(x){
+return(x-x^2*cos(x))
 }
 
 #Método de punto fijo
@@ -226,7 +226,7 @@ PuntoFijo <- function(p0, n = 100, tol){
   
   for (i in 1:n) {
     #Calculo p
-    p <- f(p0)
+    p <- g(p0)
     
     lista_p[i] <- p0
     lista_gp[i] <- p
@@ -249,22 +249,22 @@ PuntoFijo <- function(p0, n = 100, tol){
 #Pruebo el cumplimiento del teorema de existencia.
 #Se observa que la función es continua
 
-fprima <- D(expression(x^2*cos(x)), "x")
+gprima <- D(expression(-x+x^2*cos(x)), "x")
 
-fprima
+gprima
 
-fprima <- function(x){
-  return(2 * x * cos(x) - x^2 * sin(x))
+gprima <- function(x){
+  return(-1 + 2 * x * cos(x) - x^2 * sin(x))
 }
 
 # Intervalo [-5;-4.5]
 x <- seq(-5, -4.5, by =0.1)
 
 #Genero los puntos
-fprimax <- fprima(x)
+gprimax <- gprima(x)
 
 #Creo un data frame con los x e y
-df <- data.frame(x, fprimax)
+df <- data.frame(x, gprimax)
 
 #Lo imprimo
 df
@@ -273,10 +273,10 @@ df
 x <- seq(-2, -1.5, by =0.1)
 
 #Genero los puntos
-fprimax <- fprima(x)
+gprimax <- gprima(x)
 
 #Creo un data frame con los x e y
-df <- data.frame(x, fprimax)
+df <- data.frame(x, gprimax)
 
 #Lo imprimo
 df
@@ -285,10 +285,10 @@ df
 x <- seq(-0.1, 0.1, by =0.01)
 
 #Genero los puntos
-fprimax <- fprima(x)
+gprimax <- gprima(x)
 
 #Creo un data frame con los x e y
-df <- data.frame(x, fprimax)
+df <- data.frame(x, gprimax)
 
 #Lo imprimo
 df
@@ -297,10 +297,10 @@ df
 x <- seq(1.5, 2, by =0.1)
 
 #Genero los puntos
-fprimax <- fprima(x)
+gprimax <- gprima(x)
 
 #Creo un data frame con los x e y
-df <- data.frame(x, fprimax)
+df <- data.frame(x, gprimax)
 
 #Lo imprimo
 df
@@ -309,15 +309,15 @@ df
 x <- seq(4.5, 5, by =0.1)
 
 #Genero los puntos
-fprimax <- fprima(x)
+gprimax <- gprima(x)
 
 #Creo un data frame con los x e y
-df <- data.frame(x, fprimax)
+df <- data.frame(x, gprimax)
 
 #Lo imprimo
 df
 
-raiz <- PuntoFijo(p0 = 0, tol = 0.00001)
+raiz <- PuntoFijo(p0 = 0.1, tol = 0.00001)
 print(paste("La raiz es: ", raiz))
 ```
 
