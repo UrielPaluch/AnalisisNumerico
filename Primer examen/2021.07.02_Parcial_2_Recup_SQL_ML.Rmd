@@ -1,0 +1,72 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. RECUPERATORIO del Segundo Examen Parcial.  \n Para aprobar, debe sumar 50 puntos."
+author: "Remplace este texto por su Apellido y Nombre, y su Numero de Registro"
+date: "02/julio/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r Numero de Resgistro}
+  # Remplace NULL a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 895700
+```
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(scales)
+  library(flextable)
+  library(tidyverse)
+```
+
+\newpage
+
+# SQL (20 Puntos)
+
+Utilice la base de datos de la siguiente web para preparar sus códigos de SQL: <https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all> 
+
+## Consulta Clientes
+
+Escriba una consulta SQL que contenga los clientes que hicieron más de 6 compras o gastaron más de \$ 20.000 en el total de todas sus compras. La salida debe contener los siguientes campos: Nombre del Cliente, ciudad y país del cliente, Cantidad de compras, Total (calculado como la suma total del Precio*Cantidad). 
+
+Respuesta (pegue a continuación el código):
+SELECT c.CustomerName as 'Nombre del cliente' , c.city as 'Ciudad', c.Country as 'Pais',
+count(DISTINCT(o.OrderID)) as 'Cantidad de compras' ,
+round(sum(p.Price*od.Quantity)) as 'Total'
+FROM Customers c
+INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+INNER JOIN OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN Products p ON p.ProductID = od.ProductID
+GROUP BY c.CustomerID
+HAVING round(sum(p.Price*od.Quantity)) > 20000 OR count(DISTINCT(o.OrderID)) > 6
+
+## Consulta Productos
+
+Escriba una consulta SQL que contenga los productos de la categoría “Condiments”, con un descuento de 20\% para aquellos productos con precio mayor a 40, 10\% para productos con precio entre 30 y 40 (inclusive), 5\% para productos con precio mayor o igual a 20 y menor de 30, para el resto es 0. La salida debe contener los siguientes campos: Nombre del Producto, Presentación (Unidades), Precio Original, Descuento (\%), Descuento (\$) y Precio con Descuento. 
+
+Respuesta (pegue a continuación el código):
+SELECT p.ProductName as 'Producto', p.Unit as 'Presentacion', p.Price as 'Precio original',
+CASE WHEN p.Price > 40 THEN '20%' WHEN p.Price BETWEEN 30 AND 40 THEN '10%' WHEN p.Price >= 20 AND p.Price < 30 THEN '5%' ELSE '0%' END as 'Descuento %',
+round(CASE WHEN p.Price > 40 THEN 0.2*p.Price WHEN p.Price BETWEEN 30 AND 40 THEN 0.1*p.Price WHEN p.Price >= 20 AND p.Price < 30 THEN 0.05*p.Price ELSE 0 END,2) as 'Descuento $',
+round(CASE WHEN p.Price > 40 THEN p.price*(1-0.2) WHEN p.Price BETWEEN 30 AND 40 THEN p.Price*(1-0.1) WHEN p.Price >= 20 AND p.Price < 30 THEN p.Price*(1-0.05) ELSE 0 END,2) as 'Precio con descuento'
+FROM Products p
+INNER JOIN Categories c ON c.CategoryID = p.CategoryID
+WHERE c.CategoryName = 'Condiments'
+
+\newpage
+
+# Aprendizaje Automático (10 puntos)
+
+Defina el concepto de “Big Data”, identifique los impactos que tiene en la actualidad y relaciónelo con el aprendizaje automático.
+
+Respuesta (escriba a continuación):
+Big Data, su nombre hace referencia a datos grandes, diversos y complejos generados por todas las fuentes digitales disponibles en la actualidad. Es un concepto medianamente nuevo, en el cual la aparicion de datos masivos se fue viendo en los ultimos anios a traves de internet, redes sociales, celulares, etc.
+
+Los impactos masivos de Big Data se dan principalmente por lo que se llamaron las 5v's, Volumen de datos, Velocidad de procesamiento en tiempo real, Variedad de tipos de datos, Veracidad y el Valor de los mismos una vez que pasan a ser informacion y no meramente datos. Este nuevo concepto impacta en muchisimos ambitos pero principalmente en la tecnologia, la sociedad y en la creacion de valor. En la teconologia se lo ve asociado al almacenamiento, la obtencion y el analisis de volumenes de datos cada vez mas grandes. El impacto en la sociedad se expresa principalmente en los problemas de privacidad de los usuarios, la seguridad de sus datos ya que los mismos no tienen regulaciones para su uso comercial. Por ultimo la creacion de valor que basicamente se trata de las decisiones que uno fuese a tomar basandose en la informacion disponible gracias a estos datos.
