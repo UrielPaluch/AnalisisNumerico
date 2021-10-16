@@ -1,0 +1,676 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 2, 2021. Primer Examen Parcial."
+author: "Paluch Uriel - 895700"
+date: "07/Octubre/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace 000000 a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 895700
+
+```
+
+
+
+```{r Datos}
+#No edite este bloque
+set.seed(NroReg)
+datos = matrix(rnorm(3000,10,2),nrow = 1000, ncol = 3)
+A = round(cor(datos),4)
+B = matrix(round(rnorm(16,10,5),0),nrow = 4, ncol = 4)
+a5 <- round(runif(1,10,35))
+op5 <- sample(c("y", "o"), size = 1)
+b5 <- as.integer(round(runif(1,10000,20000),-2))
+p5 <- sample(c("Francia", "Italia", "Alemania"), size = 1)
+or5 <- sample(c("la cantidad", "el total"), size = 1)
+
+p0_4 <- sample(c(1,0.1),size=1) 
+Tol_4 <-round(runif(1,4,7))
+a4 <-round(runif(1,3,5))
+b4 <-round(runif(1,0.5,0.7),1)
+c4 <-round(runif(1,8,11))
+d4 <-round(runif(1,80,95))
+e4 <-round(runif(1,0.5,1.05),2)
+i4 <-round(runif(1,20,22))
+g4 <-round(runif(1,1,5))
+h4 <-round(runif(1,10,15))
+
+a2 <-round(runif(1,2,10))
+b2 <-round(runif(1,5,100))
+c2 <-round(runif(1,1,10))
+fu2 <-sample(c('cos(x)','sin(x)'),size=1) 
+x0_2<-round(runif(1,30,40))
+x1_2 <- x0_2 + 10
+n2 <-round(runif(1,5,7))
+p0_2 <- x0_2 + 1
+
+fu1 <-sample(c('cos(x)','sin(x)'),size=1)
+op1 <-sample(c('/','*'),size=1)
+a1 <-round(runif(1,0.01,1.99),2)
+x0_1<-round(runif(1,10,17))
+x1_1 <- x0_1 + 20
+p0_1 <- x0_1 + 5
+p1_1 <- x0_1 + 8
+n1 <-round(runif(1,8,15))
+rm(datos)
+  
+```
+
+
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(flextable)
+  library(tidyverse)
+ 
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Secante. (24 puntos)
+Para este ejercicio, considere la función $h(x)=`r fu1``r op1` x^{`r a1`}$.
+
+## Graficar función e identificar raíces
+
+Grafique la función $h(x)$ en el intervalo $[`r x0_1`,`r x1_1`]$ de manera tal que pueda identificar todas las soluciones de la ecuación en el intervalo.
+
+Respuesta:
+```{r Respuesta-1.2 Grafico-f-S, fig.cap="Grafico de Función para hallar raíces"}
+f <- function(x){
+  return(cos(x)/(x^0.54))
+}
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(11, 31, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje Y
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Agrego el eje X
+gg_fx <- gg_fx + geom_vline(xintercept = 0, linetype = 1)
+
+#Grafico
+gg_fx
+```
+
+## Corregir algoritmo
+
+CORREGIR el algoritmo “Secante” en el siguiente bloque de código. 
+
+COMENTAR los cambios que realizó (use "#" al final de cada línea modificada). 
+
+[***Notar que, para el resto del ejercicio, no debe utilizar su propio algoritmo, sino que debe usar el algoritmo dado y corregido, sin agregar ninguna línea de código adicional.***]
+
+Respuesta:
+```{r Algoritmo-S, echo=TRUE}
+ # Edite las líneas que considere erróneas
+ # Comente al final de cada línea editada 
+ Secante <- function(f,p0,p1,TOL,N){
+    i <- 2
+    q0 <- f(p0)
+    q1 <- f(p1)
+    while (i <= N){ #Mientas que i sea menor al numero máximo de iteraciones
+      p = p1 - q1*(p1-p0)/(q1-q0) #Corregi la formula
+      if (abs(p-p1) < TOL){ #La tolerancia se calcula en base a p, no q
+        return(p)
+      }
+      i <- i + 1
+      p0 = p1 #p0 = p1
+      q0 = q1
+      p1 = p #p1 = p
+      q1 = f(p) #f(p)
+    }
+    return(paste('El metodo fallo luego de ', N, ' iteraciones')) #R es case sensitive
+  } 
+
+```
+
+
+
+## Hallar raíces
+Utilizando el algoritmo del punto 1.2, halle todas las raíces identificadas en el punto 1.1.
+
+Respuesta:
+```{r Respuesta-1.3 Calculo-raices-S}
+  #Debe usar el algoritmo dado en 1.1 (corregido por usted). No puede usar su propio algoritmo.
+print(Secante(f = f, p0 = 13, p1 = 15, TOL = 0.0001, N = 100 ))
+print(Secante(f = f, p0 = 15, p1 = 18, TOL = 0.0001, N = 100 ))
+print(Secante(f = f, p0 = 20, p1 = 22, TOL = 0.0001, N = 100 ))
+print(Secante(f = f, p0 = 25, p1 = 28, TOL = 0.0001, N = 100 ))
+print(Secante(f = f, p0 = 28, p1 = 31, TOL = 0.0001, N = 100 ))
+```
+
+## Iteraciones 
+Tome el algoritmo del punto 1.2 (copie y pegue) y agregue las líneas de código que considere necesarias para poder visualizar (imprimir) cada iteración del algoritmo. Una vez editado el algoritmo, imprima `r n1` iteraciones del algoritmo iniciando en $x_0=`r p0_1`$ y $x_1=`r p1_1`$. ¿A cuál de las raíces convergería el algoritmo en este caso?
+
+Respuesta:
+```{r Respuesta-1.4 Algoritmo-S-Iteraciones}
+Secante <- function(f,p0,p1,TOL,N){
+    i <- 2
+    q0 <- f(p0)
+    q1 <- f(p1)
+    while (i <= N){ #Mientas que i sea menor al numero máximo de iteraciones
+      p = p1 - q1*(p1-p0)/(q1-q0) #Corregi la formula
+      
+      if (abs(p-p1) < TOL){ #La tolerancia se calcula en base a p, no q
+        return(p)
+      }
+      i <- i + 1
+      p0 = p1 #p0 = p1
+      q0 = q1
+      p1 = p #p1 = p
+      q1 = f(p) #f(p)
+      
+      if (i <= 8){
+        print(paste("En la iteracion: ", i))
+        print(paste("p vale: ", p))
+        print(paste("p0 vale: ", p0))
+        print(paste("q0 vale: ", q0))
+        print(paste("p1 vale: ", p1))
+        print(paste("q1 vale: ", q1))
+      }
+    }
+    return(paste('El metodo fallo luego de ', N, ' iteraciones')) #R es case sensitive
+}
+print(paste("Converge a la raiz ubicada en:", Secante(f = f, p0 = 16, p1 = 19, TOL = 0.0001, N = 100)))
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Newton-Raphson. (24 puntos)
+Considere la siguiente ecuación: $`r a2``r fu2`=e^{`r b2`/x^{`r c2`}}$.
+
+
+## Teoría
+Describa el método de *Newton-Raphson* que se utiliza para hallar raíces de funciones.
+
+Respuesta (escriba a continuación):  
+El método de la forma presentada en el libro esta basada en los polinomios de Taylor.  \
+
+Supongamos que $p_0$ existe en un intervalo $[a;b]$ y es una aproximación para $p$, de tal forma que $f'(p_0)$ $\neq$ 0 y $|p-p_0|$ es "pequeño". Consideremos e primer polinomio de Taylor expandido de $p_0$ y evaluado en $x = p$:
+\begin{align*}
+  f(p) = f(p_0) + (p - p_0) * f'(p_0) + \frac{(p - p_0)^2}{2} * f''(\xi(p))
+\end{align*}
+Puesto que, $f(p) = 0$ y $(p - p_0)^2$ es pequeño, reexpresamos de modo que:
+\begin{align*}
+  p = p_0 - \frac{f(p_0)}{f'(p_0)}
+\end{align*}
+
+Los consecutivos puntos $p_n$ se encuentran mediante el cruce de la recta tangente propuesta con el eje de las X.  
+
+## Hallar raíces
+Plantee la ecuación de la forma $f(x)=0$ y halle todas las raíces en el intervalo  $[`r x0_2`,`r x1_2`]$ utilizando el método de Newton-Raphson.
+
+Respuesta:
+```{r Algoritmo-NR}
+# Si no agrego la función F aca no me compila el RMD
+# Una forma de solucionarlo es pasando la función como parámetro
+f <- function(x){
+  return(4*sin(x)-exp(46/x^3))
+}
+  # Ingrese aquí la función con el algoritmo que programó 
+Newton <- function(p0, tol, n = 100){
+  #Donde p0 es la aproximación inicial
+  #El número máximo de iteraciones n viene por default en 100
+  #Y tol es la toleranacia al error
+  
+  for (i in 1:n) {
+    
+    #Calculo p
+    p <- p0 - (f(p0)/fprima(p0))
+    
+    if(abs(p-p0) <= tol){
+      return(p)
+    }
+    
+    p0 <- p
+    
+  }
+  
+  #En el caso de que falle el método
+  return(paste('El método falla luego de: ', n, ' iteraciones'))
+}
+```
+
+```{r Respuesta-2.2 Calculo-raices-NR}
+# En este bloque, aplique el algoritmo para hallar las raíces. No olvide imprimir los resultados.
+# Incluya aquí mismo cualquier cálculo adicional que requiera.
+fprima <- D(expression(4*sin(x)-exp(46/x^3)), "x")
+
+# fprima
+
+fprima <- function(x){
+  return(4 * cos(x) + exp(46/x^3) * (46 * (3 * x^2)/(x^3)^2))
+}
+
+raiz1 <- Newton(p0 = 40.625, tol = 0.001)
+print(raiz1)
+raiz2 <- Newton(p0 = 44, tol = 0.001)
+print(raiz2)
+raiz3 <- Newton(p0 = 46.5, tol = 0.001)
+print(raiz3)
+```
+
+## Iteraciones
+Considere el punto anterior. Realice `r n2` iteraciones del algoritmo de Newton-Raphson, utilizando en $x_0= `r p0_2`$. ¿A cuál de las raíces convergería el algoritmo en este caso?
+
+Respuesta:
+```{r Respuesta-2.3 Algoritmo-NR-Iteraciones}
+  # Aquí puede modificar el algoritmo RF del punto anterior para que imprima, o bien puede realizar las cuentas "a mano" (paso a paso, cada una de las iteraciones)
+Newton(p0 = 41, tol = 0.0001, n = 6)
+```
+
+## Graficar función y marcar raíces 
+
+Grafique la función $f(x)$ en el intervalo $[`r x0_2`,`r x1_2`]$, identifique todas las raíces halladas en el punto 2.2 y marque cada una con un color distinto en el gráfico.
+
+Respuesta:
+```{r Respuesta-2.4 Grafico-f-NR, fig.cap="Grafico de Función para hallar raíces"}
+#Instancio un vector que me va a indicar los puntos en la función
+x <- seq(40, 50, by = 0.1)
+
+#Genero los puntos
+fx <- f(x)
+
+#Creo un data frame con los x e y
+df <- data.frame(x, fx)
+
+#Instancio los datos
+gg_fx <- ggplot(data = df)
+
+#Agrego la capa con los datos
+gg_fx <- gg_fx + aes(x = x, y = fx)
+
+#Est grafica una linea
+gg_fx <- gg_fx + geom_line(linetype = 1, colour = "darkblue")
+
+#Agrego el eje Y
+#No agrego el eje X porque no tiene mucho sentido
+gg_fx <- gg_fx + geom_hline(yintercept = 0, linetype = 1)
+
+#Grafico las raices
+gg_fx <- gg_fx + geom_vline(xintercept = raiz1, linetype = 1, colour="darkgreen")
+gg_fx <- gg_fx + geom_vline(xintercept = raiz2, linetype = 1, colour="darkred")
+gg_fx <- gg_fx + geom_vline(xintercept = raiz3, linetype = 1, colour="darkorange")
+
+#Grafico
+gg_fx
+```
+
+\newpage
+
+# Factorización de Matrices. (12 puntos)
+
+## Factorización de Cholesky
+Realice la factorización de Cholesky de la siguiente matriz:
+
+$$
+A = `r write_matex2(A)`
+$$
+
+Respuesta:
+```{r Algoritmo-Cholesky}
+  # En este bloque de código debe ingresar su algoritmo de Cholesky
+Cholesky <- function(A){
+  n <- nrow(A)
+  
+  L <- matrix(rep(0, times = n^2), nrow = n, ncol = n, byrow = TRUE)
+  
+  # Paso 1 ------------------------------------------------------------------
+  L[1,1] <- sqrt(A[1,1])
+  
+
+  # Paso 2 ------------------------------------------------------------------
+  for (j in 2:n){
+    L[j,1] <- A[j,1]/L[1,1]
+  }
+  
+
+  # Paso 3 ------------------------------------------------------------------
+  for (i in 2:(n-1)) {
+
+    # Paso 4 ------------------------------------------------------------------
+    suma <- 0
+    for (k in 1:(i-1)) {
+      suma <- suma + L[i,k]^2
+    }
+    
+    L[i,i] <- sqrt(A[i,i] - suma)
+    
+
+    # Paso 5 ------------------------------------------------------------------
+    for (j in (i+1):n) {
+      
+      suma <- 0
+      for (k in 1:(i-1)) {
+        suma <- suma + L[j,k]*L[i,k]
+      }
+      
+      L[j,i] <- (A[j,i] - suma)/L[i,i] 
+      
+    }
+  }
+  
+  # Paso 6 ------------------------------------------------------------------
+  suma <- 0
+  for (k in 1:(n-1)) {
+    suma <- suma + L[n,k]^2
+  }
+  
+  L[n,n] <- sqrt(A[n,n]-suma)
+  
+  return(L)
+  
+}
+```
+
+```{r Respuesta-3.1}
+# En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+A <- matrix(c(1, 0.0481, 0.0105,
+              0.0481, 1, 0.0116,
+              0.0105, 0.0116, 1), nrow = 3, ncol = 3, byrow = TRUE)
+
+test <- Cholesky(A)
+
+print(test)
+
+# Con esto testeo que el algoritmo sea correcto
+# print(test%*%t(test))
+```
+
+
+## Factorización LU
+Realice la factorización de LU de la siguiente matriz:
+
+$$
+B = `r write_matex2(B)`
+$$
+
+Respuesta:
+```{r Algoritmo-LU}
+  # En este bloque de código debe ingresar su algoritmo LU
+LU <- function(matriz_coeficientes){
+  n_incognitas = nrow(matriz_coeficientes)
+  
+  L <- matrix(rep(0, times = n_incognitas^2), nrow = n_incognitas, ncol = n_incognitas, byrow = TRUE)
+  U <- matrix(rep(0, times = n_incognitas^2), nrow = n_incognitas, ncol = n_incognitas, byrow = TRUE)
+  
+  # -------- PASO 1
+  for (i in 1:(n_incognitas-1)) {
+    #Completo con 1 la diagonal principal de L.
+    L[i,i] <- 1
+    
+    for (j in (i+1):n_incognitas) {
+      L[i,j] <- 0
+    }
+  }
+  
+  #El último lo completo a mano
+  L[n_incognitas, n_incognitas] <- 1
+  
+  U[1,1] <- matriz_coeficientes[1,1]
+  
+  
+  if(U[1,1] == 0){
+    return("factorizacion imposible")
+  }
+  
+  # -------- PASO 2
+  
+  for (j in 2:n_incognitas) {
+    U[1,j] <- matriz_coeficientes[1,j]
+    L[j,1] <- matriz_coeficientes[j,1]/U[1,1]
+  }
+  
+  
+  # -------- PASO 3
+  
+  for(i in 2:(n_incognitas-1)){
+    
+    # -------- PASO 4
+    suma <- 0
+    for (k in 1:(i-1)) {
+      suma <- suma + L[i,k]*U[k,i]
+    }
+    
+    U[i,i] <- matriz_coeficientes[i,i] - suma
+    
+    
+    if(U[i,i] == 0){
+      return("factorizacion imposible")
+    }
+    
+    # -------- PASO 5
+    
+    for (j in (i+1):n_incognitas) {
+      sumaU <- 0
+      sumaL <- 0
+      for (k in 1:(i-1)) {
+        sumaU <- sumaU + L[i,k]*U[k,j]
+        sumaL <- sumaL + L[j,k]*U[k,i]
+      }
+      
+      U[i,j] <- (1/L[i,i])* (matriz_coeficientes[i,j] - sumaU)
+      L[j,i] <- (1/U[i,i])* (matriz_coeficientes[j,i] - sumaL)
+      
+    }
+    
+    
+  }
+  
+  
+  # -------- PASO 6
+  
+  
+  suma <- 0
+  for (k in 1:(n_incognitas-1)) {
+    suma <- suma + L[n_incognitas,k]*U[k,n_incognitas]
+  }
+  U[n_incognitas, n_incognitas] <- matriz_coeficientes[n_incognitas,n_incognitas] - suma
+  
+  
+  # -------- PASO 7
+  return(list("L" = L, "U" = U))
+}
+```
+
+```{r Respuesta-3.2}
+# En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+
+A <- matrix(c(10, 8, 6, 8,
+              6, 5, 19, 8,
+              9, 11, 5, 16,
+              9, -7, 6, 9), nrow = 4, ncol = 4, byrow = TRUE)
+
+LU(matriz_coeficientes = A)
+
+# Testeo que el algoritmo sea corrercto
+# L <- LU(A)$L
+# U <- LU(A)$U
+# 
+# L%*%U
+    
+```
+
+\newpage
+
+# Sistemas de Ecuaciones No Lineales. (10 puntos)
+
+Utilice el método de Newton para resolver el siguiente Sistema de Ecuaciones No Lineales, tomando como punto inicial $(`r p0_4`,`r p0_4`,-`r p0_4`)$.
+
+
+$`r a4`x-cos(yz)=`r b4`$
+
+$`r c4`x^{2}-`r d4`(y+1/10)^2+sin(z)=-`r e4`$
+
+$e^{-xy}+`r i4`z=`r g4`-(`r h4`/3)\pi$ 
+
+
+Aproxime la solución con una tolerancia de $10^{-`r Tol_4`}$
+
+
+Respuesta:
+```{r Algoritmo-Newton SENoL}
+# En este bloque de código debe ingresar su algoritmo junto con las funciones que considere necesarias
+
+newton <- function(x, TOL, N = 100, ecuaciones){
+  # x: aproximación inicial
+  # TOL: tolerancia
+  # N: cantidad maxima de iteraciones
+  
+  # Instancio las variables -------------------------------------------------
+  # n: número de ecuaciones e incognitas
+  n <- length(ecuaciones)
+  # funciones valuadas en cero
+  f0 <- rep(NA, n)
+  jacobiano = matrix(rep(NA, n*n), nrow = n, ncol = n)
+  
+  # Comienza el método ------------------------------------------------------
+  for (max_reps in 1:N) {
+    # Recorro las filas
+    for (i in 1:n) {
+      #Evaluo las ecuaciones 
+      f0[i] <- eval(ecuaciones[i], x)
+      # Recorro las columnas
+      for (j in 1:n){
+        # Derivo en cada variable y evaluo
+        jacobiano[i,j] <- eval((D(ecuaciones[i], glue::glue("x",j))), x)
+      }
+    }
+    
+    #Calcula la inversa de una matriz
+    y0 <- solve(jacobiano) %*% (-f0)
+    x <- y0 + unlist(x, use.names=FALSE)
+    
+    norma <- norm(y0,type = 'M')
+    if (norma < TOL) {
+      return(x)
+    }
+    
+    x0 <- list()
+    for (i in 1:n) {
+      x0[glue::glue("x",i)] <- x[i]
+    }
+    x <- x0
+    
+  }
+  
+  return("Numero de iteraciones maximo excedido")
+}
+
+```
+
+```{r Respuesta-4.1}
+# Siendo x1 = x; x2 = y; x3 = z 
+# En este bloque de código debe aplicar el algoritmo e imprimir el resultado
+print(newton(x = list(x1 = 1, x2 = 1, x3 = -1), TOL = 10^-6, 
+       ecuaciones = c(
+                      expression(3*x1-cos(x2*x3)-0.5),
+                      expression(9*x1^2-93*(x2+0.1)^2+sin(x3)+0.52),
+                      expression(exp(-x1*x2)+21*x3-4+(14/3)*pi)
+                      )
+)) 
+```
+
+\newpage
+# SQL. (20 puntos)
+
+Utilice la base de datos de la siguiente web para preparar sus códigos de SQL: https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all  
+ 
+## Consulta Empleados 
+
+Escriba una consulta SQL que contenga los empleados con más de $`r a5`$ ventas realizadas `r op5` cuyo total vendido es mayor a $\$`r b5`$. La salida debe contener los siguientes campos: Nombre y Apellido del Empleado, Cantidad de ventas, Total (calculado como la suma total del Precio*Cantidad).
+
+Respuesta (escriba a continuación):  
+SELECT  
+E.FirstName AS "Nombre del empleado",  
+E.LastName AS "Apellido del empleado",  
+COUNT(DISTINCT(O.OrderID)) AS "Cantidad de ventas",  
+E.EmployeeID,  
+ROUND(SUM(P.Price * OD.Quantity),2) AS "Total"  
+FROM Employees E  
+INNER JOIN Orders O ON O.EmployeeID = E.EmployeeID  
+INNER JOIN OrderDetails OD ON OD.OrderID = O.OrderID  
+INNER JOIN Products P ON P.ProductID = OD.ProductID  
+GROUP BY O.EmployeeID  
+HAVING COUNT(DISTINCT(O.OrderID)) > 24 OR SUM(P.Price * OD.Quantity) > 13500  
+
+## Consulta Proveedores 
+
+Escriba una consulta SQL que contenga un resumen de los productos vendidos de los proveedores de `r p5`. La salida debe contener los siguientes campos: Nombre del Proveedor, ciudad y país del proveedor, Contacto del proveedor, Cantidad de ventas y Total (calculado como la suma total del Precio*Cantidad) y tiene que estar ordenada de forma descendente por `r or5`. 
+
+Respuesta (escriba a continuación):  
+SELECT  
+S.SupplierName AS "Nombre del proveedor",  
+S.City AS "Ciudad del proveedor",  
+S.Country AS "Pais del proveedor",  
+S.ContactName AS "Contacto del proveedor",  
+COUNT(DISTINCT(OD.OrderID)) AS "Cantidad de Ventas",  
+ROUND(SUM(P.Price * OD.Quantity),2) AS "Total"
+FROM Suppliers S  
+INNER JOIN Products P ON P.SupplierID = S.SupplierID  
+INNER JOIN OrderDetails OD ON OD.ProductID = P.ProductID  
+GROUP BY S.SupplierID  
+HAVING S.Country = "Italy"  
+ORDER BY COUNT(DISTINCT(OD.OrderID)) DESC  
+
+\newpage
+
+# Aprendizaje automático. (10 puntos)
+
+Defina el concepto de “Big Data”, identifique los impactos que tiene en la actualidad y relaciónelo con el aprendizaje automático. 
+
+Respuesta (escriba a continuación):  
+Se llama Big Data a la masiva cantidad de datos generados por los dispositivos electrónicos de todo tipo. Puede ir desde un dispositivos GPS hasta interacciones en las redes sociales. Se pueden recolectar de muchas formas, con el ejercicio de twitter hicimos text mining pero, tambien podríamos haber hecho web scrapping para recolectar los datos directamente de la web.  
+La Big Data tiene las denominadas tres v:  
+Volumen: refiere la cantidad  
+Velocidad: al día de hoy, la internet permite tener los datos en tiempo real.  
+Variedad: Los datos pueden ser de todo tipo, imagenes, audios, texto localizaciones.  
+Y una versión extendida, las 5 v:  
+Veracidad: son los datos reales?  
+Valor: los datos por si solos no tienen ningún valor. Sirven por su capacidad   predictiva. Surge la necesidad de analizar este gran volumen de datos, con algoritmos acordes (Ejemplo: Machine Learning, se basa en la detección de patrones sin la intervención humana).  
+La Big Data impacta a diario en nuestra vida, en el ambito tecnológico surgieron nuevas infraestructuras para adaptrse a los grandes volumenes (Ejemplo: cloud storage).
+También tiene un gran impacto social. ¿Cómo se utilizan estos datos? ¿Qué saben realmente de nosotros? Solo basta con recordar el caso de Cambridge Analytics donde utilizaron la data de millones de usuarios de redes sociales para influir en el resultado electoral.  
+Los algortimos aprenden a través de 3 métodos:  
+- Supervisado: cada uno de los datos tiene una "etiqueta" o respuesta asociada.  
+- No supervisado: los datos no tienen "etiqueta".   
+- Aprendizaje reforzado: se da una recompensa al algoritmo cuando hace algo bien. Un ejemplo son las AI que juegan ajedrez.

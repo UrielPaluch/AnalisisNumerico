@@ -195,13 +195,20 @@ Respuesta:
 # Ingrese aquí la función con el algoritmo que programó del método de Regula Falsi
 
 f <- function(x){
-  return(x^2*cos(x))
+  return((x^2)*cos(x))
 }
 
 FalsaPosicion <- function(p0, p1, tol, n = 100){
   
   q0 <- f(p0)
   q1 <- f(p1)
+  
+  if(q0 == 0){
+    return(p0)
+  }
+  if(q1 == 0){
+    return(p1)
+  }
   
   for (i in 2:n){
     p = p1 -q1*(p1-p0)/(q1-q0)
@@ -230,7 +237,7 @@ FalsaPosicion <- function(p0, p1, tol, n = 100){
   # Incluya aquí mismo cualquier cálculo adicional que requiera.
 
 #Se observa un raiz en aproximadamente 0
-raiz0 <- FalsaPosicion(p0 = 0, p1 = 0.1, tol = 0.0000001)
+raiz0 <- FalsaPosicion(p0 = 0, p1 = 1, tol = 0.0001)
 raiz0
 #Se observa una raiz entre 1.5 y 1.8
 raiz1 <- FalsaPosicion(p0 = 1.5, p1 = 1.8, tol = 0.0000001)
