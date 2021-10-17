@@ -27,3 +27,13 @@
 
 ## Trabajo Práctico
 * Data mining sobre la tarjeta alimentar.
+
+## Primer Examen
+* Modelos de examen resueltos
+
+##Examen 1
+* El examen que nos tomo
+
+## Semana 8
+* Polinomio de Lagrange.
+* Método de Neville

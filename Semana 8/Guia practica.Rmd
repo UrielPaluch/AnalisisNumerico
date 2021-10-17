@@ -36,6 +36,33 @@ PolinomioLagrange <- function(x, fx, y){
 }
 ```
 
+```{r}
+# Metodo de Neville -------------------------------------------------------
+
+Neville <- function(x, y, interpolar){
+  #cantidad de iteraciones que voy a hacer
+  n <- length(x)-1
+  
+  #Hago un vector vacio para llenar el df
+  empty_vec <- rep(0, times = length(x))  
+
+  df <- data.frame(x, y)
+  
+  for (i in 1:n) {
+    df[glue::glue("Q",i)] <- empty_vec
+    
+    for (j in (i+1):(n+1)) {
+      
+      df[j, (i+2)] <- ( (interpolar-x[(j-i)]) * df[j,(i+1)] - (interpolar-x[j]) * df[(j-1),(i+1)] )  / (x[j]-x[j-i])
+  
+    }
+  }
+  
+  return(df)
+}
+```
+
+
 
 ### Ejercicio 1:
 Use los polinomios interpolantes de Lagrange apropiados de grado uno, dos y tres para aproximar lo siguiente:  
@@ -62,7 +89,7 @@ print(polinomioLagrangeGrado1)
 
 ```
 
-#### b. f (0) si f (−0.5) = 1.93750, f (−0.25) = 1.33203, f (0.25) = 0.800781, f (0.5) = 0.687500
+#### b. f (0) si f (-0.5) = 1.93750, f (-0.25) = 1.33203, f (0.25) = 0.800781, f (0.5) = 0.687500
 ```{r}
 polinomioLagrangeGrado3 <- PolinomioLagrange(x = c(-0.5, -0.25, 0.25, 0.5), fx = c(1.93750, 1.33203, 0.800781, 0.687500), y = list(x = 0))
 print(polinomioLagrangeGrado3)
@@ -88,5 +115,32 @@ print(polinomioLagrangeGrado2)
 
 polinomioLagrangeGrado1 <- PolinomioLagrange(x = c(0.1, 0.2), fx = c(-0.29004986, -0.56079734), y = list(x = 0.18))
 print(polinomioLagrangeGrado1)
+```
+
+### Ejercicio 4:
+Aplique el método de Neville para obtener las aproximaciones del ejercicio 1.
+
+#### Ejercicio a:
+```{r}
+# x es la preimagen
+# y es la imagen
+# interpolar es el número que se desea interpolar
+print(Neville(x = c(0, 0.25, 0.5, 0.75), y = c(1, 1.64872, 2.71828, 4.48169), interpolar = 0.43))
+```
+
+#### Ejercicio b:
+```{r}
+# x es la preimagen
+# y es la imagen
+# interpolar es el número que se desea interpolar
+print(Neville(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203, 0.800781, 0.687500), interpolar = 0))
+```
+
+#### Ejercicio c:
+```{r}
+# x es la preimagen
+# y es la imagen
+# interpolar es el número que se desea interpolar
+print(Neville(x = c(0.1, 0.2, 0.3, 0.4), y = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302), interpolar = 0.18))
 ```
 
