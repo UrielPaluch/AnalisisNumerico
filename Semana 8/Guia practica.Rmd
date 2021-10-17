@@ -1,0 +1,92 @@
+---
+title: "Ejercicios"
+author: "Uriel Paluch"
+date: "16/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Guía Práctica 4: Interpolación
+
+```{r}
+PolinomioLagrange <- function(x, fx, y){
+  
+  n <- length(x)
+  
+  l <- rep("", times = n)
+  
+  resultado <- 0
+  
+  for (i in 1:n) {
+    l[i] <- fx[i]
+    for (j in 1:n) {
+      if (j != i){
+        l[i] <- l[i] + glue::glue("*(x-",x[j],")/(",x[i],"-",x[j],")")
+      }
+    }
+  }
+  
+  for(i in 1:n){
+    resultado <- resultado + eval(parse(text=l[i]), y)
+  }
+  return(paste("El resultado es: ", resultado))
+}
+```
+
+
+### Ejercicio 1:
+Use los polinomios interpolantes de Lagrange apropiados de grado uno, dos y tres para aproximar lo siguiente:  
+
+#### a. f (0.43) si f (0) = 1, f (0.25) = 1.64872, f (0.5) = 2.71828, f (0.75) = 4.48169
+
+```{r}
+# x es una lista con todos los valores
+# fx es la funcion que hay que aproximar
+# y es el valor donde se desea aproximar la función
+polinomioLagrangeGrado3 <- PolinomioLagrange(x = c(0, 0.25, 0.5, 0.75), fx = c(1, 1.64872, 2.71828, 4.48169), y = list(x = 0.43))
+print(polinomioLagrangeGrado3)
+
+polinomioLagrangeGrado2 <- PolinomioLagrange(x = c(0, 0.25, 0.5), fx = c(1, 1.64872, 2.71828), y = list(x = 0.43))
+print(polinomioLagrangeGrado2)
+
+polinomioLagrangeGrado2 <- PolinomioLagrange(x = c(0.25, 0.5, 0.75), fx = c(1.64872, 2.71828, 4.48169), y = list(x = 0.43))
+print(polinomioLagrangeGrado2)
+
+#Este es el que va
+#Creo que es porque es el intervalo mas pequeño
+polinomioLagrangeGrado1 <- PolinomioLagrange(x = c(0.25, 0.5), fx = c(1.64872, 2.71828), y = list(x = 0.43))
+print(polinomioLagrangeGrado1)
+
+```
+
+#### b. f (0) si f (−0.5) = 1.93750, f (−0.25) = 1.33203, f (0.25) = 0.800781, f (0.5) = 0.687500
+```{r}
+polinomioLagrangeGrado3 <- PolinomioLagrange(x = c(-0.5, -0.25, 0.25, 0.5), fx = c(1.93750, 1.33203, 0.800781, 0.687500), y = list(x = 0))
+print(polinomioLagrangeGrado3)
+
+polinomioLagrangeGrado2 <- PolinomioLagrange(x = c(-0.5, -0.25, 0.25), fx = c(1.93750, 1.33203, 0.800781), y = list(x = 0))
+print(polinomioLagrangeGrado2)
+
+polinomioLagrangeGrado2 <- PolinomioLagrange(x = c(-0.25, 0.25, 0.5), fx = c(1.33203, 0.800781, 0.687500), y = list(x = 0))
+print(polinomioLagrangeGrado2)
+
+polinomioLagrangeGrado1 <- PolinomioLagrange(x = c(-0.25, 0.25), fx = c(1.33203, 0.800781), y = list(x = 0))
+print(polinomioLagrangeGrado1)
+```
+
+#### c. f (0.18) sif (0.1) = -0.29004986, f (0.2) = -0.56079734, f (0.3) = -0.81401972, f (0.4) =-1.0526302
+
+```{r}
+polinomioLagrangeGrado3 <- PolinomioLagrange(x = c(0.1, 0.2, 0.3, 0.4), fx = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302), y = list(x = 0.18))
+print(polinomioLagrangeGrado3)
+
+polinomioLagrangeGrado2 <- PolinomioLagrange(x = c(0.1, 0.2, 0.3), fx = c(-0.29004986, -0.56079734, -0.81401972), y = list(x = 0.18))
+print(polinomioLagrangeGrado2)
+
+polinomioLagrangeGrado1 <- PolinomioLagrange(x = c(0.1, 0.2), fx = c(-0.29004986, -0.56079734), y = list(x = 0.18))
+print(polinomioLagrangeGrado1)
+```
+

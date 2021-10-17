@@ -1,0 +1,45 @@
+---
+title: "Polinomio de Lagrange"
+author: "Uriel Paluch"
+date: "16/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Polinomio de Lagrange
+Dada una función definida y continua sobre un intervalo cerrado y acotado, existe un polinomio que está tan "cerca" de la función como se lo desee. Este resultado se expresa con presición en el teorema de aproximación de Weierstrass.  
+
+Con dos puntos se consigue un polinomio interpolador de Lagrange de grado 1.  
+Con n puntos se consigue un polinomio interpolador de Lagrange de grado n.1.
+
+```{r}
+# x es una lista con todos los valores
+# fx es la funcion que hay que aproximar
+# y es el valor donde se desea aproximar la función
+PolinomioLagrange <- function(x, fx, y){
+  
+  n <- length(x)
+  
+  l <- rep("", times = n)
+  
+  resultado <- 0
+  
+  for (i in 1:n) {
+    l[i] <- fx[i]
+    for (j in 1:n) {
+      if (j != i){
+        l[i] <- l[i] + glue::glue("*(x-",x[j],")/(",x[i],"-",x[j],")")
+      }
+    }
+  }
+  
+  for(i in 1:n){
+    resultado <- resultado + eval(parse(text=l[i]), y)
+  }
+  return(paste("El resultado es: ", resultado))
+}
+```
+
