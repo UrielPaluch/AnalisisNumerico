@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Neville
-Una dificultad práctica con la interpolación de Lagrange s que el término de error es difícil de aplicar, por lo que el grado del polinomio que se necesita para la precisión deseana en general se desconoce hasta que se realizan los cálculos.
+Una dificultad práctica con la interpolación de Lagrange es que el término de error es difícil de aplicar, por lo que el grado del polinomio que se necesita para la precisión deseana en general se desconoce hasta que se realizan los cálculos.
 
 ```{r}
 

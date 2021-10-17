@@ -62,6 +62,29 @@ Neville <- function(x, y, interpolar){
 }
 ```
 
+```{r}
+# Metodo de diferencias divididas -----------------------------------------
+DiferenciasDivididas <- function(x, y){
+  n <- length(x)
+  
+  #Hago un vector vacio para llenar el df
+  empty_vec <- rep(0, times = n)  
+  
+  df <- data.frame(x, y)
+  
+  for (i in 1:(n-1)) {
+    
+    df[glue::glue("Q",i)] <- empty_vec
+    
+    for (j in (i+1):n) {
+      
+      df[j, (i+2)] <- ( df[j,(i+1)] - df[(j-1),(i+1)])/(x[j]-x[j-i])
+    }
+  }
+  
+  return(df)
+}
+```
 
 
 ### Ejercicio 1:
@@ -115,6 +138,23 @@ print(polinomioLagrangeGrado2)
 
 polinomioLagrangeGrado1 <- PolinomioLagrange(x = c(0.1, 0.2), fx = c(-0.29004986, -0.56079734), y = list(x = 0.18))
 print(polinomioLagrangeGrado1)
+```
+### Ejercicio 2:
+Escribir las tablas de diferencias divididas asociadas al Ejercicio 1.
+
+#### Ejercicio a:
+```{r}
+print(DiferenciasDivididas(x = c(0, 0.25, 0.5, 0.75), y = c(1, 1.64872, 2.71828, 4.48169)))
+```
+
+#### Ejercicio b:
+```{r}
+print(DiferenciasDivididas(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203, 0.800781, 0.687500)))
+```
+
+#### Ejercicio c:
+```{r}
+print(DiferenciasDivididas(x = c(0.1, 0.2, 0.3, 0.4), y = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302)))
 ```
 
 ### Ejercicio 4:
