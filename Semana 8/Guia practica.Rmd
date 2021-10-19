@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 ```
 
 ## Guía Práctica 4: Interpolación
@@ -86,6 +87,103 @@ DiferenciasDivididas <- function(x, y){
 }
 ```
 
+```{r}
+PolinomioInterpolanteNewton <- function(x, y){
+  df <- DiferenciasDivididas(x = x, y = y)
+  
+  #Saco la primer columna del df
+  df[,1] <- NULL
+  
+  n <- ncol(df)
+  
+  polinomio <- df[1,1]
+  
+  for (i in 2:n) {
+    polinomio <- polinomio + glue::glue(" + ", df[i,i])
+    for (j in 1:(i-1)) {
+      polinomio <- polinomio + glue::glue(" * ( x - ", x[j], " )")
+    }
+  }
+  return(polinomio)
+}
+```
+
+```{r}
+TrazadorCubicoNatural = function(x,y){
+  n = length(y)
+  j = n - 1
+  
+  a = y
+  b = c(rep(NA,n))
+  c = c(rep(NA,n))
+  d = c(rep(NA,n))
+  
+  A = c(rep(NA,n))
+  h = c(rep(NA,n))
+  l = c(rep(NA,n))
+  u = c(rep(NA,n))
+  z = c(rep(NA,n))
+  
+  #Paso 1
+  for (i in 1:j) { 
+    h[i] = x[i + 1] - x[i]
+  }
+  
+  
+  #Paso 2
+  for (i in 1:j) { 
+    if(i != 1){
+      A[i] = (3 * (a[i + 1] - a[i])/(h[i])) - (3 * (a[i] - a[i - 1]) /h[i - 1])
+    }
+  }
+  
+  
+  #Paso 3
+  l[1] = 1
+  u[1] = 0
+  z[1] = 0
+  
+  #Paso 4
+  for (i in 2:j) {
+    l[i] = 2 * (x[i + 1] - x[i - 1]) - h[i - 1] * u[i - 1]
+    u[i] = h[i]/l[i]
+    z[i] = (A[i] - h[i - 1] * z[i - 1])/l[i]
+  }
+  
+  #Paso 5
+  l[n] = 1
+  z[n] = 0
+  c[n] = 0
+  
+  #Paso 6
+  for (i in j:1) {
+    c[i] = z[i] - u[i] * c[i + 1]
+    b[i] = (a[i + 1] - a[i])/h[i] - h[i] * (c[i + 1] + 2*c[i])/3
+    d[i] = (c[i + 1] - c[i])/(3*h[i])
+  }
+  
+  #Paso 7
+  results = matrix(rep(NA, 4*j), nrow = j, ncol = 4, byrow = F)
+  for (k in 1:j) {
+    results[k, 1] = a[k]
+    results[k, 2] = b[k]
+    results[k, 3] = c[k]
+    results[k, 4] = d[k]
+  }
+  
+  #Construyo el polinomio
+  polinomios <- rep(NA, times = nrow(results))
+  for (i in 1:nrow(results)) {
+    polinomios[i] <- glue::glue(results[i,1]) 
+    for(j in 2:ncol(results)){
+      polinomios[i] <- polinomios[i] + glue::glue(" + ", results[i,j], " * (x - ", x[i], ")^", (j-1)) 
+    }
+  }
+  
+  return(polinomios)
+  
+}
+```
 
 ### Ejercicio 1:
 Use los polinomios interpolantes de Lagrange apropiados de grado uno, dos y tres para aproximar lo siguiente:  
@@ -157,6 +255,24 @@ print(DiferenciasDivididas(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203
 print(DiferenciasDivididas(x = c(0.1, 0.2, 0.3, 0.4), y = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302)))
 ```
 
+### Ejercicio 3:
+Escriba el polinomio Pn(x) del ejercicio 1 utilizando la “Fórmula de diferencias divididas Interpolantes de Newton”, siendo “n” el grado másgrande de aproximación.
+
+#### a:
+```{r}
+print(PolinomioInterpolanteNewton(x = c(0, 0.25, 0.5, 0.75), y = c(1, 1.64872, 2.71828, 4.48169)))
+```
+
+#### b:
+```{r}
+print(PolinomioInterpolanteNewton(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203, 0.800781, 0.687500)))
+```
+
+#### c:
+```{r}
+print(PolinomioInterpolanteNewton(x = c(0.1, 0.2, 0.3, 0.4), y = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302)))
+```
+
 ### Ejercicio 4:
 Aplique el método de Neville para obtener las aproximaciones del ejercicio 1.
 
@@ -182,5 +298,66 @@ print(Neville(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203, 0.800781, 0
 # y es la imagen
 # interpolar es el número que se desea interpolar
 print(Neville(x = c(0.1, 0.2, 0.3, 0.4), y = c(-0.29004986, -0.56079734, -0.81401972, -1.0526302), interpolar = 0.18))
+```
+
+### Ejercicio 5:
+Escriba los trazadores Si(x) mediante el método de Trazadores Cúbicos Naturalespara los datos del ejercicio 1.b., indicando claramente los intervalos de x en los cuales se debe utilizar cada uno.
+
+```{r}
+print(TrazadorCubicoNatural(x = c(-0.5, -0.25, 0.25, 0.5), y = c(1.93750, 1.33203, 0.800781, 0.687500)))
+```
+1: (-0.5;-0.25)  
+2: (-0.25;0.25)  
+3: (0.25;0.5)  
+
+### Ejercicio 6:
+
+```{r}
+
+newton <- function(x){
+  return(1.9375 + -2.42188 * ( x - -0.5 ) + 1.81250933333333 * ( x - -0.5 ) * ( x - -0.25 ) + -1.00001066666667 * ( x - -0.5 ) * ( x - -0.25 ) * ( x - 0.25 ))
+}
+
+
+spline1 <- function(x){
+  return(1.9375 + -2.63867825 * (x - -0.5)^1 + 0 * (x - -0.5)^2 + 3.468772 * (x - -0.5)^3)
+}
+
+spline2 <- function(x){
+  return(1.33203 -1.9882835 * (x - -0.25)^1 + 2.601579 * (x - -0.25)^2 + -1.500016 * (x - -0.25)^3)
+}
+
+spline3 <- function(x){
+  return(0.800781 + -0.5117165 * (x - 0.25)^1 + 0.351555000000001 * (x - 0.25)^2 + -0.468740000000001 * (x - 0.25)^3)
+}
+
+#Instancio un vector que me va a indicar los puntos en la función
+newtonX <- seq(-0.5, 0.5, by = 0.01)
+
+spline1X <- seq(-0.5, -0.25, by = 0.01)
+
+spline2X <- seq(-0.25, 0.25, by = 0.01)
+
+spline3X <- seq(0.25, 0.5, by = 0.01)
+
+#Genero los puntos
+newtonY <- newton(newtonX)
+
+spline1Y <- spline1(spline1X)
+spline2Y <- spline2(spline2X)
+spline3Y <- spline3(spline3X)
+
+df_newton <- data.frame(newtonX, newtonY)
+
+df_spline1 <- data.frame(spline1X, spline1Y)
+df_spline2 <- data.frame(spline2X, spline2Y)
+df_spline3 <- data.frame(spline3X, spline3Y)
+
+ggplot() +
+  with(df_newton, geom_line(aes(newtonX, newtonY), colour = "darkblue")) + 
+  with(df_spline1, geom_line(aes(spline1X, spline1Y), colour = "red")) +
+  with(df_spline2, geom_line(aes(spline2X, spline2Y), colour = "red")) +
+  with(df_spline3, geom_line(aes(spline3X, spline3Y), colour = "red")) +
+  theme_minimal() 
 ```
 

@@ -38,3 +38,7 @@
 * Polinomio de Lagrange.
 * Método de Neville
 * Diferencias divididas
+
+## Semana 9
+* Spline cúbico (Ejercicios prácticos en la semana 8)
+* Spline condicionado (No hay ejercicios en la guía)
