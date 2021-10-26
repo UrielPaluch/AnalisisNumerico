@@ -1,0 +1,26 @@
+---
+title: "Ajustamiento"
+author: "Uriel Paluch"
+date: "25/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+## Ajuste paramétrico
+
+### Ajustamiento VS Interpolación
+En interpolación el polinomio debe pasar exactamente por los puntos dados. En cambio, en ajustambiento se busca una función que brinde un buen ajuste (según algún criterio) a los puntos dados.
+
+### Ajustamiento de Mínimos Cuadrados
+El objetivo es elegir los parámetros para minimizar la suma de los cuadrados de los errores (o residuos). 
+
+### Mínimos Cuadrados en R
+La función *lm()* realiza el ajuste de modelos lineales.
+
+El código esta en el script porque se ve mejor.
+
+
