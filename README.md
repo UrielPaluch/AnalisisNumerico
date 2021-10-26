@@ -45,3 +45,4 @@
 
 ## Semana 10
 * Ajustamiento
+* Whitakker Henderson 
