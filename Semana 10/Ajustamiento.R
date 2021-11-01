@@ -27,9 +27,12 @@ df_polinomio4 <- data.frame(x = seq(from = min(x), to = max(x), length.out = 100
 
 df_polinomio4$fit = predict(MC_4, newdata = df_polinomio4)
 
-plot(df, type = "p", pch = 16, ylim = c(0, 0.8))
-lines(df_polinomio4$x, df_polinomio4$fit, lty = 1, col = "red")
+plot <- ggplot() +
+        geom_point(data = df, aes(x = x, y = fx)) +
+        geom_line(data = df_polinomio4, aes(x = x, y = fit), colour = 'red')
   
+plot
+
 # Polinomio de grado 3 ----------------------------------------------------
 MC_3 <- lm(fx ~ x + I(x^2) + I(x^3), data = df)
 
@@ -49,9 +52,10 @@ df_polinomio3 <- data.frame(x = seq(from = min(x), to = max(x), length.out = 100
 
 df_polinomio3$fit <- predict(MC_3, newdata = df_polinomio3)
 
-lines(df_polinomio3$x, df_polinomio3$fit, lty = 1, col = "green")
+plot <- plot +
+  geom_line(data = df_polinomio3, aes(x = x, y = fit), colour = 'green')
 
-
+plot
 
 # Exponencial -------------------------------------------------------------
 exponencial <- lm(fx ~ exp(x), data = df)
@@ -72,7 +76,10 @@ df_funcion_exponencial <- data.frame(x = seq(from = min(x), to = max(x), length.
 
 df_funcion_exponencial$fit <- predict(exponencial, newdata = df_funcion_exponencial)
 
-lines(df_funcion_exponencial$x, df_funcion_exponencial$fit, lty = 1, col = "blue")
+plot <- plot +
+  geom_line(data = df_funcion_exponencial, aes(x = x, y = fit), colour = 'blue')
+
+plot
 
 
 # Ejercicio ---------------------------------------------------------------
@@ -104,8 +111,11 @@ df_polinomio <- data.frame(x = seq(from = min(x), to = max(x), length.out = 1000
 
 df_polinomio$fit = predict(MC_4, newdata = df_polinomio)
 
-plot(df, type = "p", pch = 16, ylim = c(-11, 4))
-lines(df_polinomio$x, df_polinomio$fit, lty = 1, col = "red")
+plot <- ggplot() +
+  geom_point(data = df, aes(x = x, y = fx)) +
+  geom_line(data = df_polinomio, aes(x = x, y = fit), colour = 'red')
+
+plot
 
 # Polinomio de grado 3 ----------------------------------------------------
 MC_3 <- lm(fx ~ x + I(x^2) + I(x^3), data = df)
@@ -126,7 +136,10 @@ df_polinomio3 <- data.frame(x = seq(from = min(x), to = max(x), length.out = 100
 
 df_polinomio3$fit <- predict(MC_3, newdata = df_polinomio3)
 
-lines(df_polinomio3$x, df_polinomio3$fit, lty = 1, col = "green")
+plot <- plot +
+        geom_line(data = df_polinomio3, aes(x = x, y = fit), colour = 'green')
+
+plot
 
 # Polinomio de grado 2 ----------------------------------------------------
 MC_2 <- lm(fx ~ x + I(x^2), data = df)
@@ -147,7 +160,10 @@ df_polinomio2 <- data.frame(x = seq(from = min(x), to = max(x), length.out = 100
 
 df_polinomio2$fit <- predict(MC_2, newdata = df_polinomio2)
 
-lines(df_polinomio2$x, df_polinomio2$fit, lty = 3, col = "blue")
+plot <- plot +
+  geom_line(data = df_polinomio2, aes(x = x, y = fit), colour = 'blue')
+
+plot
 
 # Polinomio de grado 2 ----------------------------------------------------
 MC_1 <- lm(fx ~ x + I(x^1), data = df)
@@ -168,4 +184,7 @@ df_polinomio1 <- data.frame(x = seq(from = min(x), to = max(x), length.out = 100
 
 df_polinomio1$fit <- predict(MC_1, newdata = df_polinomio1)
 
-lines(df_polinomio1$x, df_polinomio1$fit, lty = 6, col = "orange")
+plot <- plot +
+  geom_line(data = df_polinomio1, aes(x = x, y = fit), colour = 'orange')
+
+plot
