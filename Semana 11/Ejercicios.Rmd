@@ -1,0 +1,195 @@
+---
+title: "Ejercicios"
+author: "Uriel Paluch"
+date: "31/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Algoritmos
+
+```{r diferencia progresiva/regresiva}
+DerivadaPorDefinicion <- function(x, fx){
+  fprima <- rep(NA, times = length(x))
+  
+  #Se asume que todos los valores estan separados por un h constante
+  h <- x[2] - x[1]
+  
+  #Diferencia progresiva
+  for (i in 1:(length(x)-1)){
+    fprima[i] <- (fx[i+1] - fx[i]) / h
+  }
+  
+  #Diferencia regresiva
+  for (i in (length(x):2)) {
+    fprimaReg <- (fx[i-1] - fx[i]) / (-h)
+    
+    if (!is.na(fprima[i])){
+      if(fprimaReg != fprima[i]){
+        aux <- fprima[i]
+        fprima[i] <- glue::glue(aux, " (P)",
+                                " o ",
+                                fprimaReg, " (R)" )
+      }  
+    } else{
+      fprima[i] <- fprimaReg
+    }
+    
+  }
+  
+  resultado <- data.frame(x, fx, fprima)
+  
+  return(resultado)
+}
+```
+
+```{r formula de 3 puntos}
+Tres_puntos <- function(x, fx){
+  n <- length(x)
+  
+  fprima <- rep(NA, times = n)
+  
+  h <- x[2] - x[1]
+  
+  #Punto extremo
+  fprima[1] <- (1/(2*h))*(-3*fx[1]+4*fx[2]-fx[3])
+  fprima[n] <- (1/(2*(-h)))*(-3*fx[n]+4*fx[n-1]-fx[n-2])
+  
+  #Punto medio
+  for (i in 2:(n-1)) {
+    fprima[i] <- (1/(2*h))*(-fx[i-1]+fx[i+1])
+  }
+  
+  tabla <- data.frame(x, fx, fprima)
+  
+  return(tabla)
+}
+```
+
+```{r formula de 5 puntos}
+Cinco_puntos <- function(x, fx){
+  n <- length(x)
+  
+  fprima <- rep(NA, times = n)
+  
+  h <- x[2] - x[1]
+  
+  #Punto extremo
+  fprima[1] <- (1/(12*h))*(-25*fx[1]+48*fx[2]-36*fx[3]+16*fx[4]-3*fx[5])
+  fprima[n] <- (1/(12*(-h)))*(-25*fx[n]+48*fx[n-1]-36*fx[n-2]+16*fx[n-3]-3*fx[n-4])
+  
+  #Punto medio
+  for (i in 3:(n-2)) {
+    print(i)
+    fprima[i] <- (1/(12*h))*(fx[i-2]-8*fx[i-1]+8*fx[i+1]-fx[i+2])
+  }
+  
+  tabla <- data.frame(x, fx, fprima)
+  
+  return(tabla)
+}
+```
+
+```{r}
+Cinco_puntos_modificado <- function(x, fx){
+  n <- length(x)
+  
+  fprima <- rep(NA, times = n)
+  
+  h <- x[2] - x[1]
+  
+  #Punto extremo progresivo
+  for (i in 1:(n-4)) {
+    fprima[i] <- (1/(12*h))*(-25*fx[i]+48*fx[i+1]-36*fx[i+2]+16*fx[i+3]-3*fx[i+4])
+  }
+  
+  
+  #Punto extremo regresivo
+  for (i in n:5) {
+    fprima[i] <- (1/(12*(-h)))*(-25*fx[i]+48*fx[i-1]-36*fx[i-2]+16*fx[i-3]-3*fx[i-4])
+  }
+  
+  tabla <- data.frame(x, fx, fprima)
+  
+  return(tabla)
+}
+```
+
+
+## Ejercicio 1
+
+### A
+```{r Ejercicio 1.a}
+print(DerivadaPorDefinicion(x = c(0.5, 0.6, 0.7), fx = c(0.4794, 0.5646, 0.6442)))
+```
+
+### B
+```{r Ejercicio 2.a}
+print(DerivadaPorDefinicion(x = c(0, 0.2, 0.4), fx = c(0, 0.7414, 1.3718)))
+```
+
+## Ejercicio 2
+
+### A
+```{r}
+print(Tres_puntos(x = c(2.9, 3.0, 3.1, 3.2), fx = c(-4.827866, -4.240058, -3.496909, -2.596792)))
+```
+
+
+### B
+```{r}
+print(Tres_puntos(x = c(8.1, 8.3, 8.5, 8.7), fx = c(16.9441, 17.56492, 18.19056, 18.82091)))
+```
+
+## Ejercicio 3
+
+```{r}
+print(Cinco_puntos(x = c(0.2, 0.4, 0.6, 0.8, 1), fx = c(0.9798652, 0.9177710, 0.8080348, 0.6386093, 0.3843735)))
+```
+
+## Ejercicio 4
+
+### i
+
+#### A y B
+P: Progresiva
+R: Regresiva
+No se puede calcular el primero con regreriva porque no hay algo mas atras que el primero, de manera análoga, no se puede calcular el último con progresiva porque no hay un elemnto mas allá del último.
+```{r}
+print(DerivadaPorDefinicion(x = c(6.41, 6.76, 7.11, 7.46, 7.81, 8.16, 8.51), fx = c(4.0951, 5.1989, 6.1303, 6.7893, 7.1079, 7.0591, 6.6598)))
+```
+
+#### C
+No tendría que tener en cuenta los extremos
+```{r}
+print(Tres_puntos(x = c(6.41, 6.76, 7.11, 7.46, 7.81, 8.16, 8.51), fx = c(4.0951, 5.1989, 6.1303, 6.7893, 7.1079, 7.0591, 6.6598)))
+```
+
+#### D
+```{r}
+print(Cinco_puntos_modificado(x = c(6.41, 6.76, 7.11, 7.46, 7.81, 8.16, 8.51), fx = c(4.0951, 5.1989, 6.1303, 6.7893, 7.1079, 7.0591, 6.6598)))
+```
+
+### ii
+
+#### A y B
+P: Progresiva
+R: Regresiva
+No se puede calcular el primero con regreriva porque no hay algo mas atras que el primero, de manera análoga, no se puede calcular el último con progresiva porque no hay un elemnto mas allá del último.
+```{r}
+print(DerivadaPorDefinicion(x = c(2.31, 2.91, 3.51, 4.11, 4.71, 5.31, 5.91), fx = c(3.8915, 2.8249, 1.4308, 0.3549, 0.0994, 0.8591, 2.4595)))
+```
+
+#### C
+No tendría que tener en cuenta los extremos
+```{r}
+print(Tres_puntos(x = c(2.31, 2.91, 3.51, 4.11, 4.71, 5.31, 5.91), fx = c(3.8915, 2.8249, 1.4308, 0.3549, 0.0994, 0.8591, 2.4595)))
+```
+
+#### D
+```{r}
+print(Cinco_puntos_modificado(x = c(2.31, 2.91, 3.51, 4.11, 4.71, 5.31, 5.91), fx = c(3.8915, 2.8249, 1.4308, 0.3549, 0.0994, 0.8591, 2.4595)))
+```

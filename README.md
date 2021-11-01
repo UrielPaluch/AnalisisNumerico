@@ -45,4 +45,7 @@
 
 ## Semana 10
 * Ajustamiento
-* Whitakker Henderson 
+* Whitakker Henderson
+
+## Semana 11
+* Diferenciación numérica
