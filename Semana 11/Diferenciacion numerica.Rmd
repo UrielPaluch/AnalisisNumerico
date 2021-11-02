@@ -110,3 +110,25 @@ Cinco_puntos <- function(x, fx){
 print(Cinco_puntos(x = c(0.2, 0.4, 0.6, 0.8, 1), fx = c(0.9798652, 0.9177710, 0.8080348, 0.6386093, 0.3843735)))
 ```
 
+```{r segunda derivada}
+SegundaDerivada <- function (x, fx){
+  n <- length(x)
+  
+  fprima <- rep(NA, times = n)
+  
+   h <- x[2] - x[1]
+  
+  #Punto medio
+  for (i in 2:(n-1)) {
+    fprima[i] <- (1/(h^2))*(fx[i-1]-2*fx[i]+fx[i+1])
+  }
+  
+  tabla <- data.frame(x, fx, fprima)
+  
+  return(tabla)
+  
+}
+print(SegundaDerivada(x = c(2.31, 2.91, 3.51, 4.11, 4.71, 5.31, 5.91), fx = c(3.8915, 2.8249, 1.4308, 0.3549, 0.0994, 0.8591, 2.4595)))
+print(SegundaDerivada(x = c(2.31, 3.51, 4.71,5.91), fx = c(3.8915, 1.4308, 0.0994, 2.4595)))
+```
+
