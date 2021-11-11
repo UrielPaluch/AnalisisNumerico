@@ -49,3 +49,6 @@
 
 ## Semana 11
 * Diferenciación numérica
+
+## Semana 12
+* Integración numérica
