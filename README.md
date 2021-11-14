@@ -28,10 +28,10 @@
 ## Trabajo Práctico
 * Data mining sobre la tarjeta alimentar.
 
-## Primer Examen
+## Modelos primer examen
 * Modelos de examen resueltos
 
-## Examen 1
+## Primer examen
 * El examen que nos tomo
 
 ## Semana 8
@@ -51,4 +51,4 @@
 * Diferenciación numérica
 
 ## Semana 12
-* Integración numérica
+* Integración numérica (Ejercicio 1 medio dudoso)
