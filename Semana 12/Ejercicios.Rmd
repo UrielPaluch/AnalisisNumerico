@@ -1,0 +1,445 @@
+---
+title: "Ejercicios"
+author: "Uriel Paluch"
+date: "10/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Metodos
+
+```{r Newton-Cortes Cerradas}
+newtonCotesCerradas <- function(limiteInferior, limiteSuperior, funcion, n){
+  h <- (limiteSuperior - limiteInferior)/n
+  
+  fx <- rep(NA, times = (n+1))
+  for (i in 1:(n+1)) {
+    fx[i] <- eval(funcion, list(x = limiteInferior + (i-1)*h))
+  }
+  
+  if (n == 1){
+    return((h/2) * (fx[1] + fx[2]))
+  }
+  else if (n == 2){
+    return((h/3) * (fx[1] + 4*fx[2] + fx[3]))
+  }
+  else if(n == 3){
+    return((3/8)*h*(fx[1] + 3*fx[2] + 3*fx[3] + fx[4]))
+  }
+  else if(n == 4){
+    return((2/45) * h * ( 7 * fx[1] + 32 * fx[2] + 12 * fx[3] + 32 * fx[4] + 7 * fx[5]))
+  }
+  
+}
+```
+
+```{r Newton-Cortes abiertas}
+newtonCotesAbiertas <- function(limiteInferior, limiteSuperior, funcion, n){
+  h <- (limiteSuperior - limiteInferior)/(n+2)
+  
+  fx <- rep(NA, times = (n+1))
+  for (i in 1:(n+1)) {
+    fx[i] <- eval(funcion, list(x = limiteInferior + i*h))
+  }
+  
+  if (n == 0){
+    return(2 * h * fx[1])
+  }
+  else if (n == 1){
+    return((3/2)* h * (fx[1] + fx[2]))
+  }
+  else if(n == 2){
+    return((4/3)*h*(2*fx[1] - fx[2] + 2*fx[3]))
+  }
+  else if(n == 3){
+    return((5/24) * h * ( 11 * fx[1] + fx[2] + fx[3] + 11 * fx[4]))
+  }
+  
+}
+```
+
+```{r punto medio compuesta}
+PuntoMedioCompuesta <- function(limiteInferior, limiteSuperior, funcion, n){
+ h <- (limiteSuperior - limiteInferior)/(n + 2)
+ 
+ suma <- 0
+ 
+ x <- rep(NA, times = (n+2))
+ for (i in -1:(n+1)) {
+   x[i+2] <- limiteInferior + (i + 1) * h
+ }
+ 
+ for (j in 1:(n/2+1)) {
+   suma <- suma + eval(funcion, list(x = x[2*j]))
+ }
+ return(2 * h * suma)
+} 
+```
+
+```{r Regla compuesta de simpson y trapecio}
+IntegracionCompuesta <- function(limiteInferior, limiteSuperior, funcion, n, cantIntervalos){
+  
+  #browser()
+  if ((n == 2 || n == 0) && cantIntervalos%%2 != 0){
+    return("cantIntervalos debe ser un entero par")
+  }
+  
+  cantIntervalos <- cantIntervalos/n
+  
+  
+  crecimientoIntervalo <- (limiteSuperior-limiteInferior)/cantIntervalos
+  
+  fx <- rep(NA, times = (n+1))
+  
+  resultado <- 0
+  
+  for (i in 1:cantIntervalos) {
+    limiteSuperior <- limiteInferior + crecimientoIntervalo
+    
+    if (n != 0){
+      h <- (limiteSuperior - limiteInferior)/n
+    }
+    
+    
+    for (i in 1:(n+1)) {
+      fx[i] <- eval(funcion, list(x = limiteInferior + (i-1)*h))
+    }
+    
+    # Trapecio
+    if (n == 1){
+      resultado <- resultado + (h/2) * (fx[1] + fx[2])
+    }
+    #Simpson
+    else if(n == 2){
+      resultado <- resultado + (h/3) * (fx[1] + 4*fx[2] + fx[3])
+    }
+    
+    limiteInferior <- limiteSuperior
+  }
+  
+  return(resultado)
+}
+```
+
+## Ejercicio 1
+
+### Regla del trapecio
+
+#### a
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.5, funcion = expression(2/(x-4)), n = 1)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.5, funcion = expression(2/(x-4)), n = 2)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.5, funcion = expression(2/(x-4)), n = 3)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.5, funcion = expression(2/(x-4)), n = 4)
+```
+
+#### b
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.35, funcion = expression(2/(x^2-4)), n = 1)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.35, funcion = expression(2/(x^2-4)), n = 2)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.35, funcion = expression(2/(x^2-4)), n = 3)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.35, funcion = expression(2/(x^2-4)), n = 4)
+```
+
+### Regla de Simpson
+
+#### c
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 1, funcion = expression((x^2)*exp(-x)), n = 1)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 1, funcion = expression((x^2)*exp(-x)), n = 2)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 1, funcion = expression((x^2)*exp(-x)), n = 3)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 1, funcion = expression((x^2)*exp(-x)), n = 4)
+```
+
+#### d
+Este me da como el orto
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = pi*4, funcion = expression(exp(3*x)*sin(2*x)), n = 1)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = pi*4, funcion = expression(exp(3*x)*sin(2*x)), n = 2)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = pi*4, funcion = expression(exp(3*x)*sin(2*x)), n = 3)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = pi*4, funcion = expression(exp(3*x)*sin(2*x)), n = 4)
+```
+
+### Regla de Newton-Cotes cerrada con n = 4
+
+#### e
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0.5, limiteSuperior = 1, funcion = expression(x^4), n = 1)
+newtonCotesCerradas(limiteInferior = 0.5, limiteSuperior = 1, funcion = expression(x^4), n = 2)
+newtonCotesCerradas(limiteInferior = 0.5, limiteSuperior = 1, funcion = expression(x^4), n = 3)
+newtonCotesCerradas(limiteInferior = 0.5, limiteSuperior = 1, funcion = expression(x^4), n = 4)
+```
+
+#### f
+Este me da mal
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 1, limiteSuperior = 1.6, funcion = expression(2*x/(x^2-4)), n = 1)
+newtonCotesCerradas(limiteInferior = 1, limiteSuperior = 1.6, funcion = expression(2*x/(x^2-4)), n = 2)
+newtonCotesCerradas(limiteInferior = 1, limiteSuperior = 1.6, funcion = expression(2*x/(x^2-4)), n = 3)
+newtonCotesCerradas(limiteInferior = 1, limiteSuperior = 1.6, funcion = expression(2*x/(x^2-4)), n = 4)
+```
+
+### Regla de Newton-Cotes cerrada con n = 4
+
+#### g
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 1, limiteSuperior = 1.5, funcion = expression(x^2*log(x)), n = 4)
+```
+
+#### h
+```{r}
+# n = 1. Regla del trapecio.
+# n = 2. Regla de Simpson.
+# n = 3. Regla de tres octavos de Simpson.
+# n = 4 regla de NC cerrada con n = 4.
+# Poner la funcion con "x" como incognita
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = pi/4, funcion = expression(x*sin(x)), n = 4)
+```
+
+### Ejercicio 2
+
+#### a
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 0.1, funcion = expression(sqrt(x+1)), n = 0)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 0.1, funcion = expression(sqrt(x+1)), n = 1)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 0.1, funcion = expression(sqrt(x+1)), n = 2)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 0.1, funcion = expression(sqrt(x+1)), n = 3)
+```
+
+
+#### b
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = pi/2, funcion = expression(sin(x)^2), n = 0)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = pi/2, funcion = expression(sin(x)^2), n = 1)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = pi/2, funcion = expression(sin(x)^2), n = 2)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = pi/2, funcion = expression(sin(x)^2), n = 3)
+```
+
+#### c
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 1.1, limiteSuperior = 1.5, funcion = expression(exp(x)), n = 0)
+newtonCotesAbiertas(limiteInferior = 1.1, limiteSuperior = 1.5, funcion = expression(exp(x)), n = 1)
+newtonCotesAbiertas(limiteInferior = 1.1, limiteSuperior = 1.5, funcion = expression(exp(x)), n = 2)
+newtonCotesAbiertas(limiteInferior = 1.1, limiteSuperior = 1.5, funcion = expression(exp(x)), n = 3)
+```
+
+#### d
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 10, funcion = expression(1/x), n = 0)
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 10, funcion = expression(1/x), n = 1)
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 10, funcion = expression(1/x), n = 2)
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 10, funcion = expression(1/x), n = 3)
+```
+
+#### e
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 5.5, funcion = expression(1/x), n = 0) + newtonCotesAbiertas(limiteInferior = 5.5, limiteSuperior = 10, funcion = expression(1/x), n = 0)
+
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 5.5, funcion = expression(1/x), n = 1) + newtonCotesAbiertas(limiteInferior = 5.5, limiteSuperior = 10, funcion = expression(1/x), n = 1)
+
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 5.5, funcion = expression(1/x), n = 2) + newtonCotesAbiertas(limiteInferior = 5.5, limiteSuperior = 10, funcion = expression(1/x), n = 2)
+
+newtonCotesAbiertas(limiteInferior = 1, limiteSuperior = 5.5, funcion = expression(1/x), n = 3) + newtonCotesAbiertas(limiteInferior = 5.5, limiteSuperior = 10, funcion = expression(1/x), n = 3)
+```
+
+#### f
+```{r}
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3. 
+# Poner la funcion con "x" como incognita
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 1, funcion = expression(x^(1/3)), n = 0)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 1, funcion = expression(x^(1/3)), n = 1)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 1, funcion = expression(x^(1/3)), n = 2)
+newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = 1, funcion = expression(x^(1/3)), n = 3)
+```
+### Ejercicio 3
+
+#### a
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 1, limiteSuperior = 2, funcion = expression(x*log(x)), cantIntervalos = 4, n = 1)
+IntegracionCompuesta(limiteInferior = 1, limiteSuperior = 2, funcion = expression(x*log(x)), cantIntervalos = 4, n = 2)
+PuntoMedioCompuesta(limiteInferior = 1, limiteSuperior = 2, funcion = expression(x*log(x)), n = 4)
+```
+
+#### b
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = -2, limiteSuperior = 2, funcion = expression(x^3*exp(x)), cantIntervalos = 4, n = 1)
+IntegracionCompuesta(limiteInferior = -2, limiteSuperior = 2, funcion = expression(x^3*exp(x)), cantIntervalos = 4, n = 2)
+PuntoMedioCompuesta(limiteInferior = -2, limiteSuperior = 2, funcion = expression(x^3*exp(x)), n = 4)
+```
+
+#### c
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(2/(x^2+4)), cantIntervalos = 6, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(2/(x^2+4)), cantIntervalos = 6, n = 2)
+PuntoMedioCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(2/((x^2)+4)), n = 6)
+```
+
+#### d
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = pi, funcion = expression(x^2*cos(x)), cantIntervalos = 6, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = pi, funcion = expression(x^2*cos(x)), cantIntervalos = 6, n = 2)
+PuntoMedioCompuesta(limiteInferior = 0, limiteSuperior = pi, funcion = expression(x^2*cos(x)), n = 6)
+```
+
+#### e
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(exp(2*x)*sin(3*x)), cantIntervalos = 8, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(exp(2*x)*sin(3*x)), cantIntervalos = 8, n = 2)
+PuntoMedioCompuesta(limiteInferior = 0, limiteSuperior = 2, funcion = expression(exp(2*x)*sin(3*x)), n = 8)
+```
+
+#### f
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 1, limiteSuperior = 3, funcion = expression(x/(x^2+4)), cantIntervalos = 8, n = 1)
+IntegracionCompuesta(limiteInferior = 1, limiteSuperior = 3, funcion = expression(x/(x^2+4)), cantIntervalos = 8, n = 2)
+PuntoMedioCompuesta(limiteInferior = 1, limiteSuperior = 3, funcion = expression(x/(x^2+4)), n = 8)
+```
+
+#### g
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 3, limiteSuperior = 5, funcion = expression(1/sqrt(x^2-4)), cantIntervalos = 8, n = 1)
+IntegracionCompuesta(limiteInferior = 3, limiteSuperior = 5, funcion = expression(1/sqrt(x^2-4)), cantIntervalos = 8, n = 2)
+PuntoMedioCompuesta(limiteInferior = 3, limiteSuperior = 5, funcion = expression(1/sqrt(x^2-4)), n = 8)
+```
+
+
+#### h
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = ((3/8)*pi), funcion = expression(tan(x)), cantIntervalos = 8, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = ((3/8)*pi), funcion = expression(tan(x)), cantIntervalos = 8, n = 2)
+PuntoMedioCompuesta(limiteInferior = 0, limiteSuperior = ((3/8)*pi), funcion = expression(tan(x)), n = 8)
+```
+
+### Ejercicio 4
+
+#### 4.1 a
+```{r}
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(x^(9.23-1)*exp(-x)), cantIntervalos = 100000, n = 1)
+```
+
+#### 4.1 b
+```{r}
+gamma <- IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(x^(9.23-1)*exp(-x)), cantIntervalos = 100000, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(0.43*exp(-0.43*x)*((0.43*x)^(8.23))/gamma), cantIntervalos = 100000, n = 1)
+```
+
+#### 4.1 c
+```{r}
+gamma <- IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(x^(9.23-1)*exp(-x)), cantIntervalos = 100000, n = 1)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(x * 0.43*exp(-0.43*x)*((0.43*x)^(8.23))/gamma), cantIntervalos = 100000, n = 1)
+```
+
+#### 4.1 d
+No me da 
+```{r}
+gamma <- IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 1000, funcion = expression(x^(9.23-1)*exp(-x)), cantIntervalos = 20000, n = 2)
+esperanza <- IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 20000, funcion = expression(x * 0.43*exp(-0.43*x)*((0.43*x)^(8.23))/gamma), cantIntervalos = 20000, n = 2)
+IntegracionCompuesta(limiteInferior = 0, limiteSuperior = 10000, funcion = expression((x-esperanza)^2 * 0.43*exp(-0.43*x)*((0.43*x)^(8.23))/gamma), cantIntervalos = 200000, n = 2)
+```
+
+#### 4.2 a
+```{r}
+mu <- 24
+sigma <- 18
+IntegracionCompuesta(limiteInferior = -10000, limiteSuperior = 10000, funcion = expression( (1/(sigma*sqrt(2*pi))) * exp(-0.5*((x-mu)/sigma)^2) ), cantIntervalos = 200000, n = 2)
+```
+
+#### 4.2 b
+```{r}
+mu <- 24
+sigma <- 18
+IntegracionCompuesta(limiteInferior = -10000, limiteSuperior = 10000, funcion = expression(x * (1/(sigma*sqrt(2*pi))) * exp(-0.5*((x-mu)/sigma)^2) ), cantIntervalos = 200000, n = 2)
+```
+
+
+#### 4.2 c
+```{r}
+mu <- 24
+sigma <- 18
+esperanza <- IntegracionCompuesta(limiteInferior = -10000, limiteSuperior = 10000, funcion = expression(x * (1/(sigma*sqrt(2*pi))) * exp(-0.5*((x-mu)/sigma)^2) ), cantIntervalos = 200000, n = 2)
+IntegracionCompuesta(limiteInferior = -10000, limiteSuperior = 10000, funcion = expression((x-esperanza)^2 * (1/(sigma*sqrt(2*pi))) * exp(-0.5*((x-mu)/sigma)^2) ), cantIntervalos = 200000, n = 2)
+```

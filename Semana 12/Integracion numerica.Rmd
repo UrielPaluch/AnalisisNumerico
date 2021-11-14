@@ -12,29 +12,26 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Método
 ```{r Newton-Cortes Cerradas}
 newtonCotesCerradas <- function(limiteInferior, limiteSuperior, funcion, n){
-  
+  browser()
   h <- (limiteSuperior - limiteInferior)/n
-  fx0 <- eval(funcion, list(x = limiteInferior))
-  fxn <- eval(funcion, list(x = limiteSuperior))
   
-  if(n > 1){
-    fx <- rep(NA, times = (n-1))
-    for (i in 1:(n-1)) {
-      fx[i] <- eval(funcion, list(x = limiteInferior + i*h))
-    } 
+  fx <- rep(NA, times = (n+1))
+  for (i in 1:(n+1)) {
+    fx[i] <- eval(funcion, list(x = limiteInferior + (i-1)*h))
   }
   
-  else if (n == 1){
-    return((h/2) * (fx0 + fxn))
+  # Hay que cambiarlo para que quede solo con un 1
+  if (n == 1){
+    return((h/2) * (fx[1] + fx[2]))
   }
   else if (n == 2){
-    return((h/3) * (fx0 + 4*fx[1] + fxn))
+    return((h/3) * (fx[1] + 4*fx[2] + fx[3]))
   }
   else if(n == 3){
-    return((3/8)*h*(fx0 + 3*fx[1] + 3*fx[2] + fxn))
+    return((3/8)*h*(fx[1] + 3*fx[2] + 3*fx[3] + fx[4]))
   }
   else if(n == 4){
-    return((2/45) * h * ( 7 * fx0 + 32 * fx[1] + 12 * fx[2] + 32 * fx[3] + 7 * fxn))
+    return((2/45) * h * ( 7 * fx[1] + 32 * fx[2] + 12 * fx[3] + 32 * fx[4] + 7 * fx[5]))
   }
   
 }
@@ -44,7 +41,7 @@ newtonCotesCerradas <- function(limiteInferior, limiteSuperior, funcion, n){
 # n = 3. Regla de tres octavos de Simpson.
 # n = 4 regla de NC cerrada con n = 4.
 # Poner la funcion con "x" como incognita
-newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 0.35, funcion = expression(2/(x^2-4)), n = 1)
+newtonCotesCerradas(limiteInferior = 0, limiteSuperior = 4, funcion = expression(exp(x)), n = 2)
 ```
 
 ```{r Newton-Cortes abiertas}
@@ -70,9 +67,118 @@ newtonCotesAbiertas <- function(limiteInferior, limiteSuperior, funcion, n){
   }
   
 }
-
+# n = 0. Regla del punto medio.
+# n = 1. 
+# n = 2. 
+# n = 3.
 # Poner la funcion con "x" como incognita
 newtonCotesAbiertas(limiteInferior = 0, limiteSuperior = pi/4, funcion = expression(sin(x)), n = 3)
+```
+
+```{r}
+SimpsonCompuesta <- function(limiteInferior, limiteSuperior, funcion, n = 2, cantIntervalos){
+  # n es 2 por defecto
+  # browser()
+  if (cantIntervalos%%2 != 0){
+    return("cantIntervalos debe ser un entero par")
+  }
+  
+  cantIntervalos <- cantIntervalos
+  
+  crecimientoIntervalo <- (limiteSuperior-limiteInferior)/cantIntervalos
+  
+  fx <- rep(NA, times = 3)
+  
+  resultado <- 0
+  
+  
+  for (i in 1:cantIntervalos) {
+    limiteSuperior <- limiteInferior + crecimientoIntervalo
+    
+    h <- (limiteSuperior - limiteInferior)
+    
+    for (i in 1:3) {
+      fx[i] <- eval(funcion, list(x = limiteInferior + (i-1)*h))
+    }
+    
+    resultado <- resultado + (h/3) * (fx[1] + 4*fx[2] + fx[3])
+    
+    limiteInferior <- limiteSuperior
+  }
+  
+  return(resultado)
+}
+```
+
+```{r punto medio compuesta}
+PuntoMedioCompuesta <- function(limiteInferior, limiteSuperior, funcion, n){
+  browser()
+ h <- (limiteSuperior - limiteInferior)/(n + 2)
+ 
+ suma <- 0
+ 
+ x <- rep(NA, times = (n+2))
+ for (i in -1:(n+1)) {
+   x[i+2] <- limiteInferior + (i + 1) * h
+ }
+ 
+ for (j in 1:(n/2+1)) {
+   suma <- suma + eval(funcion, list(x = x[2*j]))
+ }
+ return(2 * h * suma)
+} 
+
+PuntoMedioCompuesta(limiteInferior = -2, limiteSuperior = 2, funcion = expression(x^3*exp(x)), n = 4)
+```
+
+
+```{r Regla compuesta de simpson y trapecio}
+IntegracionCompuesta <- function(limiteInferior, limiteSuperior, funcion, n, cantIntervalos){
+  
+  #browser()
+  if ((n == 2 || n == 0) && cantIntervalos%%2 != 0){
+    return("cantIntervalos debe ser un entero par")
+  }
+  
+  cantIntervalos <- cantIntervalos/n
+  
+  
+  crecimientoIntervalo <- (limiteSuperior-limiteInferior)/cantIntervalos
+  
+  fx <- rep(NA, times = (n+1))
+  
+  resultado <- 0
+  
+  for (i in 1:cantIntervalos) {
+    limiteSuperior <- limiteInferior + crecimientoIntervalo
+    
+    if (n != 0){
+      h <- (limiteSuperior - limiteInferior)/n
+    }
+    
+    
+    for (i in 1:(n+1)) {
+      fx[i] <- eval(funcion, list(x = limiteInferior + (i-1)*h))
+    }
+    
+    # Trapecio
+    if (n == 1){
+      resultado <- resultado + (h/2) * (fx[1] + fx[2])
+    }
+    #Simpson
+    else if(n == 2){
+      resultado <- resultado + (h/3) * (fx[1] + 4*fx[2] + fx[3])
+    }
+    
+    limiteInferior <- limiteSuperior
+  }
+  
+  return(resultado)
+}
+
+# n = 1. Trapecio
+# n = 2. Simpson
+IntegracionCompuesta(limiteInferior = -2, limiteSuperior = 2, funcion = expression(x^3*exp(x)), cantIntervalos = 4, n = 1)
 ```
 
 
@@ -116,3 +222,14 @@ La fórmula cerrada de $n + 1$ puntos de Newton-Cotes utiliza nodos $x_i = x_0 +
 
 ## Fórmulas de Newton-Cotes abiertas
 Las fórmulas de Newton-Cotes abiertas no incluyen a los extremos de $[a,b]$ como nodos.
+
+![Newton-Cotes formulas](img/formulas NC Abiertas.png)
+
+## Integración numérica compuesta
+En general, el uso de fórmulas de Newton-Cotes es inapropiado sobre largos intervalos de integración por la naturaleza oscilante de los polinomios interpolantes.
+
+En integración numérica compuesta, para una integral arbitraria $\int_{a}^{b} f(x) dx$, seleccione un entero par $n$. Subdivida el intervalo $[a,b]$ en $n$ subintervalos y aplique la regla de Simpson para cada par consecutivo de intervalos.
+
+![Integracion numérica compuesta](img/Integracion compuesta.png)
+
+Con $h = (b-a)/n$ y $x_j = a + j * h$, para cada $j = 0, 1, ..., n$
