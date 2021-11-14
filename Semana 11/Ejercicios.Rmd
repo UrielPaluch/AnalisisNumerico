@@ -101,13 +101,13 @@ Cinco_puntos_modificado <- function(x, fx){
   
   h <- x[2] - x[1]
   
-  #Punto extremo progresivo
+  # Punto extremo progresivo
   for (i in 1:(n-4)) {
     fprima[i] <- (1/(12*h))*(-25*fx[i]+48*fx[i+1]-36*fx[i+2]+16*fx[i+3]-3*fx[i+4])
   }
   
   
-  #Punto extremo regresivo
+  # Punto extremo regresivo
   for (i in n:5) {
     fprima[i] <- (1/(12*(-h)))*(-25*fx[i]+48*fx[i-1]-36*fx[i-2]+16*fx[i-3]-3*fx[i-4])
   }
