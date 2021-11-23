@@ -25,7 +25,7 @@
 * SENOL: Newton
 * SENOL: Broyden
 
-## Trabajo Práctico
+## Trabajo Práctico 1
 * Data mining sobre la tarjeta alimentar.
 
 ## Modelos primer examen
@@ -55,3 +55,6 @@
 
 ## Semana 13
 * Simulación
+
+## Trabajo Práctico 2
+* Curvas tasas de interes
