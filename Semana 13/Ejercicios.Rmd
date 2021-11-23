@@ -1,0 +1,353 @@
+---
+title: "Ejercicios"
+author: "Uriel Paluch"
+date: "21/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(quantmod)
+library(dplyr)
+set.seed(123)
+```
+
+## Metodos
+```{r}
+integracion <- function(funcion, limiteSuperior, limiteInferior, n){
+  uniforme <- limiteInferior + (limiteSuperior - limiteInferior) * runif(n = n)
+  
+  alturaPromedio <- 1/n * sum(funcion(uniforme))
+  
+  anchoBase <- limiteSuperior - limiteInferior
+  
+  desvioEstandar <- sqrt( 1/(n-1) * sum((funcion(uniforme) * (limiteSuperior - limiteInferior) - alturaPromedio * anchoBase)^2) )
+  
+  error <- desvioEstandar/sqrt(n)
+  
+  resultados <- list("error" = error, "alfa" =  alturaPromedio * anchoBase)
+  return(resultados)
+}
+```
+
+
+## Ejercicio 1
+
+### a
+```{r}
+# Hay que hacerlo así y no con expression porque el resultado es diferente
+funcion <- function(x){
+  return(sqrt(x+5)*sin(x))
+}
+
+# Fijo el seed para que me den los mismos resultados que la guia
+set.seed(123)
+
+integracion(funcion = funcion, limiteSuperior = 6, limiteInferior = 2, n = 10000)
+
+# Grafico
+x <- seq(from = 2, to = 6, by = 0.01)
+fx <- funcion(x)
+
+x1 <- seq(from = 0, to = 8, by = 0.01)
+fx1 <- funcion(x1)
+
+ggplot() +
+  geom_area(aes(x = x, y = fx )) +
+  geom_line(aes(x = x1, y = fx1))
+```
+
+### b
+```{r}
+# Hay que hacerlo así y no con expression porque el resultado es diferente
+media <- 7
+desvio <- 5
+funcion <- function(x){
+  return((1/(desvio * sqrt(2*pi))) * exp(-(x-media)^2/(2*desvio^2)))
+}
+
+
+# Fijo el seed para que me den los mismos resultados que la guia
+set.seed(123)
+
+integracion(funcion = funcion, limiteSuperior = 8, limiteInferior = 5, n = 10000)
+
+# Grafico
+x <- seq(from = 5, to = 8, by = 1)
+fx <- funcion(x)
+
+x1 <- seq(from = -30, to = 30, by = 0.1)
+fx1 <- funcion(x1)
+
+ggplot() +
+  geom_area(aes(x = x, y = fx )) +
+  geom_line(aes(x = x1, y = fx1))
+```
+
+### c
+```{r}
+# Hay que hacerlo así y no con expression porque el resultado es diferente
+funcion <- function(x){
+  return(x^3+4*x^2+2)
+}
+
+# Fijo el seed para que me den los mismos resultados que la guia
+set.seed(123)
+
+integracion(funcion = funcion, limiteSuperior = 5, limiteInferior = -2, n = 10000)
+
+# Grafico
+x <- seq(from = -2, to = 5, by = 0.1)
+fx <- funcion(x)
+
+x1 <- seq(from = -4, to = 7, by = 0.1)
+fx1 <- funcion(x1)
+
+ggplot() +
+  geom_area(aes(x = x, y = fx )) +
+  geom_line(aes(x = x1, y = fx1))
+```
+
+### d
+```{r}
+# Hay que hacerlo así y no con expression porque el resultado es diferente
+funcion <- function(x){
+  return(x*log(x^3)+12*cos(x))
+}
+
+# Fijo el seed para que me den los mismos resultados que la guia
+set.seed(123)
+
+integracion(funcion = funcion, limiteSuperior = 20, limiteInferior = 12, n = 10000)
+
+# Grafico
+x <- seq(from = 12, to = 20, by = 0.1)
+fx <- funcion(x)
+
+x1 <- seq(from = 10, to = 22, by = 0.1)
+fx1 <- funcion(x1)
+
+ggplot() +
+  geom_area(aes(x = x, y = fx )) +
+  geom_line(aes(x = x1, y = fx1))
+```
+
+## Ejercicio 2
+```{r}
+N <- 10000
+resultado <- matrix(NA, nrow = N, ncol = 2)
+set.seed(123)
+
+for (i in 1:N) {
+  # Genera un número aleatorio con distribucion binomial
+  n <- rbinom(n = 1, size = 1200, prob = 0.7984)
+
+  resultado[i, 1] <- n
+
+  xi <- rchisq(df = 2, n = n)
+
+  suma <- sum(xi)
+
+  resultado[i,2] <- suma
+}
+
+n_esperanza <- mean(resultado[,1])
+n_varianza <- var(resultado[,1])
+
+suma_esperanza <- mean(resultado[,2])
+suma_varianza <- var(resultado[,2])
+```
+
+### a
+```{r}
+n_esperanza
+```
+
+### b
+```{r}
+n_varianza
+```
+
+### c
+```{r}
+suma_esperanza
+```
+
+### d
+```{r}
+sqrt(suma_varianza)
+```
+
+## Ejercicio 3
+
+### a
+```{r}
+mu <- c(0.15, 0.12)
+sigma <- c(0.2, 0.19)
+
+p0 <- rep(NA, times = 2)
+
+getSymbols("YPFD.BA", auto.assign = TRUE, src = "yahoo")
+
+aux <- data.frame(YPFD.BA)
+rm(YPFD.BA)
+
+p0[1] <- aux['2020-11-06',]$YPFD.BA.Adjusted
+rm(aux)
+
+getSymbols("MELI.BA", auto.assign = TRUE, src = "yahoo")
+
+aux <- data.frame(MELI.BA)
+rm(MELI.BA)
+
+p0[2] <- aux['2020-11-06',]$MELI.BA.Adjusted
+rm(aux)
+
+# 1 año
+anios <- 1
+
+# Simulacion
+m <- 10000
+
+# Matriz de camino de precios
+pt <- matrix(NA, nrow = m, ncol = 2)
+
+set.seed(123)
+e <- rnorm(m)
+
+pt[,1] <- p0[1] * exp((mu[1]-0.5*sigma[1]^2) * anios + sigma[1]*sqrt(anios)*e)
+
+prob <- 0.975
+
+# YPF
+mean(pt[,1])
+YPF_mean <- mean(pt[,1])
+quantile(pt[,1], prob)
+quantile(pt[,1], 1-prob)
+
+e <- rnorm(m)
+pt[,2] <- p0[2] * exp((mu[2]-0.5*sigma[2]^2) * anios + sigma[2]*sqrt(anios)*e)
+
+# MELI
+mean(pt[,2])
+MELI_mean <- mean(pt[,2])
+quantile(pt[,2], prob)
+quantile(pt[,2], 1-prob)
+```
+
+
+### b
+```{r}
+# Rendimiento logaritmico esperado
+rl <- log(mean(pt)/p0)
+p0_m <- matrix(rep(p0,m), ncol = 2, byrow = T)
+rl_matrix <- log(pt/p0_m)
+# YPF
+mean(rl_matrix[,1])
+# MELI
+mean(rl_matrix[,2])
+```
+
+### c
+```{r}
+mu <- c(0.15, 0.12, 0.3)
+sigma <- c(0.2, 0.19, 0.42)
+
+p0 <- rep(NA, times = 3)
+
+getSymbols("YPFD.BA", auto.assign = TRUE, src = "yahoo")
+
+aux <- data.frame(YPFD.BA)
+rm(YPFD.BA)
+
+p0[1] <- aux['2020-11-06',]$YPFD.BA.Adjusted
+rm(aux)
+
+getSymbols("MELI.BA", auto.assign = TRUE, src = "yahoo")
+
+aux <- data.frame(MELI.BA)
+rm(MELI.BA)
+
+p0[2] <- aux['2020-11-06',]$MELI.BA.Adjusted
+rm(aux)
+
+p0[3] <- 54
+
+# 1 año
+anios <- 1
+
+# Simulacion
+m <- 10000
+
+# Matriz de camino de precios
+pt <- matrix(NA, nrow = m, ncol = 3)
+
+# Matriz de covarianzas
+rho <- diag(3)
+rho[1,2] <- rho[2,1] <- 0.9
+rho[1,3] <- rho[3,1] <- 0.7
+rho[2,3] <- rho[3,2] <- 0.6
+
+# Matriz de cholesky
+ch <- chol(rho)
+
+set.seed(123)
+z <- matrix(rnorm(3*m),nrow=m,ncol=3)
+
+e <- z %*% ch
+
+pt_cor <- matrix(NA, nrow = m, ncol = 3)
+
+for (i in 1:m) {
+  for (k in 1:3) {
+    pt_cor[i,k] <- p0[k] * exp((mu[k] - 0.5 * sigma[k]^2) * anios + sigma[k] * sqrt(anios) * e[i,k]) 
+  }
+}
+
+# YPF
+mean(pt_cor[,1])
+quantile(pt_cor[,1], 0.975)
+quantile(pt_cor[,1], 0.025)
+
+# MELI
+mean(pt_cor[,2])
+quantile(pt_cor[,2], 0.975)
+quantile(pt_cor[,2], 0.025)
+
+# LOMA
+mean(pt_cor[,3])
+quantile(pt_cor[,3], 0.975)
+quantile(pt_cor[,3], 0.025)
+```
+### d
+```{r}
+p0_m <- matrix(rep(p0,m), nrow = m, ncol = 3, byrow = T)
+
+rl_c <- log(pt_cor/p0_m)
+
+mean(rl_c[,1])
+mean(rl_c[,2])
+mean(rl_c[,3])
+```
+
+### e
+```{r eval=FALSE, include=FALSE}
+plot(pt_cor[,1], pt_cor[,2])
+plot(pt_cor[,1], pt_cor[,3])
+plot(pt_cor[,2], pt_cor[,3])
+
+plot(pt[,1], pt[,2])
+```
+
+### f
+```{r}
+# YPF
+mean(pt_cor[,1]) * 200
+YPF_mean * 200
+
+# MELI
+mean(pt_cor[,2]) * 120
+MELI_mean * 120
+```
+

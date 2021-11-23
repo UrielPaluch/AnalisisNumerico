@@ -1,0 +1,106 @@
+---
+title: "Simulación"
+author: "Uriel Paluch"
+date: "21/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Metodos
+```{r}
+integracion <- function(funcion, limiteSuperior, limiteInferior, n){
+  uniforme <- limiteInferior + (limiteSuperior - limiteInferior) * runif(n = n)
+  
+  alturaPromedio <- 1/n * sum(funcion(uniforme))
+  
+  anchoBase <- limiteSuperior - limiteInferior
+  
+  desvioEstandar <- sqrt( 1/(n-1) * sum((funcion(uniforme) * (limiteSuperior - limiteInferior) - alturaPromedio * anchoBase)^2) )
+  
+  error <- desvioEstandar/sqrt(n)
+  
+  resultados <- list("error" = error, "alfa" =  alturaPromedio * anchoBase)
+  return(resultados)
+}
+
+funcion <- function(x){
+  return(sqrt(x+5)*sin(x))
+}
+
+# Fijo el seed para que me den los mismos resultados que la guia
+set.seed(123)
+
+integracion(funcion = funcion, limiteSuperior = 6, limiteInferior = 2, n = 10000)
+```
+
+## Integrales como esperaza
+Supongamos que se quiere calcular la siguiente integral
+
+\begin{equation*}
+  \alpha = \int_{a}^{b} f(x)
+\end{equation*}
+
+Supongamos que contamos con un mecanismo para generar puntos independientes y con distribución uniforme en el intervalo $[0;1]$. Si se evalúa la función en cada uno de estos puntos y se promedian los resultados, obtenemos una estimación de la integral mediante Monte Carlo:  
+
+**Aclaración:** Esto es solo válido para el intervalo $[0;1]$  
+
+\begin{equation*}
+  \hat{\alpha} = \dfrac{1}{n} \sum_{i = 1}^{n} f(U_i)
+\end{equation*}
+
+Esto se debe a la Ley de los Grandes Números
+
+### Desvío estandar:
+
+\begin{equation*}
+  s_f = \sqrt{\dfrac{1}{n-1} \sum_{i = 1}^{n} (f(U_i) -\hat{\alpha}_n)^2}
+\end{equation*}
+
+### Error:
+
+\begin{equation*}
+  \dfrac{s_f}{\sqrt(n)}
+\end{equation*}
+
+
+### ¿Qué sucede cuando el intervalo no es $[0;1]$?  
+Debo multiplicar los números aleatorios por el tamaño de la base (límite superior - límite inferior), de esta forma los números estaran contenidos siempre dentro del intervalo.  
+
+\begin{equation*}
+  uniforme <- limiteInferior + (limiteSuperior - limiteInferior) * runif(100)
+\end{equation*}
+
+El valor obtenido lo múltiplico por el tamaño de la base (límiteSuperior - límiteInferior) y eso me genera un área promedio que aproxima bien a la integral.  
+
+Se puede transformar cualquier variable aleatoria en una uniforme y viceversa, una uniforme en cualquier variable aleatoria. Esto se hace con $F^{-1}(X)$
+
+## Movimiento geométrico Browniano
+Es el mas utilizado para simular el precio de una acción.
+\begin{equation*}
+  P_t = P_0 * e^{(\mu - 0.5 * \sigma^2) * T + \sigma * \sqrt{T}*\epsilon}
+\end{equation*}
+Donde:  
+- $\mu$ es el rendimiento esperado  
+- $\sigma$ es la volantilidad  
+- $P_0$ es el precio del activo en el momento cero  
+- $P_T$ es el precio del activo en el momento T  
+- $\epsilon$ es una variable aleatoria normal estandar  
+- T es el plazo  
+
+Si deseo un camino de precios puedo utilizar:
+\begin{equation*}
+  P_{t+\Delta t} = P_t * e^{(\mu - 0.5 * \sigma^2) * \Delta t + \sigma * \sqrt{\Delta t}*\epsilon}
+\end{equation*}
+donde $\Delta t$ es una variación pequeña del tiempo
+
+## Procesos multivariados
+En este caso consideramos que los retornos de los activos estan relacionados entre si.  
+
+Movimiento Geométrico Browniano para precios de activos financieros:
+\begin{equation*}
+  P_{k,T} = P_{k.0} * e^{(\mu_k - 0.5 * \sigma_k^2) * T + \sigma_k * \sqrt{T}*\epsilon_k}
+\end{equation*}
+Consideramos que los \epsilon_k están correlacionados entre si. Por lo tanto necesito la correlación como dato.

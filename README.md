@@ -52,3 +52,6 @@
 
 ## Semana 12
 * Integración numérica (Ejercicio 1 medio dudoso)
+
+## Semana 13
+* Simulación
