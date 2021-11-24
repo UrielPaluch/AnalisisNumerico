@@ -28,10 +28,10 @@
 ## Trabajo Práctico 1
 * Data mining sobre la tarjeta alimentar.
 
-## Modelos primer examen
+## Primer examen práctica
 * Modelos de examen resueltos
 
-## Primer examen
+## Examen 1
 * El examen que nos tomo
 
 ## Semana 8
