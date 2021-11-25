@@ -56,5 +56,8 @@
 ## Semana 13
 * Simulación
 
+## Semana 14
+* Ecuaciones diferenciales
+
 ## Trabajo Práctico 2
 * Curvas tasas de interes

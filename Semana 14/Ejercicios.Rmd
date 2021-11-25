@@ -1,0 +1,143 @@
+---
+title: "Ecuaciones diferenciales"
+author: "Uriel Paluch"
+date: "24/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+```
+
+## Métodos
+
+```{r}
+MetodoEuler <- function(a, b, N, alfa, funcion){
+  
+  df <- data.frame(t = rep(NA, times = (N+1)), w = rep(NA, times = (N+1)))
+  
+  # Paso 1
+  h <- (b - a) / N
+  df[1,1] <- a
+  df[1,2] <- alfa
+  
+  
+  # Paso 2
+  for (i in 1:N) {
+    
+    # Paso 3
+    df[i+1,1] <- a + i*h
+    df[i+1,2] <- df[i,2] + h * eval(funcion, list(y = df[i,2], t = (a + (i-1)*h) ))
+  }
+  
+  return(df)
+}
+
+# Alfa = y(0)
+MetodoEuler(a = 0, b = 2, N = 4, alfa = 0.5, funcion = expression(y - t^2 + 1))
+```
+
+```{r}
+RungeKutta <- function(a, b, N, alfa, funcion){
+  
+  df <- data.frame(t = rep(NA, times = (N+1)), w = rep(NA, times = (N+1)))
+  
+  h <- (b - a)/N
+  df[1,1] <- a
+  df[1,2] <- alfa
+  t <- a
+  
+  for (i in 1:N) {
+    k <- rep(NA, times = 4)
+    
+    # Paso 3
+    k[1] <- h * eval(funcion, list(t = t, y = df[i,2] ))
+    k[2] <- h * eval(funcion, list(t = t + h/2, y = df[i,2] + k[1]/2))
+    k[3] <- h * eval(funcion, list(t = t + h/2, y = df[i,2] + k[2]/2))
+    k[4] <- h * eval(funcion, list(t = t + h, y = df[i,2] + k[3]))
+    
+    df[i+1,2] <- df[i,2] + (k[1] + 2*k[2] + 2*k[3] + k[4])/6
+    
+    t <- a + i * h
+    df[i+1,1] <- t
+  }
+  
+  return(df)
+}
+# Alfa = y(0)
+RungeKutta(a = 0, b = 2, N = 10, alfa = 0.5, funcion = expression(y - t^2 + 1))
+```
+
+
+## Ejercicio 1
+
+### a
+```{r}
+MetodoEuler(a = 0, b = 1, N = 10, alfa = 2, funcion = expression(t - y + 2))
+```
+
+### b
+```{r}
+MetodoEuler(a = 0, b = 2, N = 10, alfa = 0.5, funcion = expression(y - t^2 + 1))
+```
+
+## Ejercicio 2
+
+### a
+```{r}
+RungeKutta(a = 0, b = 2, N = 10, alfa = 0.5, funcion = expression(y - t^2 + 1))
+```
+
+### b
+```{r}
+RungeKutta(a = 0, b = 0.1, N = 10, alfa = 5, funcion = expression(-20*y + 7 * exp(-0.5*t)))
+```
+
+## Ejercicio 3
+No me da como en la guía
+
+### a
+```{r}
+df_a <- MetodoEuler(a = 0, b = 4*pi, N = 100, alfa = 0.01, funcion = expression(exp(sin(t*y)) + sin(log(y))))
+
+df_a
+```
+
+### b
+```{r}
+df_b <- RungeKutta(a = 0, b = 4*pi, N = 100, alfa = 0.01, funcion = expression(exp(sin(t*y)) + sin(log(y))) )
+
+df_b
+```
+
+### c
+```{r}
+ggplot() +
+  geom_line(aes(x = df_a$t, y = df_a$w), colour = "darkblue") +
+  geom_line(aes(x = df_b$t, y = df_b$w), colour = "darkgreen") +
+  xlab("t") + ylab("w")
+```
+
+## Ejercicio 4
+
+### a
+```{r}
+MetodoEuler(a = 2, b = 3, N = 20, alfa = 1, funcion = expression(1 + (t - y)^2))
+MetodoEuler(a = 2, b = 3, N = 80, alfa = 1, funcion = expression(1 + (t - y)^2))
+```
+
+### b
+```{r}
+RungeKutta(a = 2, b = 3, N = 20, alfa = 1, funcion = expression(1 + (t - y)^2))
+RungeKutta(a = 2, b = 3, N = 80, alfa = 1, funcion = expression(1 + (t - y)^2))
+```
+
+## Ejercicio 5
+```{r}
+MetodoEuler(a = 1, b = 2, alfa = 0, N = 10, funcion = expression((2/t) * y + (t^2) * exp(t) ))
+```
+
+
+
