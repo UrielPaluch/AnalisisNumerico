@@ -63,7 +63,8 @@ df <- data.frame(
 
 ggplot(df) +
   geom_line(aes(x = date, y = couponEquivalent)) +
-  geom_point(aes(x = date, y = couponEquivalent))
+  geom_point(aes(x = date, y = couponEquivalent)) +
+  xlab("t") + ylab("r")
 ```
 
 
@@ -123,10 +124,10 @@ PolinomioInterpolanteNewton <- function(x, y){
 resultado <- PolinomioInterpolanteNewton(x = df$date, y = df$couponEquivalent)
 ```
 
-0.06 + 0.26 * ( x - 0.0769230769230769 ) - 3.30488888888889 * ( x - 0.0769230769230769 )    
-* ( x - 0.153846153846154 ) + 10.4882424242424 * ( x - 0.0769230769230769 ) * ( x - 0.153846153846154 )     
-* ( x - 0.25 ) - 12.7438518518519 * ( x - 0.0769230769230769 ) * ( x - 0.153846153846154 )     
-* ( x - 0.25 ) * ( x - 0.5 )
+0.06 + 0.26 * ( t - 0.0769230769230769 ) - 3.30488888888889 * ( t - 0.0769230769230769 )    
+* ( t - 0.153846153846154 ) + 10.4882424242424 * ( t - 0.0769230769230769 ) * ( t - 0.153846153846154 )     
+* ( t - 0.25 ) - 12.7438518518519 * ( t - 0.0769230769230769 ) * ( t - 0.153846153846154 )     
+* ( t - 0.25 ) * ( t - 0.5 )
 
 ```{r Lagrange-Interpola}
   # Use este bloque para ingresar su algoritomo de interpolación de Lagrange.
@@ -169,7 +170,8 @@ x <- seq(from = min(df$date), to = max(df$date), by = 0.00001)
 y <- eval(parse(text = resultado), list(x = x))
 ggplot() +
   geom_line(aes(x = x, y = y)) +
-  geom_point(aes(x = df$date, y = df$couponEquivalent), colour = "darkgreen")
+  geom_point(aes(x = df$date, y = df$couponEquivalent), colour = "darkgreen") +
+  xlab("t") + ylab("r")
 ```
 
 ## Trazadores Cúbicos
@@ -253,13 +255,13 @@ SplineNatural <- function(x, y){
 spline <- SplineNatural(x = df$date, y = df$couponEquivalent)
 ```
 
-0.06 + 0.405748858447489 * (x - 0.0769230769230769)^1 + 0 * (x - 0.0769230769230769)^2 - 24.6315570776256 * (x - 0.0769230769230769)^3
+0.06 + 0.405748858447489 * (t - 0.0769230769230769)^1 + 0 * (t - 0.0769230769230769)^2 - 24.6315570776256 * (t - 0.0769230769230769)^3
 
-0.08 - 0.0314977168949772 * (x - 0.153846153846154)^1 - 5.68420547945206 * (x - 0.153846153846154)^2 + 28.7766100456621 * (x - 0.153846153846154)^3
+0.08 - 0.0314977168949772 * (t - 0.153846153846154)^1 - 5.68420547945206 * (t - 0.153846153846154)^2 + 28.7766100456621 * (t - 0.153846153846154)^3
 
-0.05 - 0.326446347031964 * (x - 0.25)^1 + 2.6167397260274 * (x - 0.25)^2 - 3.96381735159817 * (x - 0.25)^3
+0.05 - 0.326446347031964 * (t - 0.25)^1 + 2.6167397260274 * (t - 0.25)^2 - 3.96381735159817 * (t - 0.25)^3
 
-0.07 + 0.238707762557078 * (x - 0.5)^1 - 0.356123287671233 * (x - 0.5)^2 + 0.237415525114155 * (x - 0.5)^3
+0.07 + 0.238707762557078 * (t - 0.5)^1 - 0.356123287671233 * (t - 0.5)^2 + 0.237415525114155 * (t - 0.5)^3
 
 ```{r CS-Interpola}
   # Use este bloque para ingresar su algoritomo de interpolación de Cubic Spline
@@ -286,7 +288,8 @@ ggplot() +
   geom_line(aes(x = x2, y = y2)) +
   geom_line(aes(x = x3, y = y3)) +
   geom_line(aes(x = x4, y = y4)) +
-  geom_point(aes(x = df$date, y = df$couponEquivalent), colour = "blue")
+  geom_point(aes(x = df$date, y = df$couponEquivalent), colour = "blue") +
+  xlab("t") + ylab("r")
 ```
 
 \newpage
