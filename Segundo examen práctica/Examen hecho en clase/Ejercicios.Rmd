@@ -93,9 +93,7 @@ fx <- eval(expression( ((1)/(x*sigma*sqrt(2*pi))) * exp(- (log(x)-mu)^2/(2*sigma
 ggplot() +
   geom_line(aes(x = x1, y = fx))
 
-tetas <- IntegracionCompuesta(limiteInferior = 0.0001, limiteSuperior = 1000, funcion = expression(x * ((1)/(x*sigma*sqrt(2*pi))) * exp(- (log(x)-mu)^2/(2*sigma^2)) ), n = 2, cantIntervalos = 1000) 
-
-culo <- CompuestaSimpson(limINF = 0.0001, limSUP = 1000, funcion = expression(x * ((1)/(x*sigma*sqrt(2*pi))) * exp(- (log(x)-mu)^2/(2*sigma^2)) ), n = 1000)
+IntegracionCompuesta(limiteInferior = 0.0001, limiteSuperior = 1000, funcion = expression(x * ((1)/(x*sigma*sqrt(2*pi))) * exp(- (log(x)-mu)^2/(2*sigma^2)) ), n = 2, cantIntervalos = 1000) 
 ```
 
 \newpage
