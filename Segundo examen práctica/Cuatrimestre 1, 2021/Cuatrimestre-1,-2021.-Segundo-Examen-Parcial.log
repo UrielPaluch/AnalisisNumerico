@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.9.4)  26 NOV 2021 23:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.9.4)  27 NOV 2021 15:47
 entering extended mode
-**./Prcial2_LucilaSchmukler_878791.tex
-(Prcial2_LucilaSchmukler_878791.tex
+**./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.tex
+(Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.tex
 LaTeX2e <2021-06-01> patch level 1
 L3 programming layer <2021-08-27> (C:\Users\COHEN\AppData\Local\Programs\MiKTeX
 \tex/latex/base\article.cls
@@ -382,8 +382,8 @@ tex.def
 File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box53
-) (Prcial2_LucilaSchmukler_878791.aux)
-\openout1 = `Prcial2_LucilaSchmukler_878791.aux'.
+) (Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.aux)
+\openout1 = `Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 117.
 LaTeX Font Info:    ... okay on input line 117.
@@ -531,7 +531,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 119
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (C:\Users\COHEN\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) (Prcial2_LucilaSchmukler_878791.toc
+) (Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 2.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -540,7 +540,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 2.
 )
 \tf@toc=\write4
-\openout4 = `Prcial2_LucilaSchmukler_878791.toc'.
+\openout4 = `Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.toc'.
 
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 24.
@@ -560,91 +560,129 @@ LaTeX Warning: Command \textellipsis invalid in math mode on input line 182.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 191.
 [2]
-<Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej1-1-1.pdf, id=69
-, 469.755pt x 325.215pt>
-File: Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej1-1-1.pdf G
-raphic file (type pdf)
-<use Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej1-1-1.pdf>
-Package pdftex.def Info: Prcial2_LucilaSchmukler_878791_files/figure-latex/Resp
-uesta-Ej1-1-1.pdf  used on input line 258.
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej1-
+1-1.pdf, id=69, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej1-1-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej1-1-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej1-1-1.pdf  used on input line 288.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[3 <./Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej1-1-1.pdf>]
-[4] [5] [6]
-<Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-1-1.pdf, id=94
-, 469.755pt x 325.215pt>
-File: Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-1-1.pdf G
-raphic file (type pdf)
-<use Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-1-1.pdf>
-Package pdftex.def Info: Prcial2_LucilaSchmukler_878791_files/figure-latex/Resp
-uesta-Ej2-1-1.pdf  used on input line 532.
+[3 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej1-1-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej1-
+2-1.pdf, id=80, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej1-2-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej1-2-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej1-2-1.pdf  used on input line 362.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[7] [8 <./Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-1-1.p
-df>]
-<Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-2-1.pdf, id=11
-7, 469.755pt x 325.215pt>
-File: Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-2-1.pdf G
-raphic file (type pdf)
-<use Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-2-1.pdf>
-Package pdftex.def Info: Prcial2_LucilaSchmukler_878791_files/figure-latex/Resp
-uesta-Ej2-2-1.pdf  used on input line 603.
+[4] [5 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respu
+esta-Ej1-2-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej1-
+3-1.pdf, id=95, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej1-3-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej1-3-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej1-3-1.pdf  used on input line 447.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[9 <./Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-2-1.pdf>]
-<Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-3-1.pdf, id=12
-8, 469.755pt x 325.215pt>
-File: Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-3-1.pdf G
-raphic file (type pdf)
-<use Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-3-1.pdf>
-Package pdftex.def Info: Prcial2_LucilaSchmukler_878791_files/figure-latex/Resp
-uesta-Ej2-3-1.pdf  used on input line 655.
+[6] [7 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respu
+esta-Ej1-3-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej1-
+4-1.pdf, id=111, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej1-4-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej1-4-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej1-4-1.pdf  used on input line 542.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10] [11 <./Prcial2_LucilaSchmukler_878791_files/figure-latex/Respuesta-Ej2-3-1
-.pdf>] [12] [13] [14] [15]
-Underfull \hbox (badness 2005) in paragraph at lines 934--947
+[8] [9 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respu
+esta-Ej1-4-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej2-
+1-1.pdf, id=125, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej2-1-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej2-1-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej2-1-1.pdf  used on input line 643.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+[10] [11 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Res
+puesta-Ej2-1-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej2-
+2-1.pdf, id=147, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej2-2-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej2-2-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej2-2-1.pdf  used on input line 714.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+[12 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuest
+a-Ej2-2-1.pdf>]
+<Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-Ej2-
+3-1.pdf, id=158, 469.755pt x 325.215pt>
+File: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta
+-Ej2-3-1.pdf Graphic file (type pdf)
+<use Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Respuesta-
+Ej2-3-1.pdf>
+Package pdftex.def Info: Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/fig
+ure-latex/Respuesta-Ej2-3-1.pdf  used on input line 766.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+[13] [14 <./Cuatrimestre-1,-2021.-Segundo-Examen-Parcial_files/figure-latex/Res
+puesta-Ej2-3-1.pdf>] [15] [16] [17] [18]
+Underfull \hbox (badness 2005) in paragraph at lines 1045--1058
 []\T1/lmr/m/n/10 (+20) Respuesta (SE-LECT c.CustomerName as Nom-bre-Cliente, c.
 City as Ciu-dad, c.Country as Pais,
  []
 
-[16] [17] (Prcial2_LucilaSchmukler_878791.aux) ) 
+[19] [20] (Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.aux) ) 
 Here is how much of TeX's memory you used:
- 13333 strings out of 478927
- 204495 string characters out of 2852536
- 557669 words of memory out of 3000000
- 30751 multiletter control sequences out of 15000+600000
+ 13357 strings out of 478927
+ 206848 string characters out of 2852536
+ 557901 words of memory out of 3000000
+ 30769 multiletter control sequences out of 15000+600000
  471285 words of font info for 146 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,6n,80p,1219b,473s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/COHEN/AppData/Local/P
-rograms/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Users/COHEN/AppData/Local/P
-rograms/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/COHEN/AppData/Local/Progr
-ams/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/COHEN/AppData/Local/Programs/
-MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Users/COHEN/AppData/Local/Programs/
-MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Users/COHEN/AppData/Local/Programs/
-MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}<C:/Users/COHEN/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/COHEN/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/lm/lmbxi10.pfb><C:/Users/COHEN/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/lm/lmex10.pfb><C:/Users/COHEN/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Users/COHEN/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/COHEN/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/lm/lmmi5.pfb><C:/Users/COHEN/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/lm/lmr10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/lm/lmr12.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/lm/lmr17.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/lm/lmr5.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/lm/lmr7.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/lm/lmri10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/lm/lmsy10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/lm/lmsy5.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/lm/lmsy7.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/lm/lmtk10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/lm/lmtt10.pfb><C:/Users/COHEN/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/lm/lmtti10.pfb>
-Output written on Prcial2_LucilaSchmukler_878791.pdf (17 pages, 2119809 bytes).
-
+ 74i,6n,80p,1015b,473s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/COHEN/A
+ppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Users/COHEN/A
+ppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/COHEN/AppDa
+ta/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/COHEN/AppData/L
+ocal/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Users/COHEN/AppData/L
+ocal/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Users/COHEN/AppData/L
+ocal/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}<C:/Users/COHEN/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/COHEN/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/COHEN/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.pfb><C:/Users/COHEN/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmex10.pfb><C:/Users/COHEN/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Users/COHEN/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/COHEN/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmmi5.pfb><C:/Users/COHEN/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/COHEN/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/COHEN/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/COHEN/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/COHEN/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Users/COHEN/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/lm/lmr5.pfb><C:/Users/COHEN/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/COHEN/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/COHEN/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/COHEN/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmsy5.pfb><C:/Users/COHEN/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/lm/lmsy7.pfb><C:/Users/COHEN/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/COHEN/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/COHEN/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
+Output written on Cuatrimestre-1,-2021.-Segundo-Examen-Parcial.pdf (20 pages, 2
+217098 bytes).
 PDF statistics:
- 346 PDF objects out of 1000 (max. 8388607)
- 55 named destinations out of 1000 (max. 500000)
- 34981 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 377 PDF objects out of 1000 (max. 8388607)
+ 58 named destinations out of 1000 (max. 500000)
+ 34996 words of extra memory for PDF output out of 35830 (max. 10000000)
 
