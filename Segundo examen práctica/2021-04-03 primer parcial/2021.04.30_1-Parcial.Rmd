@@ -1,0 +1,447 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. Primer Examen Parcial."
+author: "Remplace este texto por su Apellido y Nombre, y su Numero de Registro"
+date: "30/Abril/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace 000000 a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 000000
+```
+
+```{r Digitos-Reg}
+  d1 = floor( NroReg/10^5 )
+  d2 = floor( (NroReg - d1*10^5)/10^4 )
+  d3 = floor( (NroReg - d1*10^5 - d2*10^4)/10^3 )
+  d4 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3)/10^2 )
+  d5 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2)/10^1)
+  d6 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2 - d5*10^1)/10^0)
+```
+
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(flextable)
+  library(tidyverse)
+
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Newton-Raphson. (24 puntos)
+Considere la siguiente ecuación: $2sin(x)=e^{10/x}$.
+
+## Corregir algoritmo NR {#CorregirNR}
+
+CORREGIR el algoritmo “Newton-Rapshon” en el siguiente bloque de código. 
+
+COMENTAR los cambios que realizó (use "#" al final de cada línea modificada). 
+
+[***Notar que, para el resto del ejercicio, no debe utilizar su propio algoritmo, sino que debe usar el algoritmo dado y corregido, sin agregar ninguna línea de código adicional.***]
+
+Respuesta:
+```{r Algortimo-NR, echo=TRUE}
+ # Edite las líneas que considere erróneas
+  NewtonRapshon <- function(f,df,p0,Tol,N){
+    #Paso 1
+    i = 1
+    #Paso 2
+    while (i <= N){
+      #Paso 3
+        p = p0 - df(p0)/f(p0)
+      #Paso 4
+        if (abs[p0-p] < Tol) return(p0) 
+      #Paso 5
+        i = i + 1
+      #Paso 6
+        p0 = p
+    }
+    #Paso 7
+      return(paste('El método falla luego de ', n, ' iteraciones'))
+  }
+```
+
+## Graficar función e identificar raíces para NR {#GraficoNR}
+
+Plantee la ecuación de la forma $f(x)=0$ y grafique la función en el intervalo $[10;30]$ de manera tal que pueda identificar todas las soluciones de la ecuación en el intervalo.
+
+Respuesta:
+```{r Grafico-f-NR, fig.cap="Grafico de Función para hallar raíces"}
+
+```
+
+## Hallar raíces con NR
+Utilizando el algoritmo del punto 1.1, halle todas las raíces identificadas en el punto 1.2.
+
+Respuesta:
+```{r Calculo-raices-NR}
+  # En este bloque, aplique el algoritmo de NR para hallar las raíces. No olvide imprimir los resultados.
+  # Incluya aquí mismo cualquier cálculo adicional que requiera.
+
+```
+
+## Iteraciones del algortimo de NR {#NR5p}
+Tome el algoritmo del punto 1.1 (copie y pegue) y agregue las líneas de código que considere necesarias para poder visualizar (imprimir) cada iteración del algoritmo. Una vez editado el algoritmo, imprima `r ifelse(d4>=2,d4,ifelse(d5>=2,d5,d6))` iteraciones del algoritmo iniciando en $x_0=`r 24-ifelse(d4!=0,d4,ifelse(d5!=0,d5,d6))`$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+```{r Algortimo-NR-Iteraciones, echo=TRUE}
+
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Falsa Posición. (24 puntos)
+
+Para este ejercicio, considere la función $h(x)=x^2 \times cos(x)$.
+
+## Teoría {#RF_T}
+Explique las diferencias del método *Regula Falsi* respecto del método de *Secante*.
+
+Respuesta (escriba a continuación):
+
+## Hallar raíces con RF {#raicesRF} 
+Halle todas las raíces de $h(x)$ en el intervalo $[0,3\pi]$ utilizando el método de Falsa Posición.
+
+Respuesta:
+```{r Algoritmo-RF}
+  # Ingrese aquí la función con el algoritmo que programó del método de Regula Falsi
+
+```
+
+```{r Calculo-raices-RF}
+  # En este bloque, aplique el algoritmo de RF para hallar las raíces. No olvide imprimir los resultados.
+  # Incluya aquí mismo cualquier cálculo adicional que requiera.
+
+```
+
+## Iteraciones del algortimo de *Regula Falsi* {#RF7p}
+Considere el punto anterior. Realice `r ifelse(d6!=0,d6,ifelse(d5!=0,d5,d5))` iteraciones del algoritmo de Falsa Posición, utilizando en $x_0= `r max(5 - min(d4,d5,d6),1)`$ y $x_1=6$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+```{r Algortimo-RF-Iteraciones}
+  # Aquí puede modificar el algoritmo RF del punto anterior para que imprima, o bien puede realizar las cuentas "a mano" (paso a paso, cada una de las iteraciones)
+
+```
+
+## Graficar función para RF y marcar raíces {#GraficoRF}
+
+Grafique la función $h(x)$ en el intervalo $[0;3\pi]$, identifique todas las raíces halladas en el punto 2.2 y marque cada una con un color distinto en el gráfico (con un punto en el eje $x$ o con una línea vertical).
+
+Respuesta:
+```{r Grafico-f-RF, fig.cap="Grafico de Función para hallar raíces"}
+
+```
+
+\newpage
+
+# Factorización de Matrices. (12 puntos)
+
+```{r Ej2-Genera-Matrices}
+  set.seed(NroReg)
+  datos = matrix(rnorm(3000,10,2),nrow = 1000, ncol = 3)
+  A = round(cor(datos),4)
+  rm(datos)
+  B = matrix(round(rnorm(16,20,5),0),nrow = 4, ncol = 4)
+```
+
+## Factorización de Cholesky
+Realice la factorización de Cholesky de la siguiente matriz:
+
+$$
+A = `r write_matex2(A)`
+$$
+
+Respuesta:
+```{r Algortimo-Cholesky}
+  # En este bloque de código debe ingresar su algoritmo de Cholesky
+
+```
+
+```{r Respuesta-2a}
+  # En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+  
+```
+
+
+## Factorización LU
+Realice la factorización de LU de la siguiente matriz:
+
+$$
+B = `r write_matex2(B)`
+$$
+
+Respuesta:
+```{r Algortimo-LU}
+  # En este bloque de código debe ingresar su algoritmo LU
+
+```
+
+```{r Respuesta-2b}
+  # En este bloque de código debe Aplicar el algoritmo a la matriz A, e imprimir el resultado
+    
+```
+
+\newpage
+
+# Interpolación de Lagrange (40 Puntos)
+
+Considere la siguente tabla de datos:
+```{r Datos-Interpolacion, warning=FALSE}
+# No edite nada en ese bloque
+x = c(-2.0, -1.5, -1.0, -0.5,  0.0,  0.5,  1.0,  1.5,  2.0)
+y = c(0.0769, 0.1290, 0.2500, 0.5714, 1.0000, 0.5714, 0.2500, 0.1290, 0.0769)
+df = data.frame(x,y)
+df %>% 
+  flextable() %>%
+  colformat_num(digits = 4)
+set.seed(NroReg)
+x0 = x[runif(1,min=1, max=length(x))]+0.25
+```
+
+## Polinomio de Newton: $P_{N}(x)$
+Escriba el Polinomio interpolante de Newton, $P_n(x)$, que pasa por todos los puntos dados
+
+Respuesta:
+```{r Escribe-PN}
+DiferenciasDivididas <- function(x, y){
+  n <- length(x)
+  
+  #Hago un vector vacio para llenar el df
+  empty_vec <- rep(0, times = n)  
+  
+  df <- data.frame(x, y)
+  
+  for (i in 1:(n-1)) {
+    
+    df[glue::glue("Q",i)] <- empty_vec
+    
+    for (j in (i+1):n) {
+      
+      df[j, (i+2)] <- ( df[j,(i+1)] - df[(j-1),(i+1)])/(x[j]-x[j-i])
+    }
+  }
+  
+  return(df)
+}
+
+PolinomioInterpolanteNewton <- function(x, y){
+  df <- DiferenciasDivididas(x = x, y = y)
+  
+  #Saco la primer columna del df
+  df[,1] <- NULL
+  
+  n <- ncol(df)
+  
+  polinomio <- df[1,1]
+  
+  for (i in 2:n) {
+    polinomio <- polinomio + glue::glue(" + ", df[i,i])
+    for (j in 1:(i-1)) {
+      polinomio <- polinomio + glue::glue(" * ( x - ", x[j], " )")
+    }
+  }
+  return(polinomio)
+}
+
+PolinomioInterpolanteNewton(x = c(-2.0, -1.5, -1.0, -0.5,  0.0,  0.5,  1.0,  1.5,  2.0), y = c(0.0769, 0.1290, 0.2500, 0.5714, 1.0000, 0.5714, 0.2500, 0.1290, 0.0769))
+
+```
+
+0.0769 + 0.1042 * ( x - -2 ) + 0.1378 * ( x - -2 ) * ( x - -1.5 ) + 0.175333333333333 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) + -0.1498 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) + -0.1724 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) + 0.306355555555555 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) + -0.229752380952381 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) + 0.11487619047619 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) * ( x - 1.5 )
+
+
+## Interpolar con $P_{N}(x)$
+Calcule $P_N(`r x0`)$.
+
+Respuesta:
+```{r Interpola-PN}
+eval(expression(0.0769 + 0.1042 * ( x - -2 ) + 0.1378 * ( x - -2 ) * ( x - -1.5 ) + 0.175333333333333 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) + -0.1498 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) + -0.1724 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) + 0.306355555555555 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) + -0.229752380952381 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) + 0.11487619047619 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) * ( x - 1.5 )), list(x = 1.75))
+```
+
+
+## Cubic Splines: $S_{i}(x)$
+Escriba los trazadores cúbicos, $S_i(x); i=1,...,n$ que pasan por todos los puntos dados.Indique claramente qué polinomio $S_i$ se debe usar en cada intervalo de $x$.
+
+Respuesta:
+```{r Escribe-CS}
+
+SplineNatural <- function(x, y){
+  #browser()
+  n <- length(x)
+  
+  # Paso 1
+  h <- rep(NA, times = (n-1))
+  for (i in 1:(n-1)) {
+    h[i] <- x[i+1] - x[i]
+  }; rm(i)
+  
+  # Paso 2
+  alfa <- rep(NA, times = (n-2))
+  for (i in 2:(n-1)) {
+    alfa[i] <- (3/h[i]) * (y[i+1] - y[i]) - (3/h[i-1]) * (y[i] - y[i-1])
+  }
+  
+  # Paso 3
+  mu <- rep(NA, times = n)
+  zeta <- rep(NA, times = n)
+  l <- rep(NA, times = n)
+  
+  mu[1] <- 0
+  zeta[1] <- 0
+  l[1] <- 1
+  
+  
+  # Paso 4
+  for (i in 2:(n-1)) {
+    l[i] <- 2 * (x[i+1] - x[i-1]) - h[i-1] * mu[i-1]
+    mu[i] <- h[i]/l[i]
+    zeta[i] <- (alfa[i] - h[i-1] * zeta[i-1])/l[i]
+  }
+  
+  # Paso 5
+  l[n] <- 1
+  zeta[n] <- 0
+  c <- rep(NA, times = n)
+  c[n] <- 0
+  
+  # Paso 6
+  b <- rep(NA, times = (n-1))
+  d <- rep(NA, times = (n-1))
+  for (j in (n-1):1) {
+    c[j] <- zeta[j] - mu[j] * c[j+1]
+    b[j] <- (y[j+1] - y[j]) / h[j] - h[j] * (c[j+1] + 2 * c[j])/3
+    d[j] <- (c[j+1] - c[j]) / (3*h[j])
+  }
+  
+  #Paso 7
+  resultados <- matrix(rep(NA, 4*(n-1)), nrow = (n-1), ncol = 4, byrow = F)
+  for (k in 1:(n-1)) {
+    resultados[k, 1] <- y[k]
+    resultados[k, 2] <- b[k]
+    resultados[k, 3] <- c[k]
+    resultados[k, 4] <- d[k]
+  }
+  
+  #print(resultados)
+  
+  #Construyo el polinomio
+  polinomios <- rep(NA, times = nrow(resultados))
+  for (i in 1:nrow(resultados)) {
+    polinomios[i] <- glue::glue(resultados[i,1]) 
+    for(j in 2:ncol(resultados)){
+      polinomios[i] <- polinomios[i] + glue::glue(" + ", resultados[i,j], " * (x - ", x[i], ")^", (j-1)) 
+    }
+  }
+  
+  return(polinomios)
+}
+SplineNatural(x = c(-2.0, -1.5, -1.0, -0.5,  0.0,  0.5,  1.0,  1.5,  2.0), y = c(0.0769, 0.1290, 0.2500, 0.5714, 1.0000, 0.5714, 0.2500, 0.1290, 0.0769))
+
+
+```
+$[-2 ; -1.5]$ 0.0769 + 0.0829298969072165 * (x - -2)^1 + 0 * (x - -2)^2 + 0.085080412371134 * (x - -2)^3
+$[-1.5 ; -1]$ 0.129 + 0.146740206185567 * (x - -1.5)^1 + 0.127620618556701 * (x - -1.5)^2 + 0.12579793814433 * (x - -1.5)^3
+$[-1 ; -0.5]$ 0.25 + 0.368709278350515 * (x - -1)^1 + 0.316317525773196 * (x - -1)^2 + 0.463727835051546 * (x - -1)^3
+$[-0.5 ; 0]$ 0.5714 + 1.03282268041237 * (x - -0.5)^1 + 1.01190927835052 * (x - -0.5)^2 + -2.72630927835052 * (x - -0.5)^3
+$[0 ; 0.5]$ 1 + 1.11022302462516e-16 * (x - 0)^1 + -3.07755463917526 * (x - 0)^2 + 2.72630927835052 * (x - 0)^3
+$[0.5 ; 1]$ 0.5714 + -1.03282268041237 * (x - 0.5)^1 + 1.01190927835052 * (x - 0.5)^2 + -0.463727835051546 * (x - 0.5)^3
+$[1 ; 1.5]$ 0.25 + -0.368709278350515 * (x - 1)^1 + 0.316317525773196 * (x - 1)^2 + -0.12579793814433 * (x - 1)^3
+$[1.5 ; 2]$ 0.129 + -0.146740206185567 * (x - 1.5)^1 + 0.127620618556701 * (x - 1.5)^2 + -0.085080412371134 * (x - 1.5)^3
+
+
+## Interpolar con $S_{i}(x)$
+Usando los trazadores cúbicos, interpole los datos para el valor $x=`r x0`$ 
+
+Respuesta:
+```{r Interpola-CS}
+
+eval(expression(0.129 + -0.146740206185567 * (x - 1.5)^1 + 0.127620618556701 * (x - 1.5)^2 + -0.085080412371134 * (x - 1.5)^3), list(x = 1.75))
+
+```
+
+## Graficar {#GraficoInterpolacion}
+Grafique lo siguiente:
+
+a. Datos dados en la tabla mediante puntos (círculos rellenos o no).
+b. Línea continua de color azul con la función $P_N(x)$ para $x$ en $[-2;2]$.
+c. Línea continua de color rojo con los trazadores cúbicos para $x$ en $[-2;2]$.
+
+Respuesta:
+```{r Grafica_Interpolaciones}
+
+x <- seq(from = -2, to = 2, by = 0.01)
+fx_newton <- eval(expression(0.0769 + 0.1042 * ( x - -2 ) + 0.1378 * ( x - -2 ) * ( x - -1.5 ) + 0.175333333333333 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) + -0.1498 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) + -0.1724 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) + 0.306355555555555 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) + -0.229752380952381 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) + 0.11487619047619 * ( x - -2 ) * ( x - -1.5 ) * ( x - -1 ) * ( x - -0.5 ) * ( x - 0 ) * ( x - 0.5 ) * ( x - 1 ) * ( x - 1.5 )), list(x = x))
+
+x_sp1 <- seq(from = -2, to = -1.5, by = 0.01)
+fx_sp1 <- eval(expression(0.0769 + 0.0829298969072165 * (x - -2)^1 + 0 * (x - -2)^2 + 0.085080412371134 * (x - -2)^3), list(x = x_sp1))
+
+x_sp2 <- seq(from = -1.5, to = -1, by = 0.01)
+fx_sp2 <- eval(expression(0.129 + 0.146740206185567 * (x - -1.5)^1 + 0.127620618556701 * (x - -1.5)^2 + 0.12579793814433 * (x - -1.5)^3), list(x = x_sp2))
+
+x_sp3 <- seq(from = -1, to = -0.5, by = 0.01)
+fx_sp3 <- eval(expression(0.25 + 0.368709278350515 * (x - -1)^1 + 0.316317525773196 * (x - -1)^2 + 0.463727835051546 * (x - -1)^3), list(x = x_sp3))
+
+x_sp4 <- seq(from = -0.5, to = 0, by = 0.01)
+fx_sp4 <- eval(expression(0.5714 + 1.03282268041237 * (x - -0.5)^1 + 1.01190927835052 * (x - -0.5)^2 + -2.72630927835052 * (x - -0.5)^3), list(x = x_sp4))
+
+x_sp5 <- seq(from = 0, to = 0.5, by = 0.01)
+fx_sp5 <- eval(expression(1 + 1.11022302462516e-16 * (x - 0)^1 + -3.07755463917526 * (x - 0)^2 + 2.72630927835052 * (x - 0)^3), list(x = x_sp5))
+
+x_sp6 <- seq(from = 0.5, to = 1, by = 0.01)
+fx_sp6 <- eval(expression(0.5714 + -1.03282268041237 * (x - 0.5)^1 + 1.01190927835052 * (x - 0.5)^2 + -0.463727835051546 * (x - 0.5)^3), list(x = x_sp6))
+
+x_sp7 <- seq(from = 1, to = 1.5, by = 0.01)
+fx_sp7 <- eval(expression(0.25 + -0.368709278350515 * (x - 1)^1 + 0.316317525773196 * (x - 1)^2 + -0.12579793814433 * (x - 1)^3), list(x = x_sp7))
+
+x_sp8 <- seq(from = 1.5, to = 2, by = 0.01)
+fx_sp8 <- eval(expression(0.129 + -0.146740206185567 * (x - 1.5)^1 + 0.127620618556701 * (x - 1.5)^2 + -0.085080412371134 * (x - 1.5)^3), list(x = x_sp8))
+
+ggplot() +
+  geom_point(aes(x = c(-2.0, -1.5, -1.0, -0.5,  0.0,  0.5,  1.0,  1.5,  2.0), y = c(0.0769, 0.1290, 0.2500, 0.5714, 1.0000, 0.5714, 0.2500, 0.1290, 0.0769))) +
+  geom_line(aes(x = x, y = fx_newton), colour = 'blue') +
+  geom_line(aes(x = x_sp1, y = fx_sp1), colour = 'red') +
+  geom_line(aes(x = x_sp2, y = fx_sp2), colour = 'red') +
+  geom_line(aes(x = x_sp3, y = fx_sp3), colour = 'red') +
+  geom_line(aes(x = x_sp4, y = fx_sp4), colour = 'red') +
+  geom_line(aes(x = x_sp5, y = fx_sp5), colour = 'red') +
+  geom_line(aes(x = x_sp6, y = fx_sp6), colour = 'red') +
+  geom_line(aes(x = x_sp7, y = fx_sp7), colour = 'red') +
+  geom_line(aes(x = x_sp8, y = fx_sp8), colour = 'red') +
+  xlab("x") + ylab("y") 
+
+```
+
+## Comentar Resultados
+A partir de lo hallado en el punto anterior, comente sobre la calidad de los métodos para realizar aproximaciones de la función entre los puntos dados.
+
+Respuesta (escriba sus comentarios a continuación):  
+
+El polinomio de Newton toma valores mas extremos en los intervalos definidos entre los puntos, en cambio, el spline al estar dividido en funciones según cada intervalo dibuja una función mas suavizada. Ambas funciones pasan exactamente por los puntos.
+
+
+
+
+
