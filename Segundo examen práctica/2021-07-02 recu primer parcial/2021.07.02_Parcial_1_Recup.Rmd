@@ -1,0 +1,497 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico."
+subtitle: "Cuatrimestre 1, 2021. RECUPERATORIO del Primer Examen Parcial.  \n Para aprobar, debe sumar 50 puntos."
+author: "Remplace este texto por su Apellido y Nombre, y su Numero de Registro"
+date: "02/julio/2021"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+write_matex2 <- function(x) {
+  begin = "\\begin{bmatrix}"
+  end = "\\end{bmatrix}"
+  X =
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+```
+
+```{r Numero de Resgistro}
+  # Remplace 000000 a continuación por su número de resgistro y no edite nada más en este bloque
+  NroReg = 000000
+```
+
+```{r Digitos-Reg}
+  d1 = floor( NroReg/10^5 )
+  d2 = floor( (NroReg - d1*10^5)/10^4 )
+  d3 = floor( (NroReg - d1*10^5 - d2*10^4)/10^3 )
+  d4 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3)/10^2 )
+  d5 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2)/10^1)
+  d6 = floor( (NroReg - d1*10^5 - d2*10^4 - d3*10^3 - d4*10^2 - d5*10^1)/10^0)
+```
+
+
+```{r Librerias, message=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(ggplot2)
+  library(flextable)
+  library(tidyverse)
+```
+
+\newpage
+
+# Resolución de Ecuaciones: Secante. (24 puntos)
+Considere la siguiente ecuación: $2cos(x)=e^{-10/x}$.
+
+## Corregir algoritmo
+
+CORREGIR el algoritmo “Secante” en el siguiente bloque de código. 
+
+COMENTAR los cambios que realizó (use "#" al final de cada línea modificada). 
+
+[***Notar que, para el resto del ejercicio, no debe utilizar su propio algoritmo, sino que debe usar el algoritmo dado y corregido, sin agregar ninguna línea de código adicional.***]
+
+Respuesta:
+```{r Algortimo-Secante, echo=TRUE}
+  # Edite las líneas que considere erróneas
+  # Comente al final de cada línea editada 
+  Secante <- function(f,p0,p1,TOL,N){
+    i <- 2
+    q0 <- f(p0)
+    q1 <- f(p1)
+    while (i == N){
+      p = p1 - q1*(q1-q0)/(p1-p0)
+      if (abs(q-q1) < TOL){
+        return(p)
+      }
+      i = i + 1
+      p0 = p
+      q0 = q1
+      p1 = p0
+      q1 = f(p0)
+    }
+    return(paste('El metodo fallo luego de ', n, ' iteraciones'))
+  } 
+```
+
+## Graficar función
+
+Plantee la ecuación de la forma $f(x)=0$ y grafique la función en el intervalo $[0;20]$ de manera tal que pueda identificar todas las soluciones de la ecuación en el intervalo.
+
+Respuesta:
+
+```{r Respuesta-Ej1-2, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 1.2
+  
+```
+
+## Hallar raíces
+
+Utilizando el algoritmo del punto 1.1, halle todas las raíces identificadas en el punto 1.2.
+
+[***OBSERVACIÓN***: Debe usar el algoritmo dado en 1.1 (corregido por usted). No puede usar su propio algoritmo.]
+
+Respuesta:
+
+```{r Respuesta-Ej1-3, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 1.3
+  
+```
+
+## Iteraciones 
+
+```{r Datos-1-4}
+# No edite este bloque (Debe correrlo para calcular el número de iteraciones y x0)
+set.seed(NroReg)
+nit = sample(c(5,7,9), size =1)
+x0 = 20-round(rnorm(1,5,2),2)
+x1 = x0 + 1
+```
+
+Tome el algoritmo del punto 1.1 (copie y pegue) y agregue las líneas de código que considere necesarias para poder visualizar (imprimir) cada iteración del algoritmo. Una vez editado el algoritmo, imprima `r nit` iteraciones del algoritmo iniciando en $x_0=`r x0`$ y $x_1=`r x1`$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+
+```{r Respuesta-Ej1-4, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 1.4
+  
+```
+
+
+\newpage
+
+# Resolución de Ecuaciones: Punto Fijo. (24 puntos)
+
+Para este ejercicio, considere la función $h(x)=x^2 \times cos(x)$.
+
+## Teoría
+
+Describa el método de punto fijo que se utiliza para hallar raíces de funciones.
+
+Respuesta (escriba a continuación):
+
+
+## Hallar raíces 
+
+Halle todas las raíces de $h(x)$ en el intervalo $[-5,5]$ utilizando el método de ***Punto Fijo***.
+
+[***OBSERVACIÓN***: Recuerde hallar en primer lugar la(s) función(es) $g(x)$ y chequee el cumplimiento de las condiciones de existencia.]
+
+Respuesta:
+
+```{r Respuesta-Ej2-2, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 2.2
+  
+```
+
+
+## Iteraciones
+
+```{r Datos-2-3}
+# No edite este bloque (Debe correrlo para calcular el número de iteraciones y x0)
+set.seed(NroReg)
+nit = sample(c(9,6,8), size =1)
+x0 = sample(c(-0.5,1.4), size =1)
+```
+
+Considere el punto anterior. Realice `r nit` iteraciones del algoritmo de Punto Fijo, utilizando en $x_0= `r x0`$. ¿A cuál de las raíces convergeria el algortimo en este caso?
+
+Respuesta:
+
+```{r Respuesta-Ej2-3, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 2.3
+  
+```
+
+## Graficar $g(x)$ y marcar sus puntos fijos
+
+Grafique la función o las funciones $g(x)$ (que utilizó para hallar las raíces de $h(x)$) e identifique los ***puntos fijos*** hallados en el punto 2.2. En el gráfico (o en cada gráfico), marque las coordenadas de cada punto fijo $g(x) = x$ con un punto de color rojo.
+
+Respuesta:
+
+```{r Respuesta-Ej2-4, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 2.4
+  
+```
+
+\newpage
+
+# Factorización de Matrices. (12 puntos)
+
+```{r Ej3-Datos}
+  set.seed(NroReg)
+  datos = matrix(rnorm(3000,10,2),nrow = 1000, ncol = 3)
+  A = round(cor(datos),4)
+  rm(datos)
+  B = matrix(round(rnorm(16,20,5),0),nrow = 4, ncol = 4)
+```
+
+## Factorización de Cholesky
+Realice la factorización de Cholesky de la siguiente matriz:
+
+$$
+A = `r write_matex2(A)`
+$$
+
+Respuesta:
+
+```{r Respuesta-Ej3-1, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 3.1
+  
+```
+
+
+## Factorización LU
+
+Realice la factorización de LU de la siguiente matriz:
+
+$$
+B = `r write_matex2(B)`
+$$
+
+Respuesta:
+
+```{r Respuesta-Ej3-2, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 3.2
+  
+```
+
+\newpage
+
+# Interpolación (40 Puntos)
+
+Considere la siguente tabla de datos:
+
+```{r Datos-Interpolacion, warning=FALSE}
+# No edite nada en ese bloque
+f = function(x) qbeta(x, shape1 = 3, shape2 = 2)
+x = seq(0,1, by = 0.1)
+y = round(f(x),4)
+
+df = data.frame(x,y)
+df %>% 
+  flextable() %>%
+  colformat_num(digits = 4)
+set.seed(NroReg)
+x0 = 0.5213 # x[runif(1,min=1, max=length(x))]+0.075
+```
+
+## Polinomio de Newton: $P_{N}(x)$
+Escriba el Polinomio interpolante de Newton, $P_n(x)$, que pasa por todos los puntos dados.
+
+Respuesta:
+
+```{r Respuesta-Ej4-1, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 4.1
+  
+# Metodo de diferencias divididas -----------------------------------------
+DiferenciasDivididas <- function(x, y){
+  n <- length(x)
+  
+  #Hago un vector vacio para llenar el df
+  empty_vec <- rep(0, times = n)  
+  
+  df <- data.frame(x, y)
+  
+  for (i in 1:(n-1)) {
+    
+    df[glue::glue("Q",i)] <- empty_vec
+    
+    for (j in (i+1):n) {
+      
+      df[j, (i+2)] <- ( df[j,(i+1)] - df[(j-1),(i+1)])/(x[j]-x[j-i])
+    }
+  }
+  
+  return(df)
+}
+
+# Polinomio interpolante de Newton -----------------------------------------
+
+PolinomioInterpolanteNewton <- function(x, y){
+  df <- DiferenciasDivididas(x = x, y = y)
+  
+  #Saco la primer columna del df
+  df[,1] <- NULL
+  
+  n <- ncol(df)
+  
+  polinomio <- df[1,1]
+  
+  for (i in 2:n) {
+    polinomio <- polinomio + glue::glue(" + ", df[i,i])
+    for (j in 1:(i-1)) {
+      polinomio <- polinomio + glue::glue(" * ( x - ", x[j], " )")
+    }
+  }
+  return(polinomio)
+}
+
+PolinomioInterpolanteNewton(x = x, y = y)
+
+```
+0 + 3.205 * ( x - 0 ) + -11.175 * ( x - 0 ) * ( x - 0.1 ) + 33.4333333333333 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) + -78.2916666666666 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) + 150.25 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) + -243.055555555555 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) + 340.873015873015 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) + -421.875 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) + 474.537037037044 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) + -357.14285714289 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) * ( x - 0.9 )
+
+## Interpolar con $P_{N}(x)$
+
+Calcule $P_N(`r x0`)$.
+
+Respuesta:
+
+```{r Respuesta-Ej4-2, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 4.2
+  
+eval(expression(0 + 3.205 * ( x - 0 ) + -11.175 * ( x - 0 ) * ( x - 0.1 ) + 33.4333333333333 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) + -78.2916666666666 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) + 150.25 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) + -243.055555555555 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) + 340.873015873015 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) + -421.875 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) + 474.537037037044 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) + -357.14285714289 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) * ( x - 0.9 )), list(x = 0.5213))
+
+```
+
+
+## Cubic Splines: $S_{i}(x)$
+
+Escriba los trazadores cúbicos, $S_i(x); i=1,...,n$ que pasan por todos los puntos dados.Indique claramente qué polinomio $S_i$ se debe usar en cada intervalo de $x$.
+
+Respuesta:
+
+```{r Respuesta-Ej4-3, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 4.3
+  
+SplineNatural <- function(x, y){
+  n <- length(x)
+  
+  # Paso 1
+  h <- rep(NA, times = (n-1))
+  for (i in 1:(n-1)) {
+    h[i] <- x[i+1] - x[i]
+  }; rm(i)
+  
+  # Paso 2
+  alfa <- rep(NA, times = (n-2))
+  for (i in 2:(n-1)) {
+    alfa[i] <- (3/h[i]) * (y[i+1] - y[i]) - (3/h[i-1]) * (y[i] - y[i-1])
+  }
+  
+  # Paso 3
+  mu <- rep(NA, times = n)
+  zeta <- rep(NA, times = n)
+  l <- rep(NA, times = n)
+  
+  mu[1] <- 0
+  zeta[1] <- 0
+  l[1] <- 1
+  
+  
+  # Paso 4
+  for (i in 2:(n-1)) {
+    l[i] <- 2 * (x[i+1] - x[i-1]) - h[i-1] * mu[i-1]
+    mu[i] <- h[i]/l[i]
+    zeta[i] <- (alfa[i] - h[i-1] * zeta[i-1])/l[i]
+  }
+  
+  # Paso 5
+  l[n] <- 1
+  zeta[n] <- 0
+  c <- rep(NA, times = n)
+  c[n] <- 0
+  
+  # Paso 6
+  b <- rep(NA, times = (n-1))
+  d <- rep(NA, times = (n-1))
+  for (j in (n-1):1) {
+    c[j] <- zeta[j] - mu[j] * c[j+1]
+    b[j] <- (y[j+1] - y[j]) / h[j] - h[j] * (c[j+1] + 2 * c[j])/3
+    d[j] <- (c[j+1] - c[j]) / (3*h[j])
+  }
+  
+  #Paso 7
+  resultados <- matrix(rep(NA, 4*(n-1)), nrow = (n-1), ncol = 4, byrow = F)
+  for (k in 1:(n-1)) {
+    resultados[k, 1] <- y[k]
+    resultados[k, 2] <- b[k]
+    resultados[k, 3] <- c[k]
+    resultados[k, 4] <- d[k]
+  }
+  
+  #Construyo el polinomio
+  polinomios <- rep(NA, times = nrow(resultados))
+  for (i in 1:nrow(resultados)) {
+    polinomios[i] <- glue::glue(resultados[i,1]) 
+    for(j in 2:ncol(resultados)){
+      polinomios[i] <- polinomios[i] + glue::glue(" + ", resultados[i,j], " * (x - ", x[i], ")^", (j-1)) 
+    }
+  }
+  
+  return(polinomios)
+}
+
+trazadores <- SplineNatural(x = x, y = y)
+
+trazadores
+```
+
+$[0.0 ; 0.1]$ 0 + 3.78915168257157 * (x - 0)^1 + 0 * (x - 0)^2 + -58.4151682571572 * (x - 0)^3  
+$[0.1 ; 0.2]$ 0.3205 + 2.03669663485686 * (x - 0.1)^1 + -17.5245504771472 * (x - 0.1)^2 + 68.575841285786 * (x - 0.1)^3  
+$[0.2 ; 0.3]$ 0.4175 + 0.589061778001004 * (x - 0.2)^1 + 3.04820190858865 * (x - 0.2)^2 + -15.2881968859869 * (x - 0.2)^3  
+$[0.3 ; 0.4]$ 0.4916 + 0.740056253139126 * (x - 0.3)^1 + -1.53825715720743 * (x - 0.3)^2 + 5.27694625816169 * (x - 0.3)^3  
+$[0.4 ; 0.5]$ 0.5555 + 0.590713209442491 * (x - 0.4)^1 + 0.0448267202410806 * (x - 0.4)^2 + -0.719588146659973 * (x - 0.4)^3  
+$[0.5 ; 0.6]$ 0.6143 + 0.578090909090908 * (x - 0.5)^1 + -0.171049723756911 * (x - 0.5)^2 + 0.401406328478224 * (x - 0.5)^3  
+$[0.6 ; 0.7]$ 0.6708 + 0.555923154193873 * (x - 0.6)^1 + -0.0506278252134439 * (x - 0.6)^2 + 1.71396283274724 * (x - 0.6)^3  
+$[0.7 ; 0.8]$ 0.7276 + 0.597216474133601 * (x - 0.7)^1 + 0.463561024610728 * (x - 0.7)^2 + -4.25725765946747 * (x - 0.7)^3  
+$[0.8 ; 0.9]$ 0.7877 + 0.562210949271723 * (x - 0.8)^1 + -0.813616273229512 * (x - 0.8)^2 + 21.6150678051229 * (x - 0.8)^3  
+$[0.9 ; 1.0]$ 0.8574 + 1.04793972877951 * (x - 0.9)^1 + 5.67090406830737 * (x - 0.9)^2 + -18.9030135610246 * (x - 0.9)^3
+
+## Interpolar con $S_{i}(x)$
+
+Usando los trazadores cúbicos, interpole los datos para el valor $x=`r x0`$.
+
+Respuesta:
+
+```{r Respuesta-Ej4-4, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 4.4
+  
+eval(expression(0.6143 + 0.578090909090908 * (x - 0.5)^1 + -0.171049723756911 * (x - 0.5)^2 + 0.401406328478224 * (x - 0.5)^3), list(x = 0.5213))
+
+```
+
+## Graficar 
+
+Grafique lo siguiente:
+
+a. Datos dados en la tabla mediante puntos (círculos, rellenos o no).
+b. Línea continua de color verde con la función $P_N(x)$ para $x$ en $[0;1]$.
+c. Línea continua de color azul con los trazadores cúbicos para $x$ en $[0;1]$.
+
+Respuesta:
+
+```{r Respuesta-Ej4-5, echo=TRUE}
+ # Ingrese en este bloque todo el código necesario para resolver el ejercicio 4.5
+
+x1 <- seq(from = 0, to = 1, by = 0.001)
+
+y_pn <- eval(expression(0 + 3.205 * ( x - 0 ) + -11.175 * ( x - 0 ) * ( x - 0.1 ) + 33.4333333333333 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) + -78.2916666666666 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) + 150.25 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) + -243.055555555555 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) + 340.873015873015 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) + -421.875 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) + 474.537037037044 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) + -357.14285714289 * ( x - 0 ) * ( x - 0.1 ) * ( x - 0.2 ) * ( x - 0.3 ) * ( x - 0.4 ) * ( x - 0.5 ) * ( x - 0.6 ) * ( x - 0.7 ) * ( x - 0.8 ) * ( x - 0.9 )), list(x = x1))
+
+x_sp1 <- seq(from = 0, to = 0.1, by = 0.01)
+fx_sp1 <- eval(parse(text = trazadores[1]), list(x = x_sp1))
+
+x_sp2 <- seq(from = 0.1, to = 0.2, by = 0.01)
+fx_sp2 <- eval(parse(text = trazadores[2]), list(x = x_sp2))
+
+x_sp3 <- seq(from = 0.2, to = 0.3, by = 0.01)
+fx_sp3 <- eval(parse(text = trazadores[3]), list(x = x_sp3))
+
+x_sp4 <- seq(from = 0.3, to = 0.4, by = 0.01)
+fx_sp4 <- eval(parse(text = trazadores[4]), list(x = x_sp4))
+
+x_sp5 <- seq(from = 0.4, to = 0.5, by = 0.01)
+fx_sp5 <- eval(parse(text = trazadores[5]), list(x = x_sp5))
+
+x_sp6 <- seq(from = 0.5, to = 0.6, by = 0.01)
+fx_sp6 <- eval(parse(text = trazadores[6]), list(x = x_sp6))
+
+x_sp7 <- seq(from = 0.6, to = 0.7, by = 0.01)
+fx_sp7 <- eval(parse(text = trazadores[7]), list(x = x_sp7))
+
+x_sp8 <- seq(from = 0.7, to = 0.8, by = 0.01)
+fx_sp8 <- eval(parse(text = trazadores[8]), list(x = x_sp8))
+
+x_sp9 <- seq(from = 0.8, to = 0.9, by = 0.01)
+fx_sp9 <- eval(parse(text = trazadores[9]), list(x = x_sp9))
+
+x_sp10 <- seq(from = 0.9, to = 1, by = 0.01)
+fx_sp10 <- eval(parse(text = trazadores[10]), list(x = x_sp10))
+
+ggplot() +
+  geom_point(aes(x = x, y = y)) +
+  geom_line(aes(x = x1, y = y_pn), colour = "green") +
+  geom_line(aes(x = x_sp1, y = fx_sp1), colour = "blue") +
+  geom_line(aes(x = x_sp2, y = fx_sp2), colour = "blue") +
+  geom_line(aes(x = x_sp3, y = fx_sp3), colour = "blue") +
+  geom_line(aes(x = x_sp4, y = fx_sp4), colour = "blue") +
+  geom_line(aes(x = x_sp5, y = fx_sp5), colour = "blue") +
+  geom_line(aes(x = x_sp6, y = fx_sp6), colour = "blue") +
+  geom_line(aes(x = x_sp7, y = fx_sp7), colour = "blue") +
+  geom_line(aes(x = x_sp8, y = fx_sp8), colour = "blue") +
+  geom_line(aes(x = x_sp9, y = fx_sp9), colour = "blue") +
+  geom_line(aes(x = x_sp10, y = fx_sp10), colour = "blue") +
+  xlab("x") + ylab("y")
+  
+```
+
+## Comentar Resultados
+
+A partir de lo hallado en el punto anterior, comente sobre las diferencias entre los métodos para realizar aproximaciones de la función entre los puntos dados.
+
+Respuesta (escriba sus comentarios a continuación):
+
+
+
+
+
