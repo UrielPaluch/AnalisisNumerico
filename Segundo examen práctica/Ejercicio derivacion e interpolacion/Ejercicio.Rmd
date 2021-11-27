@@ -212,8 +212,10 @@ Vuelvo a la definición de derivada:
   \displaystyle \lim_{x \to \infty} f'(x) = \dfrac{f(x+h)-f(x)}{h}
 \end{equation*}
 ```{r}
+# Progresiva
 print(paste("P'(0):",(120 - 114.56029)/0.1))
 
+# Regresiva
 print(paste("P'(0.1):",(77.25528 - 80.55174)/0.1))
 
 DerivadaPorDefinicion(x = df$Tasa, fx = df$Precio)
