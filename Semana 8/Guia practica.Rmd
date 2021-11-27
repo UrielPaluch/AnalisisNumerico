@@ -12,6 +12,7 @@ library(ggplot2)
 
 ## Guía Práctica 4: Interpolación
 
+## Métodos
 ```{r}
 PolinomioLagrange <- function(x, fx, y){
   
