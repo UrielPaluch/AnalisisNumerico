@@ -212,13 +212,11 @@ Vuelvo a la definición de derivada:
   \displaystyle \lim_{x \to \infty} f'(x) = \dfrac{f(x+h)-f(x)}{h}
 \end{equation*}
 ```{r}
-# Progresiva
-print(paste("P'(0):",(120 - 114.56029)/0.1))
+derivadas <- DerivadaPorDefinicion(x = df$Tasa, fx = df$Precio)
 
-# Regresiva
-print(paste("P'(0.1):",(77.25528 - 80.55174)/0.1))
+print(paste("Derivada progresiva para P'(0):", derivadas$fprima[1]))
 
-DerivadaPorDefinicion(x = df$Tasa, fx = df$Precio)
+print(paste("Derivada regresiva para P'(1):", derivadas$fprima[11]))
 ```
 
 ## B
