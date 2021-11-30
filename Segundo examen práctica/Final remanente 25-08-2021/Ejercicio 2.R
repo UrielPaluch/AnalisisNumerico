@@ -146,14 +146,14 @@ TrapecioCompuesta <- function(limiteInferior, limiteSuperior, funcion, n, cantIn
 alfa <- 2.52
 theeta <- 1.32
 
+gamma <- SimpsonCompuesta(limiteInferior = 0, limiteSuperior = 100, funcion = expression((x^(alfa-1)) * exp(-x)), cantIntervalos = 1000, n = 2)
+
 # grafico para ver que haya escrito bien la funcion
 x <- seq(from = 0.01, to = 15, by = 0.01)
 y <- eval(expression(((x/theeta)^(alfa) * exp(-x/theeta)) / (x * gamma)), list(x = x))
 
 ggplot() +
   geom_line(aes(x = x, y = y))
-
-gamma <- SimpsonCompuesta(limiteInferior = 0, limiteSuperior = 100, funcion = expression((x^(alfa-1)) * exp(-x)), cantIntervalos = 1000, n = 2)
 
 # Trapecio ----------------------------------------------------------------
 resultado <- Trapecio(limiteInferior = 0.25, limiteSuperior = 5, funcion = expression(((x/theeta)^(alfa) * exp(-x/theeta)) / (x * gamma)), n = 1)
@@ -206,16 +206,16 @@ h <- (limiteSuperior - limiteInferior)/n
 
 # 2.3 Esperanza matemática ------------------------------------------------
 
-esperanza <- TrapecioCompuesta(limiteInferior = 10^-10, limiteSuperior = 25, funcion = expression( x*(( (x/theeta)^(alfa) * exp(-x/theeta)) / (x * gamma)) ), cantIntervalos = 1500, n = 1)
+esperanza <- TrapecioCompuesta(limiteInferior = 10^-10, limiteSuperior = 100, funcion = expression( x*(( (x/theeta)^(alfa) * exp(-x/theeta)) / (x * gamma)) ), cantIntervalos = 1500, n = 1)
 
-x <- seq(10^-10, 25, length.out = 1000)
+x <- seq(10^-10, 100, length.out = 10000)
 
 fx <- eval(D(D(expression( x*(( (x/theeta)^(alfa) * exp(-x/theeta)) / (x * gamma)) ), "x"),"x"), list(x = x))
 
 ggplot() +
   geom_line(aes(x = x, y = fx))
 
-limiteSuperior <- 25
+limiteSuperior <- 100
 limiteInferior <- 10^-10
 n <- 1500
 
