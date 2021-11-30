@@ -112,7 +112,7 @@ SimpsonCompuesta <- function(limiteInferior, limiteSuperior, funcion, n = 2, can
 
 ```{r punto medio compuesta}
 PuntoMedioCompuesta <- function(limiteInferior, limiteSuperior, funcion, n){
-  browser()
+  #browser()
  h <- (limiteSuperior - limiteInferior)/(n + 2)
  
  suma <- 0
