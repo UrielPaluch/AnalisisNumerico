@@ -1,0 +1,242 @@
+---
+title: "Económicas, UBA. Actuario. Análisis Numérico.  \n Cuatrimestre 2, 2021. Segundo Examen Parcial."
+subtitle: "   \n PARA APROBAR EL EXAMEN DEBE SUMAR AL MENOS 50 PUNTOS."
+author: "Paluch Uriel, 895700"
+date: "30/noviembre/2021"
+output: 
+  pdf_document:
+    toc: false
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+```{r Numero de Resgistro}
+  # A continuación, remplace NULL por su número de resgistro
+  NroReg = 895700
+```
+
+```{r Librerias, message=FALSE, warning=FALSE}
+  # Ingrese en este bloque de código las librerías que utilizará
+  library(flextable)
+  library(dplyr)
+```
+
+```{r Datos}
+  #No edite este bloque
+  set.seed(NroReg)
+  # Ejercicio 1
+    E1_alpha = round(runif(1,min=1.2,max=5),2)
+    E1_theta = round(runif(1,min=1.2,max=5),2)
+    E1_fY = c(
+      "$$ f_Y(x|\\alpha,\\theta) = \\frac{\\alpha \\theta^{\\alpha}} {(x + \\theta)^{\\alpha+1}} $$",
+      "$$ f_Y(x|\\alpha,\\theta) = \\frac{\\alpha \\theta x^{\\alpha - 1}} {(x + \\theta)^{\\alpha+1}} $$",
+      "$$ f_Y(x|\\alpha,\\theta) = \\frac{\\alpha (x / \\theta)^{\\alpha}} {x [ 1 + (x / \\theta)^{\\alpha}]^{2}} $$",
+      "$$ f_Y(x|\\alpha,\\theta) = \\frac{\\alpha^2 (x / \\theta)^{\\alpha}} {x [ 1 + (x / \\theta)^{\\alpha}]^{\\alpha+1}} $$",
+      "$$ f_Y(x|\\alpha,\\theta) = \\frac{\\alpha^2 (x / \\theta)^{\\alpha^2}} {x [ 1 + (x / \\theta)^{\\alpha}]^{\\alpha+1}} $$")
+    E1_index = sample(1:5, size=1)
+    E1_x0 = round(runif(1,min=0.1,max=5),2)
+    E1_x1 = E1_x0 + round(runif(1,min=0.1,max=10),2)
+    E1_n2 = round(runif(1,min=15,max=25))
+    E1_Algo3 = sample(c("Simpson", "Trapecio"), size = 1)
+    E1_n3 = round(runif(1,min=150,max=500))
+    E1_Algo4 = ifelse(E1_Algo3 == "Simpson", "Trapecio", "Simpson")
+    E1_n4 = E1_n3
+
+  # Ejercicio 2
+    E2_r = seq(0,sample(c(0.10,0.12,0.15), size = 1), by = 0.01)
+    E2_f = function(x) {100*(1+x)^-5 + sum(3*(1+x)^-(1:5))}
+    E2_P = round(mapply(E2_f,E2_r)+runif(n=length(E2_r),min=-0.5, max = 0.5),4)
+    E2_df = data.frame(r=E2_r,P=E2_P)
+    E2_r0 = sample(E2_r,size = 1)
+    E2_r1 = sample(E2_r[!E2_r %in% 
+                          c(E2_r0,E2_r[1:2],E2_r[(length(E2_r)-1):length(E2_r)]) ],
+                   size = 1)
+    E2_metodo = sample(c("tres puntos (punto extremo, con h>0)", 
+                         "tres puntos (punto extremo, con h<0)", 
+                         "tres puntos centrados", 
+                         "cinco puntos (punto extremo, con h>0)", 
+                         "cinco puntos (punto extremo, con h<0)",
+                         "cinco puntos centrados"), size = 1)
+
+  # Ejercicio 3
+    E3_df = tibble(x = round(sort(rlnorm(
+      n=sample(8:12, size = 1), mean = runif(1, 1, 3), sd = runif(1,0.5,1))),4)) %>%
+      mutate(`F(x) = P(L<x)` = round((1:length(x))/length(x),4))
+    E3_x = round((E3_df$x[nrow(E3_df)]+E3_df$x[nrow(E3_df)-1])/2,4)
+    E3_N = sample(3:5, size = 1)
+    E3_col = c("negro", "rojo", "azul", "naranja", "rosa", "verde", "dorado")
+    E3_col1 = sample(E3_col, size = 1)
+    E3_col2 = sample(E3_col[!E3_col %in% E3_col1], size = 1)
+    E3_col3 = sample(E3_col[!E3_col %in% c(E3_col1, E3_col2)], size = 1)
+    E3_col4 = sample(E3_col[!E3_col %in% c(E3_col1, E3_col2, E3_col3)], size = 1)
+    E3_pch = 1:20
+    E3_pch1 = sample(E3_pch, size = 1)
+    E3_pch2 = sample(E3_pch[!E3_pch %in% E3_pch1], size = 1)
+    E3_pch3 = sample(E3_pch[!E3_pch %in% c(E3_pch1, E3_pch2)], size = 1)
+    E3_pch4 = sample(E3_pch[!E3_pch %in% c(E3_pch1, E3_pch2, E3_pch3)], size = 1)
+    
+  # Ejercicio 4
+    E4_n = round(runif(n = 1, min = 750, max = 2000))
+    E4_P0 = round(runif(n=1, min = 50, max = 100))
+    E4_plazo = sample(c("cinco", "seis", "siete"), size=1)
+    E4_mu = round(runif(n=1, min = 0.10, max = 0.20),2)
+    E4_sig = round(runif(n=1, min = 0.10, max = 0.20),2)
+    E4_P1 = round(E4_P0*runif(n=1, min = 0.5, max = 0.80))
+    E4_Mm = sample(c("mayor", "menor"), size = 1)
+  
+  # Ejercicio 5
+    E5_f = paste0(sample(c("$$dy/dt = cos(y)", "$$dy/dt = sin(y)"), size = 1),
+                  sample(c("*t^{", "/t^{"), size = 1),
+                  round(runif(n = 1, min = 0.2, max = 5),2),
+                  sample(c("} +","} -"), size = 1),
+                  sample(c("t*y^2$$", "t/y^3$$"), size = 1))
+    E5_LI = sample(0:5, size=1)
+    E5_LS = E5_LI + sample(1:5, size=1)
+    E5_y0 = round(runif(n = 1, min = 0.2, max = 5),2)
+    E5_N = sample(10:50, size=1)
+    
+```
+
+# INSTRUCCIONES {-}
+
+1. Ingrese su apellido, nombre y número de registro en la línea 4 de este documento Rmd (sección "author").
+
+2. Remplace _NULL_ por su número de registro en la línea 19  de este documento Rmd.
+
+3. Teja el documento Rmd en pdf y utilice dicho documento para realizar su examen.
+
+4. La entrega del examen debe constar de lo siguiente:
+
+    a. El archivo pdf con el enunciado (generado en el punto 3. anterior).
+    b. Cinco scripts de R, uno por cada ejercicio. Los nombres de los scripts deben ser:
+        - _1_Integracion_NroReg.R_
+        - _2_Derivacion_NroReg.R_
+        - _3_InterpolacionAjustamiento_NroReg.R_
+        - _4_Simulacion_NroReg.R_
+        - _5_EcuacionesDiferenciales_NroReg.R_
+        
+        Observación: en cada uno de los scripts debe figurar su nombre, apellido y número de registro (ingresados como *comentarios*, antes del código). Si no realiza un ejercicio, de todos modos deberá cargar el script correspondiente con sus datos y sin código.
+
+5. Los archivos mencionados en el punto 4. deberán ser comprimidos en un archivo zip (o rar), cuyo nombre será _AN_2021_C2_Parcial2_NroRegistro.zip_, y cargados al campus de la materia, en la sección entregas.
+
+
+# Integración (20 puntos)
+
+Considere la siguiente función de densidad de la variable aleatoria $Y$, con dominio en el intervalo $(0,\infty)$, y parámetros $\alpha= `r E1_alpha`$ y $\theta= `r E1_theta`$:
+
+`r E1_fY[E1_index]`
+
+
+## Probabilidades simple
+
+Aproxime la probabilidad de que $Y$ esté entre $`r E1_x0`$ y $`r E1_x1`$ usando los métodos de "Trapecio", "Simpson" y "Simpson tres octavos". Ingrese cada algoritmo por separado (**NO SE ACEPTARÁ UN "ALGORITMO GENERAL"**). 
+Indique en cada caso los "nodos" $y_0, y_1, …, y_n$ que se utilizan para la aproximación.
+
+## Probabilidades Compuesto
+
+Aproxime la probabilidad de que $Y$ esté entre $`r E1_x0`$ y $`r E1_x1`$ usando el método de `r E1_Algo3` Compuesto con $n=`r E1_n2`$. Además:
+
+-   Indique los "nodos" $y_0, y_1, …, y_n$ que se utilizan para la aproximación.
+-   Calcule la cota del error.
+-   Compare los resultados con el punto 1.1.
+
+## Esperanza
+
+Use *`r E1_Algo3` Compuesto* con $n = `r E1_n3`$ para aproximar $E(Y)$; es decir, la esperanza matemática de $Y$. Calcule la cota del error.
+
+
+## Varianza
+
+Use *`r E1_Algo4` Compuesto* con $n = `r E1_n4`$ para aproximar la varianza de $Y$, es decir $V[Y] = E(Y^2) - E(Y)^2$. Calcule la cota del error.
+
+
+# Derivación (10 puntos)
+
+Considere los datos de la tabla siguiente, donde $P = f(r)$.
+
+```{r Datos-Derivacion, warning=FALSE}
+E2_df %>%   flextable() %>%   colformat_num(digits = 4)
+```
+
+## Derivada primera
+
+Utilice el método de los **`r E2_metodo`** para aproximar $P'(`r E2_r0`)$ y $P'(`r E2_r1`)$. Si no pudiese aplicar el método, explique por qué.
+
+[Observación: **NO SE ACEPTARÁ UN "ALGORITMO GENERAL"** que calcule todos los métodos. *Utilice solamente el código necesario*.]
+
+## Derivada segunda
+
+Aproxime las derivadas segundas $P''(`r E2_r0`)$ y $P''(`r E2_r1`)$. Si no pudiese aproximarla/s, explique por qué.
+
+
+# Interpolación y Ajustamiento (45 puntos)
+
+Considere los datos $x$ de la variable aleatoria pérdidas ($L$), y las **probabilidades** acumuladas ($F_L(x) = Prob(L<x)$) estimadas en la siguiente Tabla.
+
+```{r Datos-Ej3, warning=FALSE}
+  E3_df %>% flextable() %>% autofit() %>% align(align = 'center', part = 'header')
+```
+
+## Lagrange (15 puntos)
+
+- Utilice un polinomio de Lagrange que pase por todos los puntos dados para aproximar $F(`r E3_x`)$. Comente el resultado hallado.
+- Construya un polinomio de Lagrange que pase por los últimos `r E3_N` pares de datos para aproximar $F(`r E3_x`)$. Comente el resultado hallado, comparándolo con el punto anterior.
+- Construya un polinomio de Lagrange que pase por las últimas dos observaciones dadas para aproximar $F(`r E3_x`)$. Comente el resultado hallado, comparándolo con los puntos anteriores.
+
+[Observación: no es necesario que esriba los polinomios $P(x)$.]
+
+
+## Cubic Splines (10 puntos)
+
+- Escriba el trazador cúbico $S(x)$ que pasa por todos los puntos dados. Indique claramente qué polinomio $S_j(x)$ debe utilizarse en cada subintervalo. **Para presentar el polinomio, utilice solamente cuatro decimales en los coeficientes.** 
+- Utilice el trazador cúbico para aproximar $F(`r E3_x`)$ (Advertencia: para los cálculos, no redondee los coeficientes!). Comente el resultado hallado, comparándolo con los resultados hallados con el polinomio de Lagrange.
+
+## Ajustamiento (10 puntos)
+
+- Ajuste los datos de la tabla a una distribución normal (``pnorm(x, mu, sigma)``) utilizando mínimos cuadrados no lineales (``nls``).
+- Utilice el ajuste realizado para aproximar $F(`r E3_x`)$. Comente el resultado hallado, comparándolo con los resultados de Lagrange y Cubic Splines.
+
+
+## Gráfico comparativo (10 puntos)
+
+Realice un gráfico comparativo que incluya lo siguiente:
+
+- Puntos originales en color `r E3_col1` y tipo de punto ``pch = `r E3_pch1` ``.
+- Curva continua con el polinomio de Lagrange que pasa por todos los puntos dados en color `r E3_col2`, y un punto (``pch = `r E3_pch2` `` y el mismo color) marcando el valor interpolado.
+- Curva continua con el trazador cúbico que pasa por todos los puntos dados en color `r E3_col3`, y un punto (``pch = `r E3_pch3` `` y el mismo color) marcando el valor interpolado.
+- Curva continua con el ajuste de la distribución Normal en color `r E3_col4`, y un punto (``pch = `r E3_pch4` `` y el mismo color) marcando el valor interpolado.
+
+
+# Simulación de Montecarlo (15 puntos)
+
+## Caminos de precios 
+
+Utilice una semilla igual a su número de registro^[Ingrese `` set.seed(NroReg) ``, donde NroReg es su numero de registro, antes de empezar a simular.] para simular $`r E4_n`$ ***caminos de precios diarios***, considerando $P_0= `r E4_P0`$, $\mu= `r E4_mu`$ y $\sigma= `r E4_sig`$, y un horizonte temporal de `r E4_plazo` meses. 
+
+Calcule la esperanza, calcule el desvío estándar, y grafique un histograma de los ***precios finales***, $P_T$.
+
+## Probabilidad 1
+
+Calcule la probabilidad de que el precio final $P_T$ esté entre $`r E4_P1`$ y el precio inicial $P_0$.
+
+## Probabilidad 2
+
+Calcule la probabilidad de que el precio final $P_T$ sea `r E4_Mm` al precio esperado en $T$ (calculado en 4.1).
+
+
+# Ecuaciones diferenciales (10 puntos)
+
+Considere la siguiente ecuación diferencial:
+
+`r E5_f`
+
+con $`r E5_LI` \leq t \leq `r E5_LS`$ y con $y(`r E5_LI`) = `r E5_y0`$.
+
+a. Aproxime $y(t)$ en el intervalo con $N = `r E5_N`$ utilizando el algoritmo de Euler.
+b. Repita el punto anterior con el algoritmo de Runge-Kutta de orden 4.
+c. Realice un gráfico comparativo con ambas aproximaciones.
+d. Eplique las diferencias entre los dos métodos e indique cuál espera que sea más preciso.
