@@ -1,4 +1,7 @@
 # Análisis Numérico
+
+Los invito a que hagan un fork del repositorio y despues podemos ir mergeando material nuevo para mantener el repositorio actualizado.
+
 ## Semana 1
 * Calcula las raices reales de un polinomio
 * Calcula el factorial de un número
